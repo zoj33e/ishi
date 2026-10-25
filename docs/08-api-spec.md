@@ -33,7 +33,8 @@ Mark = { point: string, kind: "circle"|"triangle"|"square"|"cross"|"label", labe
 
 ## Games
 | POST | `/games` | `{mode: "capture"\|"full", board_size?, learner_color?, exam_id?}` (defaults from `/today`; M2 capture games take size/target/bot level from the current stage, D-024) | GameState |
-| GET | `/games/{id}` | | GameState |
+| GET | `/games/bot-ranks` | | `{ranks: number[], unlocked: bool}` — 9x9 strength picker until M8 (D-031) |
+| GET | `/games/{id}` | | GameState (full games add `bot_rank`, `bot_label`, and after two passes `score` + `dead`) |
 | POST | `/games/{id}/preview` | `{point}` | `{legal, nudge: null \| {narration, hint_level_available: 2, concept_id}}` |
 | POST | `/games/{id}/moves` | `{point, played_anyway?: bool}` | `{state: GameState, bot_move: string\|null, game_over: bool}` |
 | POST | `/games/{id}/hint` | `{level: 1\|2\|3}` | hint narration / marks (only after a nudge) |

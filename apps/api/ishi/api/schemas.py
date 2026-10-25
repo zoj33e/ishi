@@ -38,6 +38,15 @@ class Captures(BaseModel):
     white: int
 
 
+class ScoreOut(BaseModel):
+    black_area: int
+    white_area: int
+    komi: float
+    margin: float
+    result: str
+    territory: Stones  # empty points owned by each color (stones not repeated)
+
+
 class GameStateOut(BaseModel):
     id: str
     mode: str
@@ -56,15 +65,10 @@ class GameStateOut(BaseModel):
     capture_target: int | None = None  # capture games: captures needed to win
     bot_level: int | None = None  # capture bot level
     exam_id: str | None = None
-
-
-class ScoreOut(BaseModel):
-    black_area: int
-    white_area: int
-    komi: float
-    margin: float
-    result: str
-    territory: Stones  # empty points owned by each color (stones not repeated)
+    bot_rank: float | None = None  # full games: kyu scale (25k = 25, 1d = 0)
+    bot_label: str | None = None  # full games: "30k", "1d"
+    score: ScoreOut | None = None  # full games after two passes (dead stones removed)
+    dead: list[str] = []  # full games: stones counted as dead
 
 
 def game_state_out(

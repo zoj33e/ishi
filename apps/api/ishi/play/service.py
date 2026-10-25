@@ -1,4 +1,6 @@
-"""Capture games, stages and the Yellow exam backed by the database (I/O lives here)."""
+"""Capture games, stages and the Yellow exam backed by the database (I/O lives here).
+
+Full 9x9 games against the HumanSL bot live in `ishi.play.full_service`."""
 
 from __future__ import annotations
 
@@ -27,7 +29,7 @@ from ishi.school.content import load_lessons
 
 log = logging.getLogger("ishi.play")
 
-LEARNER = Color.BLACK  # D-024: the learner always plays Black in capture games
+LEARNER = Color.BLACK  # D-024/D-030: the learner always plays Black
 
 
 # -- history -----------------------------------------------------------------------------
@@ -128,7 +130,14 @@ def target(game: Game) -> int:
     return int(game.bot_params.get("target", 1))
 
 
-def _record(session: Session, game: Game, before: GameState, point: Point | None) -> GameState:
+def record_move(
+    session: Session,
+    game: Game,
+    before: GameState,
+    point: Point | None,
+    *,
+    bot_winrate: float | None = None,
+) -> GameState:
     after = play(before, point)
     last = after.last_move
     assert last is not None
@@ -141,6 +150,7 @@ def _record(session: Session, game: Game, before: GameState, point: Point | None
             point=None if point is None else point_to_gtp(point, game.board_size),
             captures=len(last.captured),
             by_learner=last.color is LEARNER,
+            bot_winrate=bot_winrate,
         )
     )
     return after
@@ -150,13 +160,13 @@ def play_learner_move(
     session: Session, game: Game, state: GameState, point: Point | None, rng: random.Random
 ) -> tuple[GameState, str | None]:
     """Apply a legal learner move and the bot's reply. Returns (state, bot move GTP or None)."""
-    state = _record(session, game, state, point)
+    state = record_move(session, game, state, point)
     bot_gtp: str | None = None
     if not capture_over(state, target(game)):
         bot = CaptureBot(int(game.bot_params.get("level", 1)), target(game), rng=rng)
         bot_point = bot.choose(state)
         log.debug("capture bot game=%s level=%s move=%s", game.id, bot.level, bot_point)
-        state = _record(session, game, state, bot_point)
+        state = record_move(session, game, state, bot_point)
         bot_gtp = point_to_gtp(bot_point, game.board_size)
     if capture_over(state, target(game)):
         won = capture_winner(state, target(game)) is LEARNER
@@ -184,7 +194,8 @@ def finish(
 
 
 def resign(session: Session, game: Game, state: GameState) -> None:
-    finish(session, game, state, "W+R", learner_won=False)  # the learner (Black) resigns
+    """The learner (Black) gives up."""
+    finish(session, game, state, "W+R", learner_won=False)
     session.commit()
 
 

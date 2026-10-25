@@ -399,6 +399,28 @@
         }
       }
     },
+    "/api/games/bot-ranks": {
+      "get": {
+        "tags": [
+          "games"
+        ],
+        "summary": "Bot Ranks",
+        "description": "Strengths offered in the 9x9 picker until adaptive strength (M8), D-031.",
+        "operationId": "bot_ranks_api_games_bot_ranks_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BotRanksOut"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/games/{game_id}": {
       "get": {
         "tags": [
@@ -791,6 +813,27 @@
         ],
         "title": "AnswerOut"
       },
+      "BotRanksOut": {
+        "properties": {
+          "ranks": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Ranks"
+          },
+          "unlocked": {
+            "type": "boolean",
+            "title": "Unlocked"
+          }
+        },
+        "type": "object",
+        "required": [
+          "ranks",
+          "unlocked"
+        ],
+        "title": "BotRanksOut"
+      },
       "CaptureStageOut": {
         "properties": {
           "stage": {
@@ -1115,6 +1158,46 @@
               }
             ],
             "title": "Exam Id"
+          },
+          "bot_rank": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bot Rank"
+          },
+          "bot_label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bot Label"
+          },
+          "score": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ScoreOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "dead": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Dead",
+            "default": []
           }
         },
         "type": "object",
@@ -1497,7 +1580,10 @@
         "properties": {
           "mode": {
             "type": "string",
-            "const": "capture",
+            "enum": [
+              "capture",
+              "full"
+            ],
             "title": "Mode",
             "default": "capture"
           },
@@ -1511,6 +1597,19 @@
               }
             ],
             "title": "Exam Id"
+          },
+          "bot_rank": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 30.0,
+                "minimum": -8.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bot Rank"
           }
         },
         "type": "object",

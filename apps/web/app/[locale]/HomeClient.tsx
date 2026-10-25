@@ -4,10 +4,23 @@ import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { Button, Card } from "@/components/ui";
 import { Link, useRouter } from "@/i18n/navigation";
-import { createGame, getMe, getSchool, getToday, startExam, type Locale, type Me, type School, type Today } from "@/lib/api";
+import {
+  createGame,
+  getBotRanks,
+  getMe,
+  getSchool,
+  getToday,
+  startExam,
+  type BotRanks,
+  type Locale,
+  type Me,
+  type School,
+  type Today,
+} from "@/lib/api";
+import { rankLabel } from "@/lib/rank";
 import { useErrorText } from "@/lib/useErrorText";
 
-type Data = { me: Me; today: Today; school: School };
+type Data = { me: Me; today: Today; school: School; ranks: BotRanks };
 
 export function HomeClient() {
   const t = useTranslations("home");
@@ -17,11 +30,12 @@ export function HomeClient() {
   const [data, setData] = useState<Data | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [botRank, setBotRank] = useState<number | null>(null);
 
   useEffect(() => {
     let alive = true;
-    Promise.all([getMe(), getToday(), getSchool(locale)])
-      .then(([me, today, school]) => alive && setData({ me, today, school }))
+    Promise.all([getMe(), getToday(), getSchool(locale), getBotRanks()])
+      .then(([me, today, school, ranks]) => alive && setData({ me, today, school, ranks }))
       .catch((e: unknown) => alive && setError(errorText(e)));
     return () => {
       alive = false;
@@ -38,7 +52,9 @@ export function HomeClient() {
     }
   };
 
-  const playCapture = () => go(async () => `/play/${(await createGame()).id}`);
+  const playCapture = () => go(async () => `/play/${(await createGame({ mode: "capture" })).id}`);
+  const playFull = (rank: number) =>
+    go(async () => `/play/${(await createGame({ mode: "full", bot_rank: rank })).id}`);
   const takeExam = () => go(async () => `/exam/${(await startExam()).id}`);
 
   if (!data) {
@@ -49,7 +65,8 @@ export function HomeClient() {
     );
   }
 
-  const { me, today, school } = data;
+  const { me, today, school, ranks } = data;
+  const rank = botRank ?? ranks.ranks[0];
   const done = school.lessons.filter((l) => l.status === "done").length;
   const next = school.lessons.find((l) => l.id === school.next_lesson);
   const cap = today.capture;
@@ -87,6 +104,36 @@ export function HomeClient() {
         <Button variant={next ? "secondary" : "primary"} className="self-start" disabled={busy} onClick={() => void playCapture()}>
           {t("capturePlay")}
         </Button>
+      </Card>
+
+      <Card title={t("fullTitle")}>
+        {ranks.unlocked ? (
+          <>
+            <p className="text-ink-soft">{t("fullInfo")}</p>
+            <div className="flex flex-wrap items-center gap-3">
+              <label className="flex items-center gap-2">
+                <span>{t("fullStrength")}</span>
+                <select
+                  className="min-h-11 rounded-lg border border-line bg-card px-2"
+                  value={rank}
+                  onChange={(e) => setBotRank(Number(e.target.value))}
+                  data-testid="bot-rank"
+                >
+                  {ranks.ranks.map((r) => (
+                    <option key={r} value={r}>
+                      {rankLabel(r)}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <Button variant="primary" disabled={busy} onClick={() => void playFull(rank)}>
+                {t("fullPlay")}
+              </Button>
+            </div>
+          </>
+        ) : (
+          <p className="text-ink-soft">{t("fullLocked")}</p>
+        )}
       </Card>
 
       {me.belt === "white" && (

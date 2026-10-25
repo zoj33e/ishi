@@ -48,7 +48,7 @@
       "port": 8000,
       "env": {
         "ISHI_DB_PATH": "../../data/e2e.db",
-        "ISHI_KATAGO_BIN": "none"
+        "ISHI_DEV_UNLOCK_ALL": "1"
       }
     }
   ]

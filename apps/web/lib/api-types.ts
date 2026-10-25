@@ -141,6 +141,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/games/bot-ranks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Bot Ranks
+         * @description Strengths offered in the 9x9 picker until adaptive strength (M8), D-031.
+         */
+        get: operations["bot_ranks_api_games_bot_ranks_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/games/{game_id}": {
         parameters: {
             query?: never;
@@ -274,6 +294,13 @@ export interface components {
             /** Lesson Done */
             lesson_done: boolean;
         };
+        /** BotRanksOut */
+        BotRanksOut: {
+            /** Ranks */
+            ranks: number[];
+            /** Unlocked */
+            unlocked: boolean;
+        };
         /** CaptureStageOut */
         CaptureStageOut: {
             /** Stage */
@@ -393,6 +420,16 @@ export interface components {
             bot_level?: number | null;
             /** Exam Id */
             exam_id?: string | null;
+            /** Bot Rank */
+            bot_rank?: number | null;
+            /** Bot Label */
+            bot_label?: string | null;
+            score?: components["schemas"]["ScoreOut"] | null;
+            /**
+             * Dead
+             * @default []
+             */
+            dead: string[];
         };
         /** HTTPValidationError */
         HTTPValidationError: {
@@ -534,11 +571,13 @@ export interface components {
             /**
              * Mode
              * @default capture
-             * @constant
+             * @enum {string}
              */
-            mode: "capture";
+            mode: "capture" | "full";
             /** Exam Id */
             exam_id?: string | null;
+            /** Bot Rank */
+            bot_rank?: number | null;
         };
         /** Position */
         Position: {
@@ -973,6 +1012,26 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    bot_ranks_api_games_bot_ranks_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BotRanksOut"];
                 };
             };
         };

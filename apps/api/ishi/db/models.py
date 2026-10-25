@@ -79,6 +79,8 @@ class Game(_Timestamps, table=True):
     sgf: str = ""
     nudges_used: int = 0
     exam_id: str | None = Field(default=None, foreign_key="exams.id")
+    # Full games: {black_area, white_area, komi, dead: [GTP], katago_lead} after two passes.
+    final_score: dict[str, Any] | None = Field(default=None, sa_column=Column(JSON, nullable=True))
 
 
 class Move(_Timestamps, table=True):
@@ -95,3 +97,4 @@ class Move(_Timestamps, table=True):
     by_learner: bool
     nudge_shown: bool = False
     played_anyway: bool = False
+    bot_winrate: float | None = None  # full games: the bot's winrate before its move (resign rule)

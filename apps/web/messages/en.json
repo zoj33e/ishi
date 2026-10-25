@@ -24,7 +24,12 @@
     "examStart": "Take the exam",
     "examContinue": "Continue the exam",
     "examLocked": "Finish all 10 lessons and play 5 capture games to unlock the exam.",
-    "starting": "Starting…"
+    "starting": "Starting…",
+    "fullTitle": "9×9 game",
+    "fullInfo": "Real rules: surround the most area. Komi 7.",
+    "fullStrength": "Bot strength",
+    "fullPlay": "Play 9×9",
+    "fullLocked": "Opens after you earn the Yellow belt."
   },
   "health": {
     "title": "System status",
@@ -57,7 +62,8 @@
     "not_found": "We couldn't find that.",
     "lesson_locked": "This lesson is still locked.",
     "exam_finished": "This exam is already over.",
-    "exam_not_available": "The exam isn't open yet."
+    "exam_not_available": "The exam isn't open yet.",
+    "mode_locked": "This mode isn't open yet."
   },
   "board": {
     "label": "{size} by {size} Go board",
@@ -145,6 +151,7 @@
   },
   "play": {
     "title": "Capture Go",
+    "fullTitle": "9×9 game",
     "examTitle": "Yellow belt exam",
     "goal": "First to capture {target} wins",
     "goalOne": "First capture wins",
@@ -162,7 +169,16 @@
     "playAgain": "Play again",
     "toExam": "Back to the exam",
     "home": "Home",
-    "botPassed": "The bot passed."
+    "botPassed": "The bot passed.",
+    "fullGoal": "9×9 · komi {komi}",
+    "botRank": "Teacher bot ({rank})",
+    "fullHint": "When nothing useful is left, press Pass. The game ends when both players pass in a row.",
+    "wonBy": "You won by {points} points!",
+    "lostBy": "The bot won by {points} points.",
+    "botResigned": "The bot resigned — you won!",
+    "youResigned": "You gave up this game.",
+    "scoreLine": "Area: Black {black} · White {white} + komi {komi}",
+    "deadNote": "Stones with a cross were counted as dead."
   },
   "exam": {
     "title": "Yellow belt exam",

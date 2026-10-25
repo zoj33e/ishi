@@ -71,8 +71,11 @@ export const answerTask = (lessonId: string, taskId: string, body: AnswerIn) =>
     json(body),
   );
 
-export const createGame = (examId?: string) =>
-  request<GameState>("/api/games", json({ mode: "capture", exam_id: examId ?? null }));
+export type NewGame = Schemas["NewGame"];
+export type BotRanks = Schemas["BotRanksOut"];
+
+export const createGame = (body: NewGame) => request<GameState>("/api/games", json(body));
+export const getBotRanks = () => request<BotRanks>("/api/games/bot-ranks");
 export const getGame = (id: string) => request<GameState>(`/api/games/${encodeURIComponent(id)}`);
 export const playMove = (id: string, point: string) =>
   request<MoveOut>(`/api/games/${encodeURIComponent(id)}/moves`, json({ point }));

@@ -23,6 +23,8 @@ class Settings(BaseSettings):
     llm_model: str = Field(default="claude-haiku-5-5", alias="ISHI_LLM_MODEL")
     llm_enabled: bool = Field(default=True, alias="ISHI_LLM_ENABLED")
     default_locale: str = Field(default="th", alias="ISHI_DEFAULT_LOCALE")
+    # Testing aid: opens every mode regardless of belt (e.g. 9x9 games before the Yellow belt).
+    dev_unlock_all: bool = Field(default=False, alias="ISHI_DEV_UNLOCK_ALL")
 
     @property
     def katago_configured(self) -> bool:

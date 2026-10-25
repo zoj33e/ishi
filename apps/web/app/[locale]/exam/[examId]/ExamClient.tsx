@@ -30,7 +30,7 @@ export function ExamClient({ examId }: { examId: string }) {
     if (!exam) return;
     setBusy(true);
     try {
-      const id = exam.active_game ?? (await createGame(exam.id)).id;
+      const id = exam.active_game ?? (await createGame({ mode: "capture", exam_id: exam.id })).id;
       router.push(`/play/${id}`);
     } catch (e) {
       setError(errorText(e));
