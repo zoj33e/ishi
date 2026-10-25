@@ -1,0 +1,68 @@
+id: R5
+order: 5
+board_size: 5
+title:
+  en: Connect and cut
+  th: เชื่อมและตัด
+idea:
+  en: Stones touching along the lines are connected and share liberties. Stones touching only diagonally can be cut apart.
+  th: หมากที่ติดกันตามเส้นจะเชื่อมกันและใช้ลมหายใจร่วมกัน หมากที่ติดกันแค่แนวทแยงถูกตัดแยกได้
+demo:
+  setup: {black: [B3, C4], to_move: white}
+  frames:
+    - text:
+        en: These two black stones only touch diagonally. They are not connected yet.
+        th: หมากดำสองเม็ดนี้ติดกันแค่แนวทแยง ยังไม่ได้เชื่อมกัน
+      marks:
+        - {point: C3, kind: triangle}
+        - {point: B4, kind: triangle}
+    - move: C3
+      text:
+        en: White cuts here. Now Black has two separate stones, each weaker on its own.
+        th: ขาวตัดตรงนี้ ตอนนี้ดำกลายเป็นหมากสองเม็ดแยกกัน แต่ละเม็ดอ่อนแอลง
+tasks:
+  - id: t1
+    kind: play
+    prompt:
+      en: Connect your two black stones.
+      th: เชื่อมหมากดำสองเม็ดของคุณ
+    hint:
+      en: Play on a point that touches both stones along the lines.
+      th: วางหมากที่จุดที่ติดกับทั้งสองเม็ดตามเส้น
+    success:
+      en: Connected! Now they share their liberties.
+      th: เชื่อมแล้ว! ตอนนี้ใช้ลมหายใจร่วมกัน
+    setup: {black: [B3, C4], white: [D4]}
+    steps:
+      - goal: {type: connect, a: B3, b: C4}
+  - id: t2
+    kind: play
+    prompt:
+      en: Cut the two white stones apart.
+      th: ตัดหมากขาวสองเม็ดให้แยกกัน
+    hint:
+      en: Play on a point that touches both white stones.
+      th: วางที่จุดที่ติดกับหมากขาวทั้งสองเม็ด
+    success:
+      en: Cut! White is split in two.
+      th: ตัดได้! ขาวแยกเป็นสองส่วน
+    setup: {white: [B3, C4]}
+    steps:
+      - goal: {type: cut, a: B3, b: C4}
+  - id: t3
+    kind: play
+    prompt:
+      en: Your top stone is in atari. Save it by connecting to its friend below.
+      th: หมากดำเม็ดบนโดนอาตาริ ช่วยมันด้วยการเชื่อมกับเพื่อนด้านล่าง
+    hint:
+      en: The only liberty is also the connecting point.
+      th: ลมหายใจจุดเดียวก็คือจุดเชื่อมพอดี
+    success:
+      en: Connected and safe.
+      th: เชื่อมแล้วและปลอดภัย
+    setup: {black: [C3, C1], white: [B3, D3, C4]}
+    steps:
+      - goal: {type: connect, a: C3, b: C1}
+takeaway:
+  en: Connected stones are stronger together. Watch for diagonal gaps — they can be cut.
+  th: หมากที่เชื่อมกันแข็งแรงกว่า ระวังช่องทแยง เพราะถูกตัดได้

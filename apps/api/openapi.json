@@ -1,0 +1,1933 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Ishi API",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/api/health": {
+      "get": {
+        "summary": "Health",
+        "operationId": "health_api_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Health"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/sandbox/state": {
+      "post": {
+        "summary": "Sandbox State",
+        "operationId": "sandbox_state_api_sandbox_state_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SandboxRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SandboxState"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/me": {
+      "get": {
+        "tags": [
+          "me"
+        ],
+        "summary": "Get Me",
+        "operationId": "get_me_api_me_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MeOut"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "me"
+        ],
+        "summary": "Patch Me",
+        "operationId": "patch_me_api_me_patch",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MePatch"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MeOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/today": {
+      "get": {
+        "tags": [
+          "me"
+        ],
+        "summary": "Today",
+        "operationId": "today_api_today_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TodayOut"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/school": {
+      "get": {
+        "tags": [
+          "school"
+        ],
+        "summary": "School",
+        "operationId": "school_api_school_get",
+        "parameters": [
+          {
+            "name": "locale",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "th",
+                    "en"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Locale"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SchoolOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/school/{lesson_id}": {
+      "get": {
+        "tags": [
+          "school"
+        ],
+        "summary": "Lesson Detail",
+        "operationId": "lesson_detail_api_school__lesson_id__get",
+        "parameters": [
+          {
+            "name": "lesson_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Lesson Id"
+            }
+          },
+          {
+            "name": "locale",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "th",
+                    "en"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Locale"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LessonOut"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/school/{lesson_id}/tasks/{task_id}/answer": {
+      "post": {
+        "tags": [
+          "school"
+        ],
+        "summary": "Answer",
+        "operationId": "answer_api_school__lesson_id__tasks__task_id__answer_post",
+        "parameters": [
+          {
+            "name": "lesson_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Lesson Id"
+            }
+          },
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Task Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AnswerIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnswerOut"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/games": {
+      "post": {
+        "tags": [
+          "games"
+        ],
+        "summary": "Create Game",
+        "operationId": "create_game_api_games_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewGame"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GameStateOut"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/games/{game_id}": {
+      "get": {
+        "tags": [
+          "games"
+        ],
+        "summary": "Get Game",
+        "operationId": "get_game_api_games__game_id__get",
+        "parameters": [
+          {
+            "name": "game_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Game Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GameStateOut"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/games/{game_id}/moves": {
+      "post": {
+        "tags": [
+          "games"
+        ],
+        "summary": "Post Move",
+        "operationId": "post_move_api_games__game_id__moves_post",
+        "parameters": [
+          {
+            "name": "game_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Game Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MoveIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MoveOut"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          }
+        }
+      }
+    },
+    "/api/games/{game_id}/resign": {
+      "post": {
+        "tags": [
+          "games"
+        ],
+        "summary": "Resign",
+        "operationId": "resign_api_games__game_id__resign_post",
+        "parameters": [
+          {
+            "name": "game_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Game Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GameStateOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/games/{game_id}/sgf": {
+      "get": {
+        "tags": [
+          "games"
+        ],
+        "summary": "Game Sgf",
+        "operationId": "game_sgf_api_games__game_id__sgf_get",
+        "parameters": [
+          {
+            "name": "game_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Game Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/exams": {
+      "post": {
+        "tags": [
+          "games"
+        ],
+        "summary": "Create Exam",
+        "operationId": "create_exam_api_exams_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExamOut"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/exams/{exam_id}": {
+      "get": {
+        "tags": [
+          "games"
+        ],
+        "summary": "Get Exam",
+        "operationId": "get_exam_api_exams__exam_id__get",
+        "parameters": [
+          {
+            "name": "exam_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Exam Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExamOut"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AnswerIn": {
+        "properties": {
+          "moves": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 20,
+            "title": "Moves"
+          },
+          "number": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Number"
+          },
+          "points": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 400,
+            "title": "Points"
+          },
+          "choice": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "black",
+                  "white",
+                  "draw"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Choice"
+          }
+        },
+        "type": "object",
+        "title": "AnswerIn"
+      },
+      "AnswerOut": {
+        "properties": {
+          "correct": {
+            "type": "boolean",
+            "title": "Correct"
+          },
+          "feedback_key": {
+            "type": "string",
+            "title": "Feedback Key"
+          },
+          "marks": {
+            "items": {
+              "$ref": "#/components/schemas/Mark"
+            },
+            "type": "array",
+            "title": "Marks"
+          },
+          "done": {
+            "type": "boolean",
+            "title": "Done"
+          },
+          "reply": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reply"
+          },
+          "position": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Position"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "lesson_done": {
+            "type": "boolean",
+            "title": "Lesson Done"
+          }
+        },
+        "type": "object",
+        "required": [
+          "correct",
+          "feedback_key",
+          "marks",
+          "done",
+          "reply",
+          "position",
+          "lesson_done"
+        ],
+        "title": "AnswerOut"
+      },
+      "CaptureStageOut": {
+        "properties": {
+          "stage": {
+            "type": "integer",
+            "title": "Stage"
+          },
+          "stages_total": {
+            "type": "integer",
+            "title": "Stages Total"
+          },
+          "board_size": {
+            "type": "integer",
+            "title": "Board Size"
+          },
+          "capture_target": {
+            "type": "integer",
+            "title": "Capture Target"
+          },
+          "bot_level": {
+            "type": "integer",
+            "title": "Bot Level"
+          },
+          "streak": {
+            "type": "integer",
+            "title": "Streak"
+          },
+          "games_played": {
+            "type": "integer",
+            "title": "Games Played"
+          }
+        },
+        "type": "object",
+        "required": [
+          "stage",
+          "stages_total",
+          "board_size",
+          "capture_target",
+          "bot_level",
+          "streak",
+          "games_played"
+        ],
+        "title": "CaptureStageOut"
+      },
+      "Captures": {
+        "properties": {
+          "black": {
+            "type": "integer",
+            "title": "Black"
+          },
+          "white": {
+            "type": "integer",
+            "title": "White"
+          }
+        },
+        "type": "object",
+        "required": [
+          "black",
+          "white"
+        ],
+        "title": "Captures"
+      },
+      "DemoFrameOut": {
+        "properties": {
+          "text": {
+            "type": "string",
+            "title": "Text"
+          },
+          "move": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Move"
+          },
+          "marks": {
+            "items": {
+              "$ref": "#/components/schemas/Mark"
+            },
+            "type": "array",
+            "title": "Marks"
+          },
+          "position": {
+            "$ref": "#/components/schemas/Position"
+          }
+        },
+        "type": "object",
+        "required": [
+          "text",
+          "move",
+          "marks",
+          "position"
+        ],
+        "title": "DemoFrameOut"
+      },
+      "ErrorDetail": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "message_key": {
+            "type": "string",
+            "title": "Message Key"
+          },
+          "details": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Details"
+          }
+        },
+        "type": "object",
+        "required": [
+          "code",
+          "message_key",
+          "details"
+        ],
+        "title": "ErrorDetail"
+      },
+      "ErrorResponse": {
+        "properties": {
+          "error": {
+            "$ref": "#/components/schemas/ErrorDetail"
+          }
+        },
+        "type": "object",
+        "required": [
+          "error"
+        ],
+        "title": "ErrorResponse",
+        "description": "Every non-2xx response body (see `ishi.api.errors`)."
+      },
+      "ExamOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "belt_target": {
+            "type": "string",
+            "title": "Belt Target"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "in_progress",
+              "passed",
+              "failed"
+            ],
+            "title": "Status"
+          },
+          "games_won": {
+            "type": "integer",
+            "title": "Games Won"
+          },
+          "games_lost": {
+            "type": "integer",
+            "title": "Games Lost"
+          },
+          "wins_needed": {
+            "type": "integer",
+            "title": "Wins Needed"
+          },
+          "losses_allowed": {
+            "type": "integer",
+            "title": "Losses Allowed"
+          },
+          "active_game": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Active Game"
+          },
+          "puzzles": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Puzzles"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "belt_target",
+          "status",
+          "games_won",
+          "games_lost",
+          "wins_needed",
+          "losses_allowed",
+          "active_game",
+          "puzzles"
+        ],
+        "title": "ExamOut"
+      },
+      "GameStateOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "mode": {
+            "type": "string",
+            "title": "Mode"
+          },
+          "board_size": {
+            "type": "integer",
+            "title": "Board Size"
+          },
+          "komi": {
+            "type": "number",
+            "title": "Komi"
+          },
+          "learner_color": {
+            "type": "string",
+            "enum": [
+              "black",
+              "white"
+            ],
+            "title": "Learner Color"
+          },
+          "to_move": {
+            "type": "string",
+            "enum": [
+              "black",
+              "white"
+            ],
+            "title": "To Move"
+          },
+          "stones": {
+            "$ref": "#/components/schemas/Stones"
+          },
+          "last_move": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Move"
+          },
+          "captures": {
+            "$ref": "#/components/schemas/Captures"
+          },
+          "ko_point": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ko Point"
+          },
+          "move_number": {
+            "type": "integer",
+            "title": "Move Number"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "finished"
+            ],
+            "title": "Status"
+          },
+          "result": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Result"
+          },
+          "nudges_left": {
+            "type": "integer",
+            "title": "Nudges Left"
+          },
+          "capture_target": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Capture Target"
+          },
+          "bot_level": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bot Level"
+          },
+          "exam_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Exam Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "mode",
+          "board_size",
+          "komi",
+          "learner_color",
+          "to_move",
+          "stones",
+          "last_move",
+          "captures",
+          "ko_point",
+          "move_number",
+          "status",
+          "result",
+          "nudges_left"
+        ],
+        "title": "GameStateOut"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "Health": {
+        "properties": {
+          "api": {
+            "type": "string",
+            "const": "ok",
+            "title": "Api"
+          },
+          "engine": {
+            "type": "string",
+            "enum": [
+              "ok",
+              "down"
+            ],
+            "title": "Engine"
+          },
+          "llm": {
+            "type": "string",
+            "enum": [
+              "ok",
+              "disabled",
+              "down"
+            ],
+            "title": "Llm"
+          },
+          "db": {
+            "type": "string",
+            "enum": [
+              "ok",
+              "down"
+            ],
+            "title": "Db"
+          },
+          "engine_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Engine Version"
+          }
+        },
+        "type": "object",
+        "required": [
+          "api",
+          "engine",
+          "llm",
+          "db"
+        ],
+        "title": "Health"
+      },
+      "LessonOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "order": {
+            "type": "integer",
+            "title": "Order"
+          },
+          "board_size": {
+            "type": "integer",
+            "title": "Board Size"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "idea": {
+            "type": "string",
+            "title": "Idea"
+          },
+          "takeaway": {
+            "type": "string",
+            "title": "Takeaway"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "locked",
+              "available",
+              "done"
+            ],
+            "title": "Status"
+          },
+          "demo": {
+            "items": {
+              "$ref": "#/components/schemas/DemoFrameOut"
+            },
+            "type": "array",
+            "title": "Demo"
+          },
+          "tasks": {
+            "items": {
+              "$ref": "#/components/schemas/TaskOut"
+            },
+            "type": "array",
+            "title": "Tasks"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "order",
+          "board_size",
+          "title",
+          "idea",
+          "takeaway",
+          "status",
+          "demo",
+          "tasks"
+        ],
+        "title": "LessonOut"
+      },
+      "LessonSummary": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "order": {
+            "type": "integer",
+            "title": "Order"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "locked",
+              "available",
+              "done"
+            ],
+            "title": "Status"
+          },
+          "tasks_total": {
+            "type": "integer",
+            "title": "Tasks Total"
+          },
+          "tasks_done": {
+            "type": "integer",
+            "title": "Tasks Done"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "order",
+          "title",
+          "status",
+          "tasks_total",
+          "tasks_done"
+        ],
+        "title": "LessonSummary"
+      },
+      "Mark": {
+        "properties": {
+          "point": {
+            "type": "string",
+            "title": "Point"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "circle",
+              "triangle",
+              "square",
+              "cross",
+              "label"
+            ],
+            "title": "Kind"
+          },
+          "label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Label"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "point",
+          "kind"
+        ],
+        "title": "Mark"
+      },
+      "MeOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "display_name": {
+            "type": "string",
+            "title": "Display Name"
+          },
+          "locale": {
+            "type": "string",
+            "enum": [
+              "th",
+              "en"
+            ],
+            "title": "Locale"
+          },
+          "belt": {
+            "type": "string",
+            "title": "Belt"
+          },
+          "rank_estimate": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rank Estimate"
+          },
+          "streak": {
+            "type": "integer",
+            "title": "Streak"
+          },
+          "settings": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Settings"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "display_name",
+          "locale",
+          "belt",
+          "rank_estimate",
+          "streak",
+          "settings"
+        ],
+        "title": "MeOut"
+      },
+      "MePatch": {
+        "properties": {
+          "locale": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "th",
+                  "en"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Locale"
+          },
+          "display_name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 40
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Display Name"
+          },
+          "settings": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Settings"
+          }
+        },
+        "type": "object",
+        "title": "MePatch"
+      },
+      "MoveIn": {
+        "properties": {
+          "point": {
+            "type": "string",
+            "title": "Point"
+          },
+          "played_anyway": {
+            "type": "boolean",
+            "title": "Played Anyway",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "point"
+        ],
+        "title": "MoveIn"
+      },
+      "MoveOut": {
+        "properties": {
+          "state": {
+            "$ref": "#/components/schemas/GameStateOut"
+          },
+          "bot_move": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bot Move"
+          },
+          "game_over": {
+            "type": "boolean",
+            "title": "Game Over"
+          }
+        },
+        "type": "object",
+        "required": [
+          "state",
+          "bot_move",
+          "game_over"
+        ],
+        "title": "MoveOut"
+      },
+      "NewGame": {
+        "properties": {
+          "mode": {
+            "type": "string",
+            "const": "capture",
+            "title": "Mode",
+            "default": "capture"
+          },
+          "exam_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Exam Id"
+          }
+        },
+        "type": "object",
+        "title": "NewGame"
+      },
+      "Position": {
+        "properties": {
+          "board_size": {
+            "type": "integer",
+            "title": "Board Size"
+          },
+          "komi": {
+            "type": "number",
+            "title": "Komi"
+          },
+          "to_move": {
+            "type": "string",
+            "enum": [
+              "black",
+              "white"
+            ],
+            "title": "To Move"
+          },
+          "stones": {
+            "$ref": "#/components/schemas/Stones"
+          },
+          "last_move": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Move"
+          },
+          "ko_point": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ko Point"
+          },
+          "captures": {
+            "$ref": "#/components/schemas/Captures"
+          }
+        },
+        "type": "object",
+        "required": [
+          "board_size",
+          "komi",
+          "to_move",
+          "stones",
+          "last_move",
+          "ko_point",
+          "captures"
+        ],
+        "title": "Position"
+      },
+      "SandboxRequest": {
+        "properties": {
+          "board_size": {
+            "type": "integer",
+            "maximum": 19.0,
+            "minimum": 5.0,
+            "title": "Board Size",
+            "default": 9
+          },
+          "komi": {
+            "type": "number",
+            "title": "Komi",
+            "default": 7
+          },
+          "moves": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 1000,
+            "title": "Moves"
+          }
+        },
+        "type": "object",
+        "title": "SandboxRequest"
+      },
+      "SandboxState": {
+        "properties": {
+          "state": {
+            "$ref": "#/components/schemas/GameStateOut"
+          },
+          "legal_moves": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Legal Moves"
+          },
+          "score": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ScoreOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "sgf": {
+            "type": "string",
+            "title": "Sgf"
+          }
+        },
+        "type": "object",
+        "required": [
+          "state",
+          "legal_moves",
+          "score",
+          "sgf"
+        ],
+        "title": "SandboxState"
+      },
+      "SchoolOut": {
+        "properties": {
+          "lessons": {
+            "items": {
+              "$ref": "#/components/schemas/LessonSummary"
+            },
+            "type": "array",
+            "title": "Lessons"
+          },
+          "next_lesson": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Lesson"
+          }
+        },
+        "type": "object",
+        "required": [
+          "lessons",
+          "next_lesson"
+        ],
+        "title": "SchoolOut"
+      },
+      "ScoreOut": {
+        "properties": {
+          "black_area": {
+            "type": "integer",
+            "title": "Black Area"
+          },
+          "white_area": {
+            "type": "integer",
+            "title": "White Area"
+          },
+          "komi": {
+            "type": "number",
+            "title": "Komi"
+          },
+          "margin": {
+            "type": "number",
+            "title": "Margin"
+          },
+          "result": {
+            "type": "string",
+            "title": "Result"
+          },
+          "territory": {
+            "$ref": "#/components/schemas/Stones"
+          }
+        },
+        "type": "object",
+        "required": [
+          "black_area",
+          "white_area",
+          "komi",
+          "margin",
+          "result",
+          "territory"
+        ],
+        "title": "ScoreOut"
+      },
+      "Stones": {
+        "properties": {
+          "black": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Black"
+          },
+          "white": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "White"
+          }
+        },
+        "type": "object",
+        "required": [
+          "black",
+          "white"
+        ],
+        "title": "Stones"
+      },
+      "TaskOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "play",
+              "count",
+              "select",
+              "choose"
+            ],
+            "title": "Kind"
+          },
+          "prompt": {
+            "type": "string",
+            "title": "Prompt"
+          },
+          "hint": {
+            "type": "string",
+            "title": "Hint"
+          },
+          "success": {
+            "type": "string",
+            "title": "Success"
+          },
+          "position": {
+            "$ref": "#/components/schemas/Position"
+          },
+          "steps": {
+            "type": "integer",
+            "title": "Steps"
+          },
+          "select_mode": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "one",
+                  "all"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Select Mode"
+          },
+          "done": {
+            "type": "boolean",
+            "title": "Done"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "prompt",
+          "hint",
+          "success",
+          "position",
+          "steps",
+          "select_mode",
+          "done"
+        ],
+        "title": "TaskOut"
+      },
+      "TodayGame": {
+        "properties": {
+          "mode": {
+            "type": "string",
+            "const": "capture",
+            "title": "Mode"
+          },
+          "board_size": {
+            "type": "integer",
+            "title": "Board Size"
+          },
+          "bot_rank": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bot Rank"
+          }
+        },
+        "type": "object",
+        "required": [
+          "mode",
+          "board_size",
+          "bot_rank"
+        ],
+        "title": "TodayGame"
+      },
+      "TodayOut": {
+        "properties": {
+          "warmup_due": {
+            "type": "integer",
+            "title": "Warmup Due"
+          },
+          "game": {
+            "$ref": "#/components/schemas/TodayGame"
+          },
+          "lesson_pending": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lesson Pending"
+          },
+          "school_next": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "School Next"
+          },
+          "capture": {
+            "$ref": "#/components/schemas/CaptureStageOut"
+          },
+          "exam_available": {
+            "type": "boolean",
+            "title": "Exam Available"
+          },
+          "exam_in_progress": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Exam In Progress"
+          }
+        },
+        "type": "object",
+        "required": [
+          "warmup_due",
+          "game",
+          "lesson_pending",
+          "school_next",
+          "capture",
+          "exam_available",
+          "exam_in_progress"
+        ],
+        "title": "TodayOut"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}

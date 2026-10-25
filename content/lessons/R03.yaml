@@ -1,0 +1,67 @@
+id: R3
+order: 3
+board_size: 5
+title:
+  en: Capture
+  th: การกิน
+idea:
+  en: When a stone or chain has no liberties left, it is captured and taken off the board.
+  th: เมื่อหมากหรือกลุ่มหมากไม่เหลือลมหายใจ จะถูกกินและยกออกจากกระดาน
+demo:
+  setup: {black: [C4, B3, D3], white: [C3]}
+  frames:
+    - text:
+        en: White has only one liberty left.
+        th: ขาวเหลือลมหายใจจุดเดียว
+      marks:
+        - {point: C2, kind: circle}
+    - move: C2
+      text:
+        en: Black fills the last liberty. The white stone is captured and removed!
+        th: ดำปิดลมหายใจจุดสุดท้าย หมากขาวถูกกินและยกออก!
+tasks:
+  - id: t1
+    kind: play
+    prompt:
+      en: Capture the white stone.
+      th: กินหมากขาว
+    hint:
+      en: Find White's last liberty.
+      th: หาลมหายใจจุดสุดท้ายของขาว
+    success:
+      en: Captured!
+      th: กินได้แล้ว!
+    setup: {black: [C4, B3, D3], white: [C3]}
+    steps:
+      - goal: {type: capture}
+  - id: t2
+    kind: play
+    prompt:
+      en: Two white stones share one last liberty. Capture both at once.
+      th: หมากขาวสองเม็ดใช้ลมหายใจสุดท้ายร่วมกัน กินทั้งสองเม็ดในตาเดียว
+    hint:
+      en: A chain is captured together when its last shared liberty is filled.
+      th: ทั้งกลุ่มจะถูกกินพร้อมกันเมื่อลมหายใจสุดท้ายถูกปิด
+    success:
+      en: Two stones in one move!
+      th: กินได้สองเม็ดในตาเดียว!
+    setup: {black: [C4, D4, B3, E3, C2], white: [C3, D3]}
+    steps:
+      - goal: {type: capture, min_stones: 2}
+  - id: t3
+    kind: play
+    prompt:
+      en: On the edge it's even easier. Capture the white stone.
+      th: ที่ริมกระดานกินง่ายกว่าเดิม กินหมากขาว
+    hint:
+      en: The edge already blocks one side.
+      th: ขอบกระดานปิดไว้ให้แล้วหนึ่งด้าน
+    success:
+      en: Yes! The edge helped you.
+      th: ใช่! ขอบกระดานช่วยคุณ
+    setup: {black: [A4, B3], white: [A3]}
+    steps:
+      - goal: {type: capture}
+takeaway:
+  en: No liberties left means captured. Fill the last liberty to capture.
+  th: ไม่เหลือลมหายใจคือถูกกิน ปิดลมหายใจสุดท้ายเพื่อกิน

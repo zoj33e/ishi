@@ -1,0 +1,74 @@
+id: R10
+order: 10
+board_size: 5
+title:
+  en: Ending the game
+  th: การจบเกม
+idea:
+  en: When nothing useful is left to play, both players pass. Stones that can't escape capture are dead — they are removed and their points go to the other side.
+  th: เมื่อไม่มีตาที่มีประโยชน์เหลือ ทั้งสองฝ่ายผ่าน หมากที่หนีไม่รอดคือหมากตาย จะถูกยกออก และจุดนั้นเป็นของอีกฝ่าย
+demo:
+  setup:
+    black: [C5, C4, B3, C3, A2, B2, B1]
+    white: [A4, D5, D4, D3, C2, D2, C1]
+    komi: 7
+  frames:
+    - text:
+        en: There is a white stone inside Black's area. It can never make two eyes there, so it is dead.
+        th: มีหมากขาวอยู่ในพื้นที่ของดำ มันไม่มีทางทำสองตาได้ จึงเป็นหมากตาย
+      marks:
+        - {point: A4, kind: cross}
+    - text:
+        en: Both players pass. The dead stone is removed, and its point counts for Black.
+        th: ทั้งสองฝ่ายผ่าน หมากตายถูกยกออก และจุดนั้นนับเป็นของดำ
+tasks:
+  - id: t1
+    kind: play
+    prompt:
+      en: The borders are finished and nothing useful is left. What should you do now?
+      th: เขตแดนปิดหมดแล้ว ไม่มีตาที่มีประโยชน์เหลือ ตอนนี้ควรทำอะไร?
+    hint:
+      en: There's a button for it below the board.
+      th: มีปุ่มสำหรับสิ่งนี้อยู่ใต้กระดาน
+    success:
+      en: Right — pass. When both players pass in a row, the game ends.
+      th: ถูกต้อง — ผ่าน เมื่อทั้งสองฝ่ายผ่านติดกัน เกมจะจบ
+    setup:
+      black: [C5, C4, B3, C3, A2, B2, B1]
+      white: [D5, D4, D3, C2, D2, C1]
+    steps:
+      - goal: {type: pass}
+  - id: t2
+    kind: select
+    prompt:
+      en: Tap the dead white stone, then press Check.
+      th: แตะหมากขาวที่ตาย แล้วกด "ตรวจคำตอบ"
+    hint:
+      en: Look for a white stone stuck inside Black's area.
+      th: หาหมากขาวที่ติดอยู่ในพื้นที่ของดำ
+    success:
+      en: Yes, that stone is dead. It will be removed when counting.
+      th: ใช่ หมากเม็ดนั้นตายแล้ว จะถูกยกออกตอนนับ
+    setup:
+      black: [C5, C4, B3, C3, A2, B2, B1]
+      white: [A4, D5, D4, D3, C2, D2, C1]
+    select: {type: points, points: [A4], mode: all}
+  - id: t3
+    kind: count
+    prompt:
+      en: After removing the dead stone, how many points does Black have?
+      th: เมื่อยกหมากตายออกแล้ว ดำได้กี่แต้ม?
+    hint:
+      en: The dead stone's point and the empty points around it are now Black's.
+      th: จุดของหมากตายและจุดว่างรอบ ๆ ตอนนี้เป็นของดำ
+    success:
+      en: 13 points — the dead stone didn't save White anything.
+      th: 13 แต้ม — หมากตายไม่ได้ช่วยอะไรขาวเลย
+    setup:
+      black: [C5, C4, B3, C3, A2, B2, B1]
+      white: [A4, D5, D4, D3, C2, D2, C1]
+    count: {type: area, color: black, dead: [A4]}
+    expect: 13
+takeaway:
+  en: Pass when nothing is left. Remove dead stones, then count.
+  th: ผ่านเมื่อไม่มีอะไรให้เดิน ยกหมากตายออก แล้วนับ

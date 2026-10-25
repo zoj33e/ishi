@@ -1,0 +1,59 @@
+id: R7
+order: 7
+board_size: 5
+title:
+  en: Ko
+  th: โคะ
+idea:
+  en: If one stone captures one stone, the other player may not take back right away. They must play somewhere else first. This is ko.
+  th: ถ้าหมากหนึ่งเม็ดกินหมากหนึ่งเม็ด อีกฝ่ายจะกินคืนทันทีไม่ได้ ต้องเดินที่อื่นก่อนหนึ่งตา นี่คือโคะ
+demo:
+  setup: {black: [B3, C4, C2], white: [D4, E3, D2, C3]}
+  frames:
+    - text:
+        en: Black can capture the white stone in the middle.
+        th: ดำกินหมากขาวตรงกลางได้
+      marks:
+        - {point: D3, kind: circle}
+    - move: D3
+      text:
+        en: Black captured. Now White would like to take back at the same spot…
+        th: ดำกินแล้ว ขาวอยากกินคืนตรงจุดเดิม…
+      marks:
+        - {point: C3, kind: cross}
+    - text:
+        en: …but not right away, or the game could repeat forever. White must play somewhere else first.
+        th: …แต่ทำทันทีไม่ได้ ไม่อย่างนั้นเกมจะวนไม่จบ ขาวต้องเดินที่อื่นก่อน
+tasks:
+  - id: t1
+    kind: select
+    prompt:
+      en: Black just captured. White to play. Tap the point where White may not play right now.
+      th: ดำเพิ่งกิน ตาของขาว แตะจุดที่ขาวยังเดินไม่ได้ในตานี้
+    hint:
+      en: It's where the white stone was just captured.
+      th: คือจุดที่หมากขาวเพิ่งถูกกิน
+    success:
+      en: Right. Taking back immediately is forbidden by the ko rule.
+      th: ถูกต้อง กฎโคะห้ามกินคืนทันที
+    setup: {black: [B3, C4, C2], white: [D4, E3, D2, C3], moves: [D3]}
+    select: {type: ko_point, mode: one}
+  - id: t2
+    kind: play
+    prompt:
+      en: Play a threat elsewhere first — put a black stone in atari. After Black answers, retake the ko.
+      th: เดินขู่ที่อื่นก่อน — ทำให้หมากดำโดนอาตาริ พอดำรับแล้ว ค่อยกินโคะคืน
+    hint:
+      en: The black stone in the corner has only two liberties.
+      th: หมากดำที่มุมมีลมหายใจแค่สองจุด
+    success:
+      en: That's a ko fight! Threat, answer, then take back.
+      th: นี่แหละการสู้โคะ! ขู่ ให้อีกฝ่ายรับ แล้วกินคืน
+    setup: {black: [B3, C4, C2, A5], white: [D4, E3, D2, C3], moves: [D3]}
+    steps:
+      - goal: {type: atari, target: A5}
+        reply: {type: save_atari, target: A5}
+      - goal: {type: capture, target: D3}
+takeaway:
+  en: In a ko you can't take back at once. Play a threat somewhere else, then retake.
+  th: ในโคะ กินคืนทันทีไม่ได้ ให้เดินขู่ที่อื่นก่อน แล้วค่อยกินคืน

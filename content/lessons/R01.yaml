@@ -1,0 +1,69 @@
+id: R1
+order: 1
+board_size: 5
+title:
+  en: The board and taking turns
+  th: กระดานและการผลัดกันเดิน
+idea:
+  en: Stones go on the points where the lines cross. Black plays first, then the players take turns.
+  th: หมากวางบนจุดตัดของเส้น ฝ่ายดำเดินก่อน แล้วผลัดกันเดินทีละเม็ด
+demo:
+  setup: {}
+  frames:
+    - text:
+        en: This is a small 5×5 board. Stones go on the crossing points, not inside the squares.
+        th: นี่คือกระดานเล็กขนาด 5×5 หมากวางบนจุดตัด ไม่ใช่ในช่องสี่เหลี่ยม
+    - move: C3
+      text:
+        en: Black always plays first.
+        th: ฝ่ายดำเดินก่อนเสมอ
+    - move: D4
+      text:
+        en: Then White plays. One stone per turn, and stones never move once placed.
+        th: จากนั้นฝ่ายขาวเดิน ตาละหนึ่งเม็ด และวางแล้วไม่ย้ายอีก
+tasks:
+  - id: t1
+    kind: play
+    prompt:
+      en: Place a black stone on any crossing point. Tap once to see it, tap again to play.
+      th: วางหมากดำบนจุดตัดไหนก็ได้ แตะครั้งแรกเพื่อดู แตะอีกครั้งเพื่อเดิน
+    hint:
+      en: Tap where two lines cross.
+      th: แตะตรงที่เส้นสองเส้นตัดกัน
+    success:
+      en: Nice! That's your first stone.
+      th: เยี่ยม! นี่คือหมากเม็ดแรกของคุณ
+    setup: {}
+    steps:
+      - goal: {type: place_any}
+  - id: t2
+    kind: play
+    prompt:
+      en: Place a stone on the very center point.
+      th: วางหมากที่จุดกึ่งกลางกระดาน
+    hint:
+      en: The center is the third line from every side.
+      th: จุดกึ่งกลางคือเส้นที่สามนับจากทุกด้าน
+    success:
+      en: Right in the middle!
+      th: ตรงกลางพอดี!
+    setup: {}
+    steps:
+      - goal: {type: place_at, points: [C3]}
+  - id: t3
+    kind: play
+    prompt:
+      en: Black has played. Now it is White's turn. Place a white stone.
+      th: ดำเดินแล้ว ตอนนี้ตาของขาว วางหมากขาวหนึ่งเม็ด
+    hint:
+      en: Any empty crossing point is fine.
+      th: จุดตัดที่ว่างจุดไหนก็ได้
+    success:
+      en: That's taking turns. Black, White, Black, White…
+      th: นี่แหละการผลัดกันเดิน ดำ ขาว ดำ ขาว…
+    setup: {black: [C3], to_move: white}
+    steps:
+      - goal: {type: place_any}
+takeaway:
+  en: Stones go on crossing points. Black first, then take turns.
+  th: หมากวางบนจุดตัด ดำเดินก่อน แล้วผลัดกันเดิน

@@ -1,0 +1,70 @@
+@import "tailwindcss";
+
+:root {
+  --paper: #f6f1e7;
+  --ink: #1f1b16;
+  --ink-soft: #5d554b;
+  --wood: #dcb35c;
+  --card: #fffdf8;
+  --line: #e4dccd;
+  --ok: #3f7d4e;
+  --warn: #b7791f;
+  --bad: #b23a2b;
+  --grid: #3b2a12;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #17150f;
+    --ink: #f1ebdf;
+    --ink-soft: #b3aa9b;
+    --wood: #b98f3e;
+    --card: #211e17;
+    --line: #36312a;
+    --ok: #6fbf80;
+    --warn: #e0a44a;
+    --bad: #e2715f;
+    --grid: #2a1d0b;
+  }
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-wood: var(--wood);
+  --color-card: var(--card);
+  --color-line: var(--line);
+  --color-ok: var(--ok);
+  --color-warn: var(--warn);
+  --color-bad: var(--bad);
+  --font-sans: var(--font-plex-thai), var(--font-plex), system-ui, sans-serif;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 16px;
+}
+
+/* Stone placement: 120 ms drop (09-ui-ux), skipped for reduced motion. */
+@keyframes stone-drop {
+  from {
+    transform: scale(1.18);
+    opacity: 0.4;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.stone-drop {
+  animation: stone-drop 120ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stone-drop {
+    animation: none;
+  }
+}

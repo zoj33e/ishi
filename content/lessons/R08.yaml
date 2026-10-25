@@ -1,0 +1,74 @@
+id: R8
+order: 8
+board_size: 5
+title:
+  en: Eyes and life
+  th: ตาและการรอด
+idea:
+  en: An eye is an empty point your stones surround. A group with two eyes can never be captured. With only one eye, it can.
+  th: ตาคือจุดว่างที่หมากของเราล้อมไว้ กลุ่มที่มีสองตาจะไม่มีวันถูกกิน แต่ถ้ามีตาเดียว ถูกกินได้
+demo:
+  setup:
+    black: [A2, B2, C2, D2, E2, B1, D1]
+    white: [A3, B3, C3, D3, E3]
+  frames:
+    - text:
+        en: Black has two separate eyes.
+        th: ดำมีตาสองตาแยกกัน
+      marks:
+        - {point: A1, kind: circle}
+        - {point: C1, kind: circle}
+    - text:
+        en: White can't play in either eye — it would be suicide. White can never fill both, so Black is alive.
+        th: ขาววางในตาไหนก็ไม่ได้ เพราะเป็นการฆ่าตัวตาย ขาวปิดทั้งสองตาไม่ได้ ดำจึงรอด
+tasks:
+  - id: t1
+    kind: play
+    prompt:
+      en: Make this black group alive. Play the point that gives it two eyes.
+      th: ทำให้กลุ่มดำรอด วางหมากที่จุดที่ทำให้มีสองตา
+    hint:
+      en: Split the empty space along the bottom into separate single eyes.
+      th: แบ่งพื้นที่ว่างแถวล่างให้กลายเป็นตาเดี่ยวแยกกัน
+    success:
+      en: Two eyes — alive forever!
+      th: สองตา — รอดตลอดไป!
+    setup:
+      black: [A2, B2, C2, D2, E2, B1]
+      white: [A3, B3, C3, D3, E3]
+    steps:
+      - goal: {type: two_eyes, target: A2}
+  - id: t2
+    kind: play
+    prompt:
+      en: This white group has only one eye. Capture it!
+      th: กลุ่มขาวนี้มีตาเดียว กินมันเลย!
+    hint:
+      en: Playing inside the eye is allowed because it captures.
+      th: วางในตาได้ เพราะตานั้นกินหมาก
+    success:
+      en: One eye is not enough. Captured!
+      th: ตาเดียวไม่พอ ถูกกินแล้ว!
+    setup:
+      black: [C1, C2, A3, B3]
+      white: [B1, A2, B2]
+    steps:
+      - goal: {type: capture, min_stones: 3}
+  - id: t3
+    kind: select
+    prompt:
+      en: This white group has two eye shapes, but one is a false eye. Tap the false eye, then press Check.
+      th: กลุ่มขาวนี้มีรูปตาสองที่ แต่มีหนึ่งที่เป็นตาปลอม แตะตาปลอม แล้วกด "ตรวจคำตอบ"
+    hint:
+      en: Look at the diagonal points next to each eye. A black stone there spoils the eye.
+      th: ดูจุดทแยงข้าง ๆ แต่ละตา ถ้ามีหมากดำอยู่ตรงนั้น ตานั้นจะเสีย
+    success:
+      en: Yes. Black can capture the two stones on the right through that point, so it isn't a real eye.
+      th: ใช่ ดำกินหมากขาวสองเม็ดด้านขวาผ่านจุดนั้นได้ จึงไม่ใช่ตาจริง
+    setup:
+      black: [D3, D2, E2]
+      white: [A3, B3, C3, A2, B2, C2, B1, D1, E1]
+    select: {type: false_eyes, target: A2}
+takeaway:
+  en: Two real eyes means alive. One eye, or a false eye, is not enough.
+  th: มีตาจริงสองตาคือรอด ตาเดียวหรือตาปลอมไม่พอ

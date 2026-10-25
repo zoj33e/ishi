@@ -1,0 +1,178 @@
+{
+  "app": {
+    "name": "Ishi",
+    "tagline": "A patient Go teacher, at your level."
+  },
+  "home": {
+    "language": "Language",
+    "sandboxLink": "Open the practice board (two players)",
+    "belt": {
+      "white": "White belt",
+      "yellow": "Yellow belt"
+    },
+    "schoolTitle": "Rules school",
+    "schoolProgress": "{done} of {total} lessons done",
+    "schoolContinue": "Continue: {title}",
+    "schoolDone": "All rules learned!",
+    "schoolOpen": "Open the school",
+    "captureTitle": "Capture Go",
+    "captureInfo": "Stage {stage} of {total} · {size}×{size} · first to capture {target}",
+    "captureStreak": "Wins in a row: {streak} of 3 to move up",
+    "capturePlay": "Play capture Go",
+    "examTitle": "Yellow belt exam",
+    "examReady": "You're ready! Win 3 capture games before losing 3.",
+    "examStart": "Take the exam",
+    "examContinue": "Continue the exam",
+    "examLocked": "Finish all 10 lessons and play 5 capture games to unlock the exam.",
+    "starting": "Starting…"
+  },
+  "health": {
+    "title": "System status",
+    "api": "App server",
+    "engine": "Go engine (KataGo)",
+    "llm": "Teacher voice (Claude)",
+    "db": "Saved progress",
+    "status": {
+      "ok": "Ready",
+      "down": "Offline",
+      "disabled": "Off (using built-in explanations)",
+      "checking": "Checking…"
+    },
+    "unreachable": "Can't reach the app server. Is it running on your PC?",
+    "engineOffline": "Teacher is resting (engine offline)."
+  },
+  "errors": {
+    "engine_offline": "Teacher is resting (engine offline).",
+    "illegal_move": "You can't play there.",
+    "bad_coordinate": "That point isn't on the board.",
+    "invalid_request": "Something went wrong with that request.",
+    "network": "Can't reach the app server.",
+    "reason": {
+      "occupied": "There's already a stone there.",
+      "suicide": "That stone would have no liberties (suicide isn't allowed).",
+      "ko": "Ko: you can't take back right away. Play somewhere else first.",
+      "game_over": "The game is over.",
+      "off_board": "That point isn't on the board."
+    },
+    "not_found": "We couldn't find that.",
+    "lesson_locked": "This lesson is still locked.",
+    "exam_finished": "This exam is already over.",
+    "exam_not_available": "The exam isn't open yet."
+  },
+  "board": {
+    "label": "{size} by {size} Go board",
+    "empty": "empty",
+    "stone": {
+      "black": "black stone",
+      "white": "white stone"
+    }
+  },
+  "sandbox": {
+    "title": "Practice board",
+    "subtitle": "Two players, one device. Tap once to place a ghost stone, tap again to play.",
+    "toMove": "{color} to play",
+    "color": {
+      "black": "Black",
+      "white": "White"
+    },
+    "captures": "Captured — Black: {black} · White: {white}",
+    "moveNumber": "Move {n}",
+    "pass": "Pass",
+    "undo": "Undo",
+    "newGame": "New game",
+    "size": "Board size",
+    "downloadSgf": "Download SGF",
+    "coordinates": "Show coordinates",
+    "finished": "Game over (both passed). Result: {result}",
+    "areaNote": "Area count: stones + surrounded empty points, komi {komi}. Dead stones are not removed here.",
+    "area": "Black {black} · White {white}",
+    "home": "Back to home"
+  },
+  "school": {
+    "title": "Rules school",
+    "home": "Home",
+    "lessonN": "Lesson {n}",
+    "status": {
+      "locked": "Locked",
+      "available": "Open",
+      "done": "Done"
+    },
+    "tasksDone": "{done}/{total} tasks",
+    "next": "Next",
+    "prev": "Back",
+    "watch": "Watch",
+    "taskN": "Task {n} of {total}",
+    "check": "Check",
+    "pass": "Pass",
+    "hint": "Hint",
+    "reset": "Start over",
+    "continue": "Continue",
+    "black": "Black",
+    "white": "White",
+    "draw": "Draw",
+    "yourAnswer": "Your answer",
+    "selected": "{n} selected",
+    "takeaway": "Remember",
+    "lessonDone": "Lesson complete!",
+    "nextLesson": "Next lesson",
+    "backToSchool": "Back to the school",
+    "locked": "This lesson is locked. Finish the earlier lessons first.",
+    "feedback": {
+      "correct": "Correct!",
+      "keep_going": "Good — the opponent answered. Keep going.",
+      "not_capture": "That doesn't capture. Look for stones with only one liberty.",
+      "not_atari": "Not atari yet. Leave the stones with exactly one liberty.",
+      "not_escaped": "Still in danger. Your stones need at least two liberties.",
+      "not_connected": "Not connected yet. Stones connect along the lines, not diagonally.",
+      "not_cut": "That doesn't cut them apart. Play where both stones touch.",
+      "not_pass": "Not a stone this time. Look at the buttons under the board.",
+      "not_two_eyes": "Not two eyes yet. Try another point.",
+      "not_there": "Not that point. Read the task again.",
+      "place_stone": "Place a stone on the board.",
+      "bad_answer": "Give an answer first.",
+      "wrong_count": "Not quite. Count again — the circles show what to count.",
+      "wrong_select": "Not quite. Look again.",
+      "incomplete": "Good start — there are more to find.",
+      "wrong_choice": "Not quite. Count both sides again.",
+      "illegal": {
+        "occupied": "There's already a stone there.",
+        "suicide": "You can't play there: that stone would have no liberties.",
+        "ko": "Ko: you can't take back right away.",
+        "game_over": "This position is finished.",
+        "off_board": "That point isn't on the board."
+      }
+    }
+  },
+  "play": {
+    "title": "Capture Go",
+    "examTitle": "Yellow belt exam",
+    "goal": "First to capture {target} wins",
+    "goalOne": "First capture wins",
+    "you": "You (Black)",
+    "bot": "Teacher bot (level {level})",
+    "captured": "Captured",
+    "yourTurn": "Your turn",
+    "thinking": "Thinking…",
+    "pass": "Pass",
+    "resign": "Give up",
+    "resignConfirm": "Give up this game?",
+    "won": "You won!",
+    "lost": "The bot won this time.",
+    "draw": "It's a draw.",
+    "playAgain": "Play again",
+    "toExam": "Back to the exam",
+    "home": "Home",
+    "botPassed": "The bot passed."
+  },
+  "exam": {
+    "title": "Yellow belt exam",
+    "rules": "Play capture Go on 9×9: first to capture 3. Win 3 games before you lose 3.",
+    "score": "Wins {won} / 3 · Losses {lost} / 3",
+    "play": "Play the next game",
+    "resume": "Resume the game",
+    "passed": "Passed! You earned the yellow belt.",
+    "failed": "Not this time. Play 3 more capture games, then try again.",
+    "notAvailable": "The exam isn't open yet.",
+    "home": "Home"
+  }
+}

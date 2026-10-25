@@ -1,0 +1,55 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "ishi-api",
+      "runtimeExecutable": "uv",
+      "runtimeArgs": [
+        "run",
+        "--directory",
+        "apps/api",
+        "uvicorn",
+        "ishi.main:app",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "8000"
+      ],
+      "port": 8000
+    },
+    {
+      "name": "ishi-web",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": [
+        "--dir",
+        "apps/web",
+        "start",
+        "-H",
+        "127.0.0.1",
+        "-p",
+        "3000"
+      ],
+      "port": 3000
+    },
+    {
+      "name": "ishi-api-e2e",
+      "runtimeExecutable": "uv",
+      "runtimeArgs": [
+        "run",
+        "--directory",
+        "apps/api",
+        "uvicorn",
+        "ishi.main:app",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "8000"
+      ],
+      "port": 8000,
+      "env": {
+        "ISHI_DB_PATH": "../../data/e2e.db",
+        "ISHI_KATAGO_BIN": "none"
+      }
+    }
+  ]
+}

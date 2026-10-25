@@ -1,0 +1,61 @@
+id: R6
+order: 6
+board_size: 5
+title:
+  en: Illegal moves
+  th: ตาที่เดินไม่ได้
+idea:
+  en: You may not play where your stone would have no liberties — unless that move captures something.
+  th: ห้ามวางหมากตรงที่หมากของตัวเองจะไม่มีลมหายใจ — ยกเว้นตานั้นกินหมากฝ่ายตรงข้ามได้
+demo:
+  setup: {white: [A2, B1]}
+  frames:
+    - text:
+        en: If Black played in the corner, the stone would have no liberties at all. That's suicide, and it's not allowed.
+        th: ถ้าดำวางที่มุม หมากจะไม่มีลมหายใจเลย นี่คือการฆ่าตัวตาย ซึ่งห้ามเดิน
+      marks:
+        - {point: A1, kind: cross}
+tasks:
+  - id: t1
+    kind: select
+    prompt:
+      en: Tap a point where Black is not allowed to play, then press Check.
+      th: แตะจุดที่ดำห้ามเดิน แล้วกด "ตรวจคำตอบ"
+    hint:
+      en: Look for an empty point completely surrounded by white.
+      th: หาจุดว่างที่ถูกหมากขาวล้อมรอบทุกด้าน
+    success:
+      en: Right. A stone there would have no liberties.
+      th: ถูกต้อง หมากตรงนั้นจะไม่มีลมหายใจ
+    setup: {white: [A2, B1, D5, E4]}
+    select: {type: suicide_points, mode: one}
+  - id: t2
+    kind: play
+    prompt:
+      en: This black move looks like suicide, but it captures. Find it.
+      th: ตานี้ของดำดูเหมือนฆ่าตัวตาย แต่จริง ๆ แล้วกินหมากได้ หาให้เจอ
+    hint:
+      en: Which white stone has only one liberty?
+      th: หมากขาวเม็ดไหนเหลือลมหายใจจุดเดียว?
+    success:
+      en: Yes! Capturing first gives your stone a liberty, so the move is legal.
+      th: ใช่! การกินทำให้หมากของคุณมีลมหายใจ จึงเดินได้
+    setup: {black: [C5, B4], white: [B5, A4]}
+    steps:
+      - goal: {type: capture, target: B5}
+  - id: t3
+    kind: select
+    prompt:
+      en: Now it's White's turn. Tap a point where White is not allowed to play.
+      th: ตอนนี้ตาของขาว แตะจุดที่ขาวห้ามเดิน
+    hint:
+      en: The rule is the same for both colors.
+      th: กฎเหมือนกันทั้งสองสี
+    success:
+      en: Correct. The rule works the same for White.
+      th: ถูกต้อง กฎนี้ใช้กับขาวเหมือนกัน
+    setup: {black: [A2, B1], to_move: white}
+    select: {type: suicide_points, mode: one}
+takeaway:
+  en: No suicide — but a move that captures is always allowed.
+  th: ห้ามฆ่าตัวตาย — แต่ตาที่กินหมากได้ เดินได้เสมอ

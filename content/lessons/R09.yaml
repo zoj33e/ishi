@@ -1,0 +1,83 @@
+id: R9
+order: 9
+board_size: 5
+title:
+  en: Territory and counting
+  th: อาณาเขตและการนับ
+idea:
+  en: At the end, count your stones on the board plus the empty points you surround. That is your area. White also gets komi for moving second.
+  th: ตอนจบเกม นับหมากของเราบนกระดาน บวกจุดว่างที่เราล้อมไว้ นั่นคือพื้นที่ของเรา ฝ่ายขาวได้โคมิเพิ่มเพราะเดินทีหลัง
+demo:
+  setup:
+    black: [C5, C4, B3, C3, A2, B2, B1]
+    white: [D5, D4, D3, C2, D2, C1]
+    komi: 7
+  frames:
+    - text:
+        en: The game is over. Black's area is the black stones plus the empty points only Black surrounds.
+        th: เกมจบแล้ว พื้นที่ของดำคือหมากดำ บวกจุดว่างที่ดำล้อมไว้ฝ่ายเดียว
+      marks:
+        - {point: A5, kind: square}
+        - {point: B5, kind: square}
+        - {point: A4, kind: square}
+        - {point: B4, kind: square}
+        - {point: A3, kind: square}
+        - {point: A1, kind: square}
+    - text:
+        en: White counts the same way. Then White adds komi — 7 points for playing second.
+        th: ขาวนับแบบเดียวกัน แล้วบวกโคมิอีก 7 แต้ม เพราะเดินทีหลัง
+tasks:
+  - id: t1
+    kind: count
+    prompt:
+      en: How many points does Black have? (stones + surrounded empty points)
+      th: ดำได้กี่แต้ม? (หมากดำ + จุดว่างที่ล้อมไว้)
+    hint:
+      en: Count the 7 black stones first, then add the empty points inside Black's wall.
+      th: นับหมากดำ 7 เม็ดก่อน แล้วบวกจุดว่างที่อยู่ในกำแพงของดำ
+    success:
+      en: 13 points for Black.
+      th: ดำได้ 13 แต้ม
+    setup:
+      black: [C5, C4, B3, C3, A2, B2, B1]
+      white: [D5, D4, D3, C2, D2, C1]
+      komi: 7
+    count: {type: area, color: black}
+    expect: 13
+  - id: t2
+    kind: count
+    prompt:
+      en: How many points does White have on the board? (without komi)
+      th: ขาวได้กี่แต้มบนกระดาน? (ยังไม่รวมโคมิ)
+    hint:
+      en: 6 white stones plus the empty points on White's side.
+      th: หมากขาว 6 เม็ด บวกจุดว่างฝั่งขาว
+    success:
+      en: 12 points for White on the board.
+      th: ขาวได้ 12 แต้มบนกระดาน
+    setup:
+      black: [C5, C4, B3, C3, A2, B2, B1]
+      white: [D5, D4, D3, C2, D2, C1]
+      komi: 7
+    count: {type: area, color: white}
+    expect: 12
+  - id: t3
+    kind: choose
+    prompt:
+      en: Black 13, White 12. With komi 7 for White, who wins?
+      th: ดำ 13 ขาว 12 ถ้าขาวได้โคมิ 7 ใครชนะ?
+    hint:
+      en: Add 7 to White's score and compare.
+      th: บวก 7 ให้ขาว แล้วเทียบกัน
+    success:
+      en: White wins, 19 to 13. Komi matters!
+      th: ขาวชนะ 19 ต่อ 13 โคมิสำคัญนะ!
+    setup:
+      black: [C5, C4, B3, C3, A2, B2, B1]
+      white: [D5, D4, D3, C2, D2, C1]
+      komi: 7
+    choose: {type: winner}
+    expect: white
+takeaway:
+  en: Area = your stones + your surrounded empty points. White adds komi.
+  th: พื้นที่ = หมากของเรา + จุดว่างที่เราล้อม ขาวได้บวกโคมิ

@@ -1,0 +1,74 @@
+id: R4
+order: 4
+board_size: 5
+title:
+  en: Atari and escape
+  th: อาตาริและการหนี
+idea:
+  en: A stone or chain with only one liberty left is in atari. If you don't help it, it will be captured.
+  th: หมากหรือกลุ่มที่เหลือลมหายใจจุดเดียวกำลังโดนอาตาริ ถ้าไม่ช่วย จะถูกกิน
+demo:
+  setup: {black: [C3], white: [C4, B3], to_move: white}
+  frames:
+    - text:
+        en: Black has 2 liberties.
+        th: ดำมีลมหายใจ 2 จุด
+      marks:
+        - {point: D3, kind: circle}
+        - {point: C2, kind: circle}
+    - move: D3
+      text:
+        en: White takes one. Black has one liberty left — atari!
+        th: ขาวแย่งไปหนึ่งจุด ดำเหลือลมหายใจจุดเดียว — อาตาริ!
+      marks:
+        - {point: C2, kind: circle}
+    - move: C2
+      text:
+        en: Black extends out of atari. The chain now has 3 liberties again.
+        th: ดำต่อหมากหนีออกจากอาตาริ ตอนนี้กลุ่มมีลมหายใจ 3 จุดอีกครั้ง
+tasks:
+  - id: t1
+    kind: play
+    prompt:
+      en: Put the white stone in atari.
+      th: ทำให้หมากขาวโดนอาตาริ
+    hint:
+      en: White has two liberties. Take one of them.
+      th: ขาวมีลมหายใจสองจุด แย่งมาหนึ่งจุด
+    success:
+      en: Atari! White has one liberty left.
+      th: อาตาริ! ขาวเหลือลมหายใจจุดเดียว
+    setup: {black: [C4, B3], white: [C3]}
+    steps:
+      - goal: {type: atari, target: C3}
+  - id: t2
+    kind: play
+    prompt:
+      en: Your black stone is in atari. Save it.
+      th: หมากดำของคุณโดนอาตาริ ช่วยมันหนี
+    hint:
+      en: Extend from your last liberty to get more room to breathe.
+      th: ต่อหมากออกไปที่ลมหายใจจุดสุดท้าย เพื่อให้มีที่หายใจมากขึ้น
+    success:
+      en: Saved! Your chain can breathe again.
+      th: รอดแล้ว! กลุ่มของคุณหายใจได้อีก
+    setup: {black: [C3], white: [C4, B3, D3]}
+    steps:
+      - goal: {type: escape, target: C3, min_libs: 2}
+  - id: t3
+    kind: play
+    prompt:
+      en: Now two black stones are in atari. Save them.
+      th: ตอนนี้หมากดำสองเม็ดโดนอาตาริ ช่วยให้รอด
+    hint:
+      en: Find the chain's only liberty and extend there.
+      th: หาลมหายใจจุดเดียวของกลุ่ม แล้วต่อหมากตรงนั้น
+    success:
+      en: Well done. Always check your liberties!
+      th: เก่งมาก ตรวจลมหายใจของตัวเองเสมอ!
+    setup: {black: [C3, D3], white: [C4, D4, B3, E3, D2]}
+    steps:
+      - goal: {type: escape, target: C3, min_libs: 2}
+takeaway:
+  en: One liberty left is atari. Escape by extending, before it gets captured.
+  th: เหลือลมหายใจจุดเดียวคืออาตาริ หนีด้วยการต่อหมากก่อนจะถูกกิน

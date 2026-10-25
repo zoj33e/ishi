@@ -1,0 +1,87 @@
+id: R2
+order: 2
+board_size: 5
+title:
+  en: Liberties
+  th: ลมหายใจ
+idea:
+  en: A stone breathes through the empty points right next to it along the lines. These are its liberties.
+  th: หมากหายใจผ่านจุดว่างที่อยู่ติดกันตามเส้น จุดเหล่านี้เรียกว่าลมหายใจ
+demo:
+  setup: {black: [C3], to_move: white}
+  frames:
+    - text:
+        en: This black stone has 4 liberties — up, down, left and right.
+        th: หมากดำเม็ดนี้มีลมหายใจ 4 จุด คือ บน ล่าง ซ้าย ขวา
+      marks:
+        - {point: C4, kind: circle}
+        - {point: B3, kind: circle}
+        - {point: D3, kind: circle}
+        - {point: C2, kind: circle}
+    - move: D3
+      text:
+        en: A white stone next to it takes one liberty away. Now Black has 3.
+        th: หมากขาวที่มาวางติดกันจะแย่งลมหายใจไปหนึ่งจุด ตอนนี้ดำเหลือ 3
+      marks:
+        - {point: C4, kind: circle}
+        - {point: B3, kind: circle}
+        - {point: C2, kind: circle}
+tasks:
+  - id: t1
+    kind: count
+    prompt:
+      en: How many liberties does the black stone have?
+      th: หมากดำเม็ดนี้มีลมหายใจกี่จุด?
+    hint:
+      en: Count the empty points directly up, down, left and right. Diagonals don't count.
+      th: นับจุดว่างที่อยู่ติดกันด้านบน ล่าง ซ้าย ขวา แนวทแยงไม่นับ
+    success:
+      en: Yes, 4 liberties.
+      th: ถูกต้อง มีลมหายใจ 4 จุด
+    setup: {black: [C3]}
+    count: {type: liberties, target: C3}
+    expect: 4
+  - id: t2
+    kind: count
+    prompt:
+      en: Two stones side by side form a chain and share their liberties. How many does this chain have?
+      th: หมากสองเม็ดที่ติดกันเป็นกลุ่มเดียวกันและใช้ลมหายใจร่วมกัน กลุ่มนี้มีลมหายใจกี่จุด?
+    hint:
+      en: Walk around the whole chain and count each empty neighbor once.
+      th: เดินรอบทั้งกลุ่ม แล้วนับจุดว่างที่ติดกันจุดละครั้ง
+    success:
+      en: Right — 6 shared liberties.
+      th: ใช่แล้ว ลมหายใจร่วมกัน 6 จุด
+    setup: {black: [C3, D3]}
+    count: {type: liberties, target: C3}
+    expect: 6
+  - id: t3
+    kind: count
+    prompt:
+      en: A stone on the edge has fewer liberties. How many does this one have?
+      th: หมากที่อยู่ริมกระดานมีลมหายใจน้อยกว่า เม็ดนี้มีกี่จุด?
+    hint:
+      en: There is no point outside the board.
+      th: นอกกระดานไม่มีจุดให้หายใจ
+    success:
+      en: Yes, only 3 on the edge.
+      th: ใช่ ริมกระดานเหลือแค่ 3
+    setup: {black: [A3]}
+    count: {type: liberties, target: A3}
+    expect: 3
+  - id: t4
+    kind: select
+    prompt:
+      en: Tap all the liberties of the corner stone, then press Check.
+      th: แตะลมหายใจทั้งหมดของหมากที่มุม แล้วกด "ตรวจคำตอบ"
+    hint:
+      en: In the corner a stone has only two neighbors.
+      th: ที่มุมกระดาน หมากมีจุดติดกันแค่สองจุด
+    success:
+      en: Correct. A corner stone has just 2 liberties.
+      th: ถูกต้อง หมากที่มุมมีลมหายใจแค่ 2 จุด
+    setup: {black: [A1]}
+    select: {type: liberties, target: A1}
+takeaway:
+  en: Liberties are the empty points next to a stone or chain. Fewer on the edge, fewest in the corner.
+  th: ลมหายใจคือจุดว่างที่ติดกับหมากหรือกลุ่มหมาก ริมกระดานมีน้อยลง มุมกระดานมีน้อยที่สุด
