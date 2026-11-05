@@ -86,6 +86,20 @@ export function HomeClient() {
         </Card>
       )}
 
+      <Card title={t("gymTitle")}>
+        <p className="text-ink-soft" data-testid="gym-due">{t("gymDue", { n: today.warmup_due })}</p>
+        <div className="flex flex-wrap gap-2">
+          {today.warmup_due > 0 && (
+            <Link href="/gym?warmup=1" data-testid="home-warmup">
+              <span className="inline-flex min-h-11 items-center rounded-full bg-ink px-5 font-semibold text-paper">{t("gymWarmup")}</span>
+            </Link>
+          )}
+          <Link href="/gym" data-testid="home-gym">
+            <span className="inline-flex min-h-11 items-center rounded-full border border-line bg-card px-5 font-semibold">{t("gymOpen")}</span>
+          </Link>
+        </div>
+      </Card>
+
       <Card title={t("schoolTitle")}>
         <p className="text-ink-soft">{t("schoolProgress", { done, total: school.lessons.length })}</p>
         <div className="h-2 overflow-hidden rounded-full bg-line" aria-hidden>

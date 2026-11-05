@@ -145,3 +145,29 @@ def best_move_set(resp: AnalysisResponse, mover: Color) -> list[str]:
         if m.visits >= BEST_SET_VISIT_SHARE * top.visits
         and best - for_player(m.scoreLead, mover) <= BEST_SET_MARGIN
     ]
+
+
+# -- Shape Gym (M6) ------------------------------------------------------------------------
+
+PUZZLE_VISITS = 800
+
+
+def puzzle_query(
+    qid: str,
+    state: GameState,
+    region: list[str] | None,
+    *,
+    max_visits: int = PUZZLE_VISITS,
+    moves_ownership: bool = False,
+) -> AnalysisQuery:
+    """Analyze a puzzle position (setup + moves so far). With a region, the side to move may only
+    play there (`allowMoves`, first move only): a puzzle asks about one local fight, so a bigger
+    move elsewhere on a sparse board must not crowd out the answer."""
+    query = game_analysis_query(qid, state, [len(state.moves)], max_visits=max_visits)
+    query.priority = 0
+    query.includeOwnership = moves_ownership
+    query.includeMovesOwnership = moves_ownership
+    if region:
+        player = "B" if state.to_move is Color.BLACK else "W"
+        query.allowMoves = [{"player": player, "moves": region, "untilDepth": 1}]
+    return query

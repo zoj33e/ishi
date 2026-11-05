@@ -1,0 +1,260 @@
+# Shape Gym seed puzzles: cut_disconnect. Generated from hand-drawn base shapes
+# (scratch generator); verified by scripts/build_puzzles.py.
+concept: cut_disconnect
+puzzles:
+  - id: ct01
+    note: diagonal
+    to_move: black
+    answer: E4
+    cut_points: [E4]
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . . . . .  # 7
+      . . . . . . . . .  # 6
+      . . . . X O . . .  # 5
+      . . . . . X . . .  # 4
+      . . . . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: ct02
+    note: diagonal
+    to_move: white
+    answer: E6
+    cut_points: [E6]
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . . . . .  # 7
+      . . . . . O . . .  # 6
+      . . . . O X . . .  # 5
+      . . . . . . . . .  # 4
+      . . . . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: ct03
+    note: diagonal
+    to_move: black
+    answer: D5
+    cut_points: [D5]
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . . . . .  # 7
+      . . . . . . . . .  # 6
+      . . X . . . . . .  # 5
+      . . O X . . . . .  # 4
+      . . . . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: ct04
+    note: diagonal
+    to_move: white
+    answer: G4
+    cut_points: [G4]
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . . . . .  # 7
+      . . . . . . . . .  # 6
+      . . . . . X O . .  # 5
+      . . . . . O . . .  # 4
+      . . . . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: ct05
+    note: diagonal
+    to_move: black
+    answer: E6
+    cut_points: [E6]
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . O X . . . .  # 7
+      . . . X . . . . .  # 6
+      . . . . . . . . .  # 5
+      . . . . . . . . .  # 4
+      . . . . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: ct06
+    note: diagonal
+    to_move: white
+    answer: G5
+    cut_points: [G4]
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . . . . .  # 7
+      . . . . . . . . .  # 6
+      . . . . . . . . .  # 5
+      . . . . . O . . .  # 4
+      . . . . . X O . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: ct07
+    note: jump
+    to_move: black
+    answer: E5
+    cut_points: [E5]
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . . . . .  # 7
+      . . . . X . . . .  # 6
+      . . . O . O . . .  # 5
+      . . . . X . . . .  # 4
+      . . . . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: ct08
+    note: jump
+    to_move: white
+    answer: D6
+    cut_points: [D6]
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . X . . . . .  # 7
+      . . O . O . . . .  # 6
+      . . . X . . . . .  # 5
+      . . . . . . . . .  # 4
+      . . . . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: ct09
+    note: jump
+    to_move: black
+    answer: D5
+    cut_points: [D5]
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . . . . .  # 7
+      . . . X . . . . .  # 6
+      . . O . O . . . .  # 5
+      . . . X . . . . .  # 4
+      . . . . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: ct10
+    note: jump
+    to_move: white
+    answer: E4
+    cut_points: [E4]
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . . . . .  # 7
+      . . . . . . . . .  # 6
+      . . . . X . . . .  # 5
+      . . . O . O . . .  # 4
+      . . . . X . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: ct11
+    note: jump
+    to_move: black
+    answer: E6
+    cut_points: [E6]
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . X . . . .  # 7
+      . . . O . O . . .  # 6
+      . . . . X . . . .  # 5
+      . . . . . . . . .  # 4
+      . . . . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: ct12
+    note: hane
+    to_move: black
+    answer: D4
+    cut_points: [D4]
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . . . . .  # 7
+      . . . . . . . . .  # 6
+      . . X X O . . . .  # 5
+      . . . . X O . . .  # 4
+      . . . . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: ct13
+    note: hane
+    to_move: white
+    answer: E5
+    cut_points: [E5]
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . . . . .  # 7
+      . . . . . O . . .  # 6
+      . . . . . O . . .  # 5
+      . . . . O X . . .  # 4
+      . . . . X . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: ct14
+    note: hane
+    to_move: black
+    answer: F6
+    cut_points: [F5]
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . . . . .  # 7
+      . . . . . . . . .  # 6
+      . . . O X . . . .  # 5
+      . . . . O X X . .  # 4
+      . . . . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: ct15
+    note: hane
+    to_move: white
+    answer: F5
+    cut_points: [F5]
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . X . . .  # 7
+      . . . . X O . . .  # 6
+      . . . . O . . . .  # 5
+      . . . . O . . . .  # 4
+      . . . . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: ct16
+    note: hane
+    to_move: black
+    answer: G6
+    cut_points: [G6]
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . X . . .  # 7
+      . . . . . X . . .  # 6
+      . . . . . O X . .  # 5
+      . . . . . . O . .  # 4
+      . . . . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J

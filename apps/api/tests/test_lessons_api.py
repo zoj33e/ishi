@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+from datetime import timedelta
 from pathlib import Path
 
 import pytest
@@ -11,7 +12,17 @@ from fastapi.testclient import TestClient
 from sqlmodel import Session, select
 
 from ishi.config import get_settings
-from ishi.db.models import Analysis, Game, Lesson, Move, NarrationCache, Puzzle, User, utcnow
+from ishi.db.models import (
+    Analysis,
+    Game,
+    Lesson,
+    Move,
+    NarrationCache,
+    Puzzle,
+    SrsCard,
+    User,
+    utcnow,
+)
 from ishi.db.session import get_engine, get_or_create_user
 from ishi.engine.models import AnalysisResponse
 from ishi.play import lessons
@@ -175,6 +186,9 @@ def test_done_adds_a_puzzle_once(api: TestClient, game_id: str) -> None:
         assert p.correct_moves == ["J5"] and p.setup["to_move"] == "black"
         assert "F8" not in p.setup["black"] and p.solution_line[0] == "B J5"
         assert s.get(Lesson, lid).done_at is not None  # type: ignore[union-attr]
+        assert p.setup["target"] is not None  # the group the hint marks
+        [card] = s.exec(select(SrsCard)).all()  # Shape Gym: first due the next day (D-052)
+        assert card.puzzle_id == p.id and card.due_at > utcnow() + timedelta(hours=23)
     assert api.get(f"/api/games/{game_id}/lesson").json()["done"]
     assert api.get("/api/today").json()["lesson_pending"] is None
 

@@ -5,9 +5,11 @@ from typing import Any, Literal
 from fastapi import APIRouter
 from pydantic import BaseModel, Field
 
+from ishi.api.routes_gym import NowDep
 from ishi.api.routes_school import next_lesson
 from ishi.db.models import User, utcnow
 from ishi.db.session import SessionDep, get_or_create_user
+from ishi.gym import service as gym
 from ishi.play import lessons, service
 from ishi.play.progression import STAGES
 
@@ -91,13 +93,13 @@ def patch_me(session: SessionDep, body: MePatch) -> MeOut:
 
 
 @router.get("/today", response_model=TodayOut)
-def today(session: SessionDep) -> TodayOut:
+def today(session: SessionDep, now: NowDep) -> TodayOut:
     user = get_or_create_user(session)
     st = service.stage_status(session, user)
     exam = service.active_exam(session, user)
     pending = lessons.pending_lesson(session, user.id)
     return TodayOut(
-        warmup_due=0,
+        warmup_due=gym.due_count(session, user.id, now),
         game=TodayGame(mode="capture", board_size=st.stage.board_size, bot_rank=None),
         lesson_pending=pending.id if pending else None,
         lesson_game=pending.game_id if pending else None,

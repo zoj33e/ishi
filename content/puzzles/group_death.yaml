@@ -1,0 +1,324 @@
+# Shape Gym seed puzzles: group_death. Generated from hand-drawn base shapes
+# (scratch generator); verified by scripts/build_puzzles.py.
+concept: group_death
+puzzles:
+  - id: gd01
+    note: corner_straight
+    to_move: black
+    answer: B1
+    target: A2
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . . . . .  # 7
+      . . . . . . . . .  # 6
+      . . . . . . . . .  # 5
+      . . . . . . . . .  # 4
+      O O O O O . . . .  # 3
+      X X X X O . . . .  # 2
+      . . . X O . . . .  # 1
+      # A B C D E F G H J
+  - id: gd02
+    note: corner_straight
+    to_move: white
+    answer: A8
+    target: B9
+    board: |
+      . O X . . . . . .  # 9
+      . O X . . . . . .  # 8
+      . O X . . . . . .  # 7
+      O O X . . . . . .  # 6
+      X X X . . . . . .  # 5
+      . . . . . . . . .  # 4
+      . . . . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: gd03
+    note: corner_straight
+    to_move: black
+    answer: H9
+    target: J8
+    board: |
+      . . . . O X . . .  # 9
+      . . . . O X X X X  # 8
+      . . . . O O O O O  # 7
+      . . . . . . . . .  # 6
+      . . . . . . . . .  # 5
+      . . . . . . . . .  # 4
+      . . . . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: gd04
+    note: corner_straight
+    to_move: white
+    answer: J2
+    target: H1
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . . . . .  # 7
+      . . . . . . . . .  # 6
+      . . . . . . X X X  # 5
+      . . . . . . X O O  # 4
+      . . . . . . X O .  # 3
+      . . . . . . X O .  # 2
+      . . . . . . X O .  # 1
+      # A B C D E F G H J
+  - id: gd05
+    note: corner_straight
+    to_move: black
+    answer: H1
+    target: J2
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . . . . .  # 7
+      . . . . . . . . .  # 6
+      . . . . . . . . .  # 5
+      . . . . . . . . .  # 4
+      . . . . O O O O O  # 3
+      . . . . O X X X X  # 2
+      . . . . O X . . .  # 1
+      # A B C D E F G H J
+  - id: gd06
+    note: corner_straight
+    to_move: white
+    answer: B9
+    target: A8
+    board: |
+      . . . O X . . . .  # 9
+      O O O O X . . . .  # 8
+      X X X X X . . . .  # 7
+      . . . . . . . . .  # 6
+      . . . . . . . . .  # 5
+      . . . . . . . . .  # 4
+      . . . . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: gd07
+    note: corner_straight
+    to_move: black
+    answer: J8
+    target: H9
+    board: |
+      . . . . . . O X .  # 9
+      . . . . . . O X .  # 8
+      . . . . . . O X .  # 7
+      . . . . . . O X X  # 6
+      . . . . . . O O O  # 5
+      . . . . . . . . .  # 4
+      . . . . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: gd08
+    note: corner_straight
+    to_move: white
+    answer: A2
+    target: B1
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . . . . .  # 7
+      . . . . . . . . .  # 6
+      X X X . . . . . .  # 5
+      O O X . . . . . .  # 4
+      . O X . . . . . .  # 3
+      . O X . . . . . .  # 2
+      . O X . . . . . .  # 1
+      # A B C D E F G H J
+  - id: gd09
+    note: corner_bent
+    to_move: white
+    answer: A1
+    target: A3
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . . . . .  # 7
+      . . . . . . . . .  # 6
+      . . . . . . . . .  # 5
+      X X X . . . . . .  # 4
+      O O X . . . . . .  # 3
+      . O O X . . . . .  # 2
+      . . O X . . . . .  # 1
+      # A B C D E F G H J
+  - id: gd10
+    note: corner_bent
+    to_move: black
+    answer: A9
+    target: C9
+    board: |
+      . . X O . . . . .  # 9
+      . X X O . . . . .  # 8
+      X X O O . . . . .  # 7
+      O O . . . . . . .  # 6
+      . . . . . . . . .  # 5
+      . . . . . . . . .  # 4
+      . . . . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: gd11
+    note: corner_bent
+    to_move: white
+    answer: J9
+    target: J7
+    board: |
+      . . . . . X O . .  # 9
+      . . . . . X O O .  # 8
+      . . . . . . X O O  # 7
+      . . . . . . X X X  # 6
+      . . . . . . . . .  # 5
+      . . . . . . . . .  # 4
+      . . . . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: gd12
+    note: corner_bent
+    to_move: black
+    answer: J1
+    target: G1
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . . . . .  # 7
+      . . . . . . . . .  # 6
+      . . . . . . . . .  # 5
+      . . . . . . . O O  # 4
+      . . . . . O O X X  # 3
+      . . . . . O X X .  # 2
+      . . . . . O X . .  # 1
+      # A B C D E F G H J
+  - id: gd13
+    note: corner_bent
+    to_move: white
+    answer: J1
+    target: J3
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . . . . .  # 7
+      . . . . . . . . .  # 6
+      . . . . . . . . .  # 5
+      . . . . . . X X X  # 4
+      . . . . . . X O O  # 3
+      . . . . . X O O .  # 2
+      . . . . . X O . .  # 1
+      # A B C D E F G H J
+  - id: gd14
+    note: corner_bent
+    to_move: black
+    answer: A9
+    target: A7
+    board: |
+      . . X O . . . . .  # 9
+      . X X O . . . . .  # 8
+      X X O . . . . . .  # 7
+      O O O . . . . . .  # 6
+      . . . . . . . . .  # 5
+      . . . . . . . . .  # 4
+      . . . . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: gd15
+    note: corner_bent
+    to_move: white
+    answer: J9
+    target: G9
+    board: |
+      . . . . . X O . .  # 9
+      . . . . . X O O .  # 8
+      . . . . . X X O O  # 7
+      . . . . . . . X X  # 6
+      . . . . . . . . .  # 5
+      . . . . . . . . .  # 4
+      . . . . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: gd16
+    note: corner_bent
+    to_move: black
+    answer: A1
+    target: C1
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . . . . .  # 7
+      . . . . . . . . .  # 6
+      . . . . . . . . .  # 5
+      O O . . . . . . .  # 4
+      X X O O . . . . .  # 3
+      . X X O . . . . .  # 2
+      . . X O . . . . .  # 1
+      # A B C D E F G H J
+  - id: gd17
+    note: side_straight
+    to_move: black
+    answer: E1
+    target: C2
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . . . . .  # 7
+      . . . . . . . . .  # 6
+      . . . . . . . . .  # 5
+      . . . . . . . . .  # 4
+      . O O O O O O O .  # 3
+      . O X X X X X O .  # 2
+      . O X . . . X O .  # 1
+      # A B C D E F G H J
+  - id: gd18
+    note: side_straight
+    to_move: white
+    answer: A5
+    target: B7
+    board: |
+      . . . . . . . . .  # 9
+      X X X . . . . . .  # 8
+      O O X . . . . . .  # 7
+      . O X . . . . . .  # 6
+      . O X . . . . . .  # 5
+      . O X . . . . . .  # 4
+      O O X . . . . . .  # 3
+      X X X . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: gd19
+    note: side_straight
+    to_move: black
+    answer: D9
+    target: F8
+    board: |
+      O X . . . X O . .  # 9
+      O X X X X X O . .  # 8
+      O O O O O O O . .  # 7
+      . . . . . . . . .  # 6
+      . . . . . . . . .  # 5
+      . . . . . . . . .  # 4
+      . . . . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: gd20
+    note: side_straight
+    to_move: white
+    answer: J5
+    target: H3
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . X X X  # 8
+      . . . . . . X O O  # 7
+      . . . . . . X O .  # 6
+      . . . . . . X O .  # 5
+      . . . . . . X O .  # 4
+      . . . . . . X O O  # 3
+      . . . . . . X X X  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J

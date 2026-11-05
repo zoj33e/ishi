@@ -171,6 +171,7 @@ class Puzzle(_Timestamps, table=True):
     """A Shape Gym position (M5 creates them from lessons; M6 schedules them)."""
 
     __tablename__ = "puzzles"
+    __table_args__ = (Index("ix_puzzles_seed", "user_id", "seed_id", unique=True),)
 
     id: str = Field(default_factory=_uuid, primary_key=True)
     user_id: str = Field(foreign_key="users.id", index=True)
@@ -183,6 +184,38 @@ class Puzzle(_Timestamps, table=True):
     solution_line: list[str] = Field(default_factory=list, sa_column=Column(JSON, nullable=False))
     difficulty: float | None = None
     origin_lesson_id: str | None = Field(default=None, foreign_key="lessons.id")
+    seed_id: str | None = None  # content/puzzles id for source=seed
+    learner_moves: int = 1  # moves the learner plays to solve it (the opponent answers between)
+
+
+class SrsCard(_Timestamps, table=True):
+    """A puzzle's FSRS schedule (one card per puzzle)."""
+
+    __tablename__ = "srs_cards"
+    __table_args__ = (
+        Index("ix_srs_cards_puzzle", "puzzle_id", unique=True),
+        Index("ix_srs_cards_due", "user_id", "due_at"),
+    )
+
+    id: str = Field(default_factory=_uuid, primary_key=True)
+    user_id: str = Field(foreign_key="users.id")
+    puzzle_id: str = Field(foreign_key="puzzles.id")
+    fsrs_state: dict[str, Any] = Field(sa_column=Column(JSON, nullable=False))
+    due_at: datetime
+    reps: int = 0
+    lapses: int = 0
+
+
+class PuzzleAttempt(_Timestamps, table=True):
+    __tablename__ = "puzzle_attempts"
+
+    id: str = Field(default_factory=_uuid, primary_key=True)
+    user_id: str = Field(foreign_key="users.id", index=True)
+    puzzle_id: str = Field(foreign_key="puzzles.id")
+    context: str  # warmup / gym / exam
+    result: str  # again / hard / good / easy
+    hints_used: int = 0
+    time_ms: int | None = None
 
 
 class NarrationCache(_Timestamps, table=True):

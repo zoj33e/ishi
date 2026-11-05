@@ -334,6 +334,57 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/gym/due": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Due */
+        get: operations["due_api_gym_due_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/gym/puzzles/{puzzle_id}/attempt": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Attempt */
+        post: operations["attempt_api_gym_puzzles__puzzle_id__attempt_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/gym/puzzles/{puzzle_id}/hint": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Hint */
+        post: operations["hint_api_gym_puzzles__puzzle_id__hint_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -364,6 +415,49 @@ export interface components {
             position: components["schemas"]["Position"] | null;
             /** Lesson Done */
             lesson_done: boolean;
+        };
+        /** AttemptIn */
+        AttemptIn: {
+            /** Moves */
+            moves: string[];
+            /**
+             * Hints Used
+             * @default 0
+             */
+            hints_used: number;
+            /** Time Ms */
+            time_ms?: number | null;
+            /**
+             * Wrong Tries
+             * @default 0
+             */
+            wrong_tries: number;
+            /**
+             * Context
+             * @default gym
+             * @enum {string}
+             */
+            context: "warmup" | "gym" | "exam";
+        };
+        /** AttemptOut */
+        AttemptOut: {
+            /** Correct */
+            correct: boolean;
+            /** Done */
+            done: boolean;
+            /** Solved */
+            solved: boolean;
+            /** Opponent Reply */
+            opponent_reply: string | null;
+            /** Solution Line */
+            solution_line: string[] | null;
+            /** Solution Frames */
+            solution_frames: components["schemas"]["LineFrame"][] | null;
+            /** Rating */
+            rating: ("again" | "hard" | "good" | "easy") | null;
+            /** Next Due At */
+            next_due_at: string | null;
+            board: components["schemas"]["LineFrame"];
         };
         /** BotRanksOut */
         BotRanksOut: {
@@ -410,6 +504,13 @@ export interface components {
         DoneOut: {
             /** Puzzle Added */
             puzzle_added: boolean;
+        };
+        /** DueOut */
+        DueOut: {
+            /** Puzzles */
+            puzzles: components["schemas"]["PuzzleOut"][];
+            /** Due Today */
+            due_today: number;
         };
         /** ErrorDetail */
         ErrorDetail: {
@@ -594,6 +695,48 @@ export interface components {
             /** Engine Version */
             engine_version?: string | null;
         };
+        /** HintIn */
+        HintIn: {
+            /** Level */
+            level: number;
+            /**
+             * Hints Used
+             * @default 0
+             */
+            hints_used: number;
+            /** Time Ms */
+            time_ms?: number | null;
+            /**
+             * Wrong Tries
+             * @default 0
+             */
+            wrong_tries: number;
+            /**
+             * Context
+             * @default gym
+             * @enum {string}
+             */
+            context: "warmup" | "gym" | "exam";
+        };
+        /** HintOut */
+        HintOut: {
+            /** Level */
+            level: number;
+            /** Concept Id */
+            concept_id: string;
+            /** Marks */
+            marks: string[];
+            /** Focus */
+            focus: string | null;
+            /** Solution Line */
+            solution_line: string[] | null;
+            /** Solution Frames */
+            solution_frames: components["schemas"]["LineFrame"][] | null;
+            /** Rating */
+            rating: ("again" | "hard" | "good" | "easy") | null;
+            /** Next Due At */
+            next_due_at: string | null;
+        };
         /** LessonOut */
         LessonOut: {
             /** Id */
@@ -750,6 +893,26 @@ export interface components {
             /** Ko Point */
             ko_point: string | null;
             captures: components["schemas"]["Captures"];
+        };
+        /** PuzzleOut */
+        PuzzleOut: {
+            /** Id */
+            id: string;
+            /** Concept Id */
+            concept_id: string;
+            /**
+             * Source
+             * @enum {string}
+             */
+            source: "own_mistake" | "seed";
+            /**
+             * To Move
+             * @enum {string}
+             */
+            to_move: "black" | "white";
+            /** Learner Moves */
+            learner_moves: number;
+            position: components["schemas"]["GameStateOut"];
         };
         /** RetryIn */
         RetryIn: {
@@ -1600,6 +1763,126 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["DoneOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    due_api_gym_due_get: {
+        parameters: {
+            query?: {
+                limit?: number;
+                context?: "warmup" | "gym" | "exam";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DueOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    attempt_api_gym_puzzles__puzzle_id__attempt_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                puzzle_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AttemptIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AttemptOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    hint_api_gym_puzzles__puzzle_id__hint_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                puzzle_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["HintIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HintOut"];
                 };
             };
             /** @description Not Found */

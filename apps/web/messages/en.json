@@ -32,7 +32,11 @@
     "fullLocked": "Opens after you earn the Yellow belt.",
     "lessonTitle": "Your lesson",
     "lessonReady": "Your teacher picked one moment from your last game.",
-    "lessonOpen": "Open the lesson"
+    "lessonOpen": "Open the lesson",
+    "gymTitle": "Shape Gym",
+    "gymDue": "{n, plural, =0 {Nothing due — practise a few new puzzles.} one {1 puzzle to review today.} other {# puzzles to review today.}}",
+    "gymWarmup": "Warm up",
+    "gymOpen": "Practise"
   },
   "health": {
     "title": "System status",
@@ -68,7 +72,8 @@
     "exam_not_available": "The exam isn't open yet.",
     "mode_locked": "This mode isn't open yet.",
     "game_not_finished": "Finish the game first.",
-    "retry_closed": "This try is already over."
+    "retry_closed": "This try is already over.",
+    "puzzle_not_found": "We couldn't find that puzzle."
   },
   "board": {
     "label": "{size} by {size} Go board",
@@ -231,5 +236,59 @@
     "addedToGym": "Added to Shape Gym",
     "done": "Done",
     "finishing": "Saving…"
+  },
+  "gym": {
+    "title": "Shape Gym",
+    "warmupTitle": "Warm-up",
+    "loading": "Getting your puzzles…",
+    "home": "Home",
+    "progress": "Puzzle {n} of {total}",
+    "black": "Black",
+    "white": "White",
+    "toPlay": "{color} to play",
+    "fromYourGame": "From your game",
+    "concept": {
+      "missed_capture": "Capture",
+      "ignored_atari": "Escape atari",
+      "self_atari": "Self-atari",
+      "ladder": "Ladder",
+      "cut_disconnect": "Cut and connect",
+      "group_death": "Life and death"
+    },
+    "task": {
+      "missed_capture": "Capture the stones you can take.",
+      "ignored_atari": "Your stones are in atari. Save them.",
+      "self_atari": "Make your stones safe, without walking into atari.",
+      "ladder": "Catch the stones that are trying to run.",
+      "cut_disconnect": "Keep your stones connected.",
+      "group_death": "Make your group live."
+    },
+    "chase": "The opponent answers; keep chasing.",
+    "hint": {
+      "missed_capture": "Count the liberties of the marked stones.",
+      "ignored_atari": "The marked stones have one liberty left. Can they get more?",
+      "self_atari": "Before you play, count the liberties your stones will have.",
+      "ladder": "Chase the marked stones toward the edge or your own stones.",
+      "cut_disconnect": "Where could the opponent cut your stones apart?",
+      "group_death": "Your marked group needs two eyes. Find the key point inside."
+    },
+    "hintArea": "Look inside the highlighted area.",
+    "showAnswer": "Show the answer",
+    "correct": "Correct!",
+    "keepGoing": "Good. Keep going.",
+    "tryAgain": "Not quite. Try again.",
+    "failed": "Here is the answer.",
+    "answerShown": "Here is the answer.",
+    "nextDue": "{days, plural, one {You'll see this again tomorrow.} other {You'll see this again in # days.}}",
+    "replayTitle": "How it goes",
+    "step": "Move {n} of {total}",
+    "back": "Back",
+    "forward": "Forward",
+    "next": "Next puzzle",
+    "finish": "Finish",
+    "summaryTitle": "Done for today!",
+    "summary": "You solved {solved} of {total}.",
+    "empty": "No puzzles right now. Come back tomorrow.",
+    "hintButton": "Hint"
   }
 }

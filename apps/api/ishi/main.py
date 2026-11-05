@@ -8,6 +8,7 @@ from fastapi import FastAPI
 
 from ishi.api import (
     routes_games,
+    routes_gym,
     routes_health,
     routes_lessons,
     routes_me,
@@ -82,6 +83,7 @@ def create_app() -> FastAPI:
     app.include_router(routes_school.router, prefix="/api")
     app.include_router(routes_games.router, prefix="/api")
     app.include_router(routes_lessons.router, prefix="/api")
+    app.include_router(routes_gym.router, prefix="/api")
 
     install_error_handlers(app)
     return app

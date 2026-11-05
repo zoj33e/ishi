@@ -1,0 +1,276 @@
+# Shape Gym seed puzzles: ladder. Generated from hand-drawn base shapes
+# (scratch generator); verified by scripts/build_puzzles.py.
+concept: ladder
+puzzles:
+  - id: ld01
+    note: one
+    to_move: black
+    answer: F6
+    moves: 2
+    target: F7
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . X . . .  # 8
+      . . . . X O . . .  # 7
+      . . . . . . X . .  # 6
+      . . . . . . . . .  # 5
+      . . . . . . . . .  # 4
+      . . . . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: ld02
+    note: one
+    to_move: white
+    answer: F5
+    moves: 2
+    target: F6
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . O . . .  # 7
+      . . . . . X O . .  # 6
+      . . . . O . . . .  # 5
+      . . . . . . . . .  # 4
+      . . . . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: ld03
+    note: one
+    to_move: black
+    answer: E4
+    moves: 2
+    target: E3
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . . . . .  # 7
+      . . . . . . . . .  # 6
+      . . . . . . . . .  # 5
+      . . . X . . . . .  # 4
+      . . . . O X . . .  # 3
+      . . . . X . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: ld04
+    note: one
+    to_move: white
+    answer: F6
+    moves: 2
+    target: E6
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . O . . .  # 7
+      . . . O X . . . .  # 6
+      . . . . O . . . .  # 5
+      . . . . . . . . .  # 4
+      . . . . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: ld05
+    note: one
+    to_move: black
+    answer: C5
+    moves: 2
+    target: C6
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . X . . . . . .  # 7
+      . . O X . . . . .  # 6
+      . X . . . . . . .  # 5
+      . . . . . . . . .  # 4
+      . . . . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: ld06
+    note: one
+    to_move: white
+    answer: F6
+    moves: 2
+    target: E6
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . O . . .  # 7
+      . . . O X . . . .  # 6
+      . . . . O . . . .  # 5
+      . . . . . . . . .  # 4
+      . . . . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: ld07
+    note: one
+    to_move: black
+    answer: F3
+    moves: 2
+    target: F4
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . . . . .  # 7
+      . . . . . . . . .  # 6
+      . . . . . X . . .  # 5
+      . . . . X O . . .  # 4
+      . . . . . . X . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: ld08
+    note: one
+    to_move: white
+    answer: E5
+    moves: 2
+    target: E4
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . . . . .  # 7
+      . . . . . . . . .  # 6
+      . . . O . . . . .  # 5
+      . . . . X O . . .  # 4
+      . . . . O . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: ld09
+    note: two
+    to_move: black
+    answer: H6
+    moves: 2
+    target: G6
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . X X . .  # 7
+      . . . . X O O . .  # 6
+      . . . . . . X . .  # 5
+      . . . . . . . . .  # 4
+      . . . . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: ld10
+    note: two
+    to_move: white
+    answer: E3
+    moves: 2
+    target: E4
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . . . . .  # 7
+      . . . . O . . . .  # 6
+      . . . . X O . . .  # 5
+      . . . O X O . . .  # 4
+      . . . . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: ld11
+    note: two
+    to_move: black
+    answer: B5
+    moves: 2
+    target: C5
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . . . . .  # 7
+      . . X . . . . . .  # 6
+      . . O O X . . . .  # 5
+      . . X X . . . . .  # 4
+      . . . . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: ld12
+    note: two
+    to_move: white
+    answer: F7
+    moves: 2
+    target: F6
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . . . . .  # 7
+      . . . . O X O . .  # 6
+      . . . . O X . . .  # 5
+      . . . . . O . . .  # 4
+      . . . . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: ld13
+    note: two
+    to_move: black
+    answer: B4
+    moves: 2
+    target: C4
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . . . . .  # 7
+      . . . . . . . . .  # 6
+      . . X X . . . . .  # 5
+      . . O O X . . . .  # 4
+      . . X . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: ld14
+    note: two
+    to_move: white
+    answer: G4
+    moves: 2
+    target: F4
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . . . . .  # 7
+      . . . . . . . . .  # 6
+      . . . . . O . . .  # 5
+      . . . O X X . . .  # 4
+      . . . . O O . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: ld15
+    note: two
+    to_move: black
+    answer: F3
+    moves: 2
+    target: E2
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . . . . .  # 7
+      . . . . . . . . .  # 6
+      . . . . . . . . .  # 5
+      . . . . X . . . .  # 4
+      . . . X O . . . .  # 3
+      . . . X O X . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: ld16
+    note: two
+    to_move: white
+    answer: D6
+    moves: 2
+    target: D5
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . . . . .  # 7
+      . . . . . . . . .  # 6
+      . . O X O . . . .  # 5
+      . . . X O . . . .  # 4
+      . . . O . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J

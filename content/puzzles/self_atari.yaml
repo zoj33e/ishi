@@ -1,0 +1,244 @@
+# Shape Gym seed puzzles: self_atari. Generated from hand-drawn base shapes
+# (scratch generator); verified by scripts/build_puzzles.py.
+concept: self_atari
+puzzles:
+  - id: sa01
+    note: single
+    to_move: black
+    answer: E6
+    target: D6
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . O . . . . .  # 7
+      . . O X . . . . .  # 6
+      . . O . O . . . .  # 5
+      . . . O . . . . .  # 4
+      . . . . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: sa02
+    note: single
+    to_move: white
+    answer: E4
+    target: E5
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . . . . .  # 7
+      . . . X X . . . .  # 6
+      . . X . O X . . .  # 5
+      . . . X . . . . .  # 4
+      . . . . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: sa03
+    note: single
+    to_move: black
+    answer: C4
+    target: D4
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . . . . .  # 7
+      . . . O . . . . .  # 6
+      . . O . O . . . .  # 5
+      . . . X O . . . .  # 4
+      . . . O . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: sa04
+    note: single
+    to_move: white
+    answer: F5
+    target: F4
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . . . . .  # 7
+      . . . . . . . . .  # 6
+      . . . . . . X . .  # 5
+      . . . . X O . X .  # 4
+      . . . . . X X . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: sa05
+    note: single
+    to_move: black
+    answer: D6
+    target: E6
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . O . . . .  # 7
+      . . . . X O . . .  # 6
+      . . . O . O . . .  # 5
+      . . . . O . . . .  # 4
+      . . . . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: sa06
+    note: two
+    to_move: black
+    answer: F6
+    target: E6
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . O O . . . .  # 7
+      . . O X X . . . .  # 6
+      . . . O . O . . .  # 5
+      . . . . O . . . .  # 4
+      . . . . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: sa07
+    note: two
+    to_move: white
+    answer: D5
+    target: E5
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . X . . . .  # 7
+      . . . X . X . . .  # 6
+      . . . . O O X . .  # 5
+      . . . . X X . . .  # 4
+      . . . . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: sa08
+    note: two
+    to_move: black
+    answer: G4
+    target: F4
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . . . . .  # 7
+      . . . . . O . . .  # 6
+      . . . . O . O . .  # 5
+      . . . O X X . . .  # 4
+      . . . . O O . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: sa09
+    note: two
+    to_move: white
+    answer: E4
+    target: E5
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . X . . . .  # 7
+      . . . X O X . . .  # 6
+      . . . X O . X . .  # 5
+      . . . . . X . . .  # 4
+      . . . . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: sa10
+    note: two
+    to_move: black
+    answer: E3
+    target: E4
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . . . . .  # 7
+      . . . . O . . . .  # 6
+      . . . O X O . . .  # 5
+      . . O . X O . . .  # 4
+      . . . O . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: sa11
+    note: wall
+    to_move: black
+    answer: F5
+    target: E5
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . . . . .  # 7
+      . . . O O . . . .  # 6
+      . . . O X . . . .  # 5
+      . . . O . O . . .  # 4
+      . . . . O . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: sa12
+    note: wall
+    to_move: white
+    answer: F5
+    target: F6
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . X X X . .  # 7
+      . . . X . O X . .  # 6
+      . . . . X . . . .  # 5
+      . . . . . . . . .  # 4
+      . . . . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: sa13
+    note: wall
+    to_move: black
+    answer: C5
+    target: D5
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . O . . . . .  # 7
+      . . O . O . . . .  # 6
+      . . . X O . . . .  # 5
+      . . . O O . . . .  # 4
+      . . . . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: sa14
+    note: wall
+    to_move: white
+    answer: F6
+    target: F5
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . . . . .  # 7
+      . . . . . . X . .  # 6
+      . . . . X O . X .  # 5
+      . . . . X X X . .  # 4
+      . . . . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: sa15
+    note: wall
+    to_move: black
+    answer: E5
+    target: E4
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . . . . .  # 7
+      . . . . . . . . .  # 6
+      . . . O . . . . .  # 5
+      . . O . X O . . .  # 4
+      . . . O O O . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J

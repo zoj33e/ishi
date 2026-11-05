@@ -980,6 +980,190 @@
           }
         }
       }
+    },
+    "/api/gym/due": {
+      "get": {
+        "tags": [
+          "gym"
+        ],
+        "summary": "Due",
+        "operationId": "due_api_gym_due_get",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 8,
+              "minimum": 1,
+              "default": 8,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "context",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "warmup",
+                "gym",
+                "exam"
+              ],
+              "type": "string",
+              "default": "gym",
+              "title": "Context"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DueOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/gym/puzzles/{puzzle_id}/attempt": {
+      "post": {
+        "tags": [
+          "gym"
+        ],
+        "summary": "Attempt",
+        "operationId": "attempt_api_gym_puzzles__puzzle_id__attempt_post",
+        "parameters": [
+          {
+            "name": "puzzle_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Puzzle Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AttemptIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttemptOut"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          }
+        }
+      }
+    },
+    "/api/gym/puzzles/{puzzle_id}/hint": {
+      "post": {
+        "tags": [
+          "gym"
+        ],
+        "summary": "Hint",
+        "operationId": "hint_api_gym_puzzles__puzzle_id__hint_post",
+        "parameters": [
+          {
+            "name": "puzzle_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Puzzle Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HintIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HintOut"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1091,6 +1275,159 @@
           "lesson_done"
         ],
         "title": "AnswerOut"
+      },
+      "AttemptIn": {
+        "properties": {
+          "moves": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 21,
+            "minItems": 1,
+            "title": "Moves"
+          },
+          "hints_used": {
+            "type": "integer",
+            "maximum": 3.0,
+            "minimum": 0.0,
+            "title": "Hints Used",
+            "default": 0
+          },
+          "time_ms": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Time Ms"
+          },
+          "wrong_tries": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Wrong Tries",
+            "default": 0
+          },
+          "context": {
+            "type": "string",
+            "enum": [
+              "warmup",
+              "gym",
+              "exam"
+            ],
+            "title": "Context",
+            "default": "gym"
+          }
+        },
+        "type": "object",
+        "required": [
+          "moves"
+        ],
+        "title": "AttemptIn"
+      },
+      "AttemptOut": {
+        "properties": {
+          "correct": {
+            "type": "boolean",
+            "title": "Correct"
+          },
+          "done": {
+            "type": "boolean",
+            "title": "Done"
+          },
+          "solved": {
+            "type": "boolean",
+            "title": "Solved"
+          },
+          "opponent_reply": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Opponent Reply"
+          },
+          "solution_line": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Solution Line"
+          },
+          "solution_frames": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/LineFrame"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Solution Frames"
+          },
+          "rating": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "again",
+                  "hard",
+                  "good",
+                  "easy"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rating"
+          },
+          "next_due_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Due At"
+          },
+          "board": {
+            "$ref": "#/components/schemas/LineFrame"
+          }
+        },
+        "type": "object",
+        "required": [
+          "correct",
+          "done",
+          "solved",
+          "opponent_reply",
+          "solution_line",
+          "solution_frames",
+          "rating",
+          "next_due_at",
+          "board"
+        ],
+        "title": "AttemptOut"
       },
       "BotRanksOut": {
         "properties": {
@@ -1223,6 +1560,27 @@
           "puzzle_added"
         ],
         "title": "DoneOut"
+      },
+      "DueOut": {
+        "properties": {
+          "puzzles": {
+            "items": {
+              "$ref": "#/components/schemas/PuzzleOut"
+            },
+            "type": "array",
+            "title": "Puzzles"
+          },
+          "due_today": {
+            "type": "integer",
+            "title": "Due Today"
+          }
+        },
+        "type": "object",
+        "required": [
+          "puzzles",
+          "due_today"
+        ],
+        "title": "DueOut"
       },
       "ErrorDetail": {
         "properties": {
@@ -1789,6 +2147,155 @@
         ],
         "title": "Health"
       },
+      "HintIn": {
+        "properties": {
+          "level": {
+            "type": "integer",
+            "maximum": 3.0,
+            "minimum": 1.0,
+            "title": "Level"
+          },
+          "hints_used": {
+            "type": "integer",
+            "maximum": 3.0,
+            "minimum": 0.0,
+            "title": "Hints Used",
+            "default": 0
+          },
+          "time_ms": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Time Ms"
+          },
+          "wrong_tries": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Wrong Tries",
+            "default": 0
+          },
+          "context": {
+            "type": "string",
+            "enum": [
+              "warmup",
+              "gym",
+              "exam"
+            ],
+            "title": "Context",
+            "default": "gym"
+          }
+        },
+        "type": "object",
+        "required": [
+          "level"
+        ],
+        "title": "HintIn"
+      },
+      "HintOut": {
+        "properties": {
+          "level": {
+            "type": "integer",
+            "title": "Level"
+          },
+          "concept_id": {
+            "type": "string",
+            "title": "Concept Id"
+          },
+          "marks": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Marks"
+          },
+          "focus": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Focus"
+          },
+          "solution_line": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Solution Line"
+          },
+          "solution_frames": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/LineFrame"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Solution Frames"
+          },
+          "rating": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "again",
+                  "hard",
+                  "good",
+                  "easy"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rating"
+          },
+          "next_due_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Due At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "level",
+          "concept_id",
+          "marks",
+          "focus",
+          "solution_line",
+          "solution_frames",
+          "rating",
+          "next_due_at"
+        ],
+        "title": "HintOut"
+      },
       "LessonOut": {
         "properties": {
           "id": {
@@ -2253,6 +2760,51 @@
           "captures"
         ],
         "title": "Position"
+      },
+      "PuzzleOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "concept_id": {
+            "type": "string",
+            "title": "Concept Id"
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "own_mistake",
+              "seed"
+            ],
+            "title": "Source"
+          },
+          "to_move": {
+            "type": "string",
+            "enum": [
+              "black",
+              "white"
+            ],
+            "title": "To Move"
+          },
+          "learner_moves": {
+            "type": "integer",
+            "title": "Learner Moves"
+          },
+          "position": {
+            "$ref": "#/components/schemas/GameStateOut"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "concept_id",
+          "source",
+          "to_move",
+          "learner_moves",
+          "position"
+        ],
+        "title": "PuzzleOut"
       },
       "RetryIn": {
         "properties": {

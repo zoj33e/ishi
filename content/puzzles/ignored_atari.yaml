@@ -1,0 +1,260 @@
+# Shape Gym seed puzzles: ignored_atari. Generated from hand-drawn base shapes
+# (scratch generator); verified by scripts/build_puzzles.py.
+concept: ignored_atari
+puzzles:
+  - id: ia01
+    note: single
+    to_move: black
+    answer: E5
+    target: E6
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . O . . . .  # 7
+      . . . O X O . . .  # 6
+      . . . . . . . . .  # 5
+      . . . . . . . . .  # 4
+      . . . . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: ia02
+    note: single
+    to_move: white
+    answer: F6
+    target: F5
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . . . . .  # 7
+      . . . . . . . . .  # 6
+      . . . . X O X . .  # 5
+      . . . . . X . . .  # 4
+      . . . . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: ia03
+    note: single
+    to_move: black
+    answer: D4
+    target: E4
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . . . . .  # 7
+      . . . . . . . . .  # 6
+      . . . . O . . . .  # 5
+      . . . . X O . . .  # 4
+      . . . . O . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: ia04
+    note: single
+    to_move: white
+    answer: E4
+    target: D4
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . . . . .  # 7
+      . . . . . . . . .  # 6
+      . . . X . . . . .  # 5
+      . . X O . . . . .  # 4
+      . . . X . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: ia05
+    note: two
+    to_move: black
+    answer: E4
+    target: E5
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . O . . . .  # 7
+      . . . O X O . . .  # 6
+      . . . O X O . . .  # 5
+      . . . . . . . . .  # 4
+      . . . . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: ia06
+    note: two
+    to_move: white
+    answer: C4
+    target: D4
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . . . . .  # 7
+      . . . . . . . . .  # 6
+      . . . X X . . . .  # 5
+      . . . O O X . . .  # 4
+      . . . X X . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: ia07
+    note: two
+    to_move: black
+    answer: F5
+    target: F4
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . . . . .  # 7
+      . . . . . . . . .  # 6
+      . . . . . . . . .  # 5
+      . . . . O X O . .  # 4
+      . . . . O X O . .  # 3
+      . . . . . O . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: ia08
+    note: capture
+    to_move: black
+    answer: E5
+    target: D6
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . O X . . . .  # 7
+      . . O X O X . . .  # 6
+      . . . . . . . . .  # 5
+      . . . . . . . . .  # 4
+      . . . . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: ia09
+    note: capture
+    to_move: white
+    answer: F6
+    target: E5
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . . . . .  # 7
+      . . . . . . . . .  # 6
+      . . . X O X O . .  # 5
+      . . . . X O . . .  # 4
+      . . . . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: ia10
+    note: capture
+    to_move: black
+    answer: G5
+    target: F4
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . . . . .  # 7
+      . . . . . X . . .  # 6
+      . . . . X O . . .  # 5
+      . . . . O X . . .  # 4
+      . . . . . O . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: ia11
+    note: connect
+    to_move: black
+    answer: E5
+    target: E6
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . O . . . .  # 7
+      . . . O X O . . .  # 6
+      . . . . . . . . .  # 5
+      . . . . X . . . .  # 4
+      . . . . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: ia12
+    note: connect
+    to_move: white
+    answer: C6
+    target: D6
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . X . . . . .  # 7
+      . O . O X . . . .  # 6
+      . . . X . . . . .  # 5
+      . . . . . . . . .  # 4
+      . . . . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: ia13
+    note: connect
+    to_move: black
+    answer: E6
+    target: D6
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . O . . . . .  # 7
+      . . O X . X . . .  # 6
+      . . . O . . . . .  # 5
+      . . . . . . . . .  # 4
+      . . . . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: ia14
+    note: low
+    to_move: black
+    answer: E2
+    target: E3
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . . . . . . . .  # 7
+      . . . . . . . . .  # 6
+      . . . . . . . . .  # 5
+      . . . . O . . . .  # 4
+      . . . O X O . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: ia15
+    note: low
+    to_move: white
+    answer: C8
+    target: C7
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . X O X . . . . .  # 7
+      . . X . . . . . .  # 6
+      . . . . . . . . .  # 5
+      . . . . . . . . .  # 4
+      . . . . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J
+  - id: ia16
+    note: low
+    to_move: black
+    answer: B6
+    target: C6
+    board: |
+      . . . . . . . . .  # 9
+      . . . . . . . . .  # 8
+      . . O . . . . . .  # 7
+      . . X O . . . . .  # 6
+      . . O . . . . . .  # 5
+      . . . . . . . . .  # 4
+      . . . . . . . . .  # 3
+      . . . . . . . . .  # 2
+      . . . . . . . . .  # 1
+      # A B C D E F G H J

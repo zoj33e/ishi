@@ -108,3 +108,17 @@ export const lessonHint = (id: string) =>
   request<GameLesson>(`/api/lessons/${encodeURIComponent(id)}/hint`, { method: "POST" });
 export const finishLesson = (id: string) =>
   request<Schemas["DoneOut"]>(`/api/lessons/${encodeURIComponent(id)}/done`, { method: "POST" });
+
+// -- M6: Shape Gym ---------------------------------------------------------------------------
+
+export type GymPuzzle = Schemas["PuzzleOut"];
+export type GymDue = Schemas["DueOut"];
+export type GymAttempt = Schemas["AttemptOut"];
+export type GymHint = Schemas["HintOut"];
+export type GymContext = Schemas["AttemptIn"]["context"];
+
+export const getGymDue = (context: GymContext) => request<GymDue>(`/api/gym/due?context=${context}`);
+export const gymAttempt = (id: string, body: Schemas["AttemptIn"]) =>
+  request<GymAttempt>(`/api/gym/puzzles/${encodeURIComponent(id)}/attempt`, json(body));
+export const gymHint = (id: string, body: Schemas["HintIn"]) =>
+  request<GymHint>(`/api/gym/puzzles/${encodeURIComponent(id)}/hint`, json(body));

@@ -14,6 +14,7 @@ from typing import Literal
 from sqlmodel import Session, col, select
 
 from ishi.db.models import Game, Lesson, Mistake, NarrationCache, Puzzle, User, utcnow
+from ishi.gym import service as gym
 from ishi.play.review_service import learner_color, response_from_row, stored_analyses
 from ishi.play.service import load_state
 from ishi.rules.board import Color
@@ -376,7 +377,9 @@ def finish_lesson(session: Session, game: Game, lesson: Lesson) -> bool:
     if lesson.lesson_type == "mistake":
         exists = session.exec(select(Puzzle.id).where(Puzzle.origin_lesson_id == lesson.id)).first()
         if exists is None:
-            session.add(puzzle_from_lesson(session, game, lesson))
+            puzzle = puzzle_from_lesson(session, game, lesson)
+            session.add(puzzle)
+            gym.add_card(session, puzzle, gym.local_now())
         added = True
     session.commit()
     return added
@@ -398,6 +401,7 @@ def puzzle_from_lesson(session: Session, game: Game, lesson: Lesson) -> Puzzle:
             "komi": state.komi,
             "ko_point": point_to_gtp(state.ko_point, size) if state.ko_point else None,
             "rules": game.rules,
+            "target": pkg.groups[0].stones[0] if pkg.groups else None,
         },
         correct_moves=list(pkg.correct_moves),
         solution_line=list(lesson.solution_line),
