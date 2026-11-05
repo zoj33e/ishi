@@ -150,7 +150,7 @@ export interface paths {
         };
         /**
          * Bot Ranks
-         * @description Strengths offered in the 9x9 picker until adaptive strength (M8), D-031.
+         * @description Strengths offered in the 9x9 picker (D-031); the adaptive one is the default (M8).
          */
         get: operations["bot_ranks_api_games_bot_ranks_get"];
         put?: never;
@@ -295,6 +295,43 @@ export interface paths {
         };
         /** Get Exam */
         get: operations["get_exam_api_exams__exam_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/exams/{exam_id}/puzzles/{puzzle_id}/attempt": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Exam Attempt
+         * @description One try per puzzle and no hints: a wrong move answers it as not solved.
+         */
+        post: operations["exam_attempt_api_exams__exam_id__puzzles__puzzle_id__attempt_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/progress": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Progress */
+        get: operations["get_progress_api_progress_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -499,12 +536,26 @@ export interface components {
             next_due_at: string | null;
             board: components["schemas"]["LineFrame"];
         };
+        /** BeltStep */
+        BeltStep: {
+            /** Belt */
+            belt: string;
+            /** Rank */
+            rank: number | null;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "done" | "current" | "next" | "later";
+        };
         /** BotRanksOut */
         BotRanksOut: {
             /** Ranks */
             ranks: number[];
             /** Unlocked */
             unlocked: boolean;
+            /** Recommended */
+            recommended: number;
         };
         /** CaptureStageOut */
         CaptureStageOut: {
@@ -529,6 +580,15 @@ export interface components {
             black: number;
             /** White */
             white: number;
+        };
+        /** ConceptStat */
+        ConceptStat: {
+            /** Concept Id */
+            concept_id: string;
+            /** Count */
+            count: number;
+            /** Points Lost */
+            points_lost: number;
         };
         /** DemoFrameOut */
         DemoFrameOut: {
@@ -570,6 +630,28 @@ export interface components {
         ErrorResponse: {
             error: components["schemas"]["ErrorDetail"];
         };
+        /** ExamAttemptIn */
+        ExamAttemptIn: {
+            /** Moves */
+            moves: string[];
+            /** Time Ms */
+            time_ms?: number | null;
+        };
+        /** ExamAttemptOut */
+        ExamAttemptOut: {
+            /** Correct */
+            correct: boolean;
+            /** Done */
+            done: boolean;
+            /** Opponent Reply */
+            opponent_reply: string | null;
+            /** Solution Line */
+            solution_line: string[] | null;
+            /** Solution Frames */
+            solution_frames: components["schemas"]["LineFrame"][] | null;
+            board: components["schemas"]["LineFrame"];
+            exam: components["schemas"]["ExamOut"];
+        };
         /** ExamOut */
         ExamOut: {
             /** Id */
@@ -581,6 +663,11 @@ export interface components {
              * @enum {string}
              */
             status: "in_progress" | "passed" | "failed";
+            /**
+             * Phase
+             * @enum {string}
+             */
+            phase: "puzzles" | "games" | "done";
             /** Games Won */
             games_won: number;
             /** Games Lost */
@@ -592,7 +679,43 @@ export interface components {
             /** Active Game */
             active_game: string | null;
             /** Puzzles */
-            puzzles: string[];
+            puzzles: components["schemas"]["ExamPuzzleOut"][];
+            /** Puzzles Needed */
+            puzzles_needed: number;
+            /** Puzzle Score */
+            puzzle_score: number;
+            /** Bot Rank */
+            bot_rank: number | null;
+            /** Bot Label */
+            bot_label: string | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+        };
+        /** ExamPuzzleOut */
+        ExamPuzzleOut: {
+            puzzle: components["schemas"]["PuzzleOut"];
+            /** Solved */
+            solved: boolean | null;
+        };
+        /** ExamStatus */
+        ExamStatus: {
+            /** Belt Target */
+            belt_target: string | null;
+            /** Available */
+            available: boolean;
+            /** In Progress */
+            in_progress: string | null;
+            /** Rank Needed */
+            rank_needed: number | null;
+            /** Games Since Belt */
+            games_since_belt: number;
+            /** Games Needed */
+            games_needed: number;
+            /** Games Left */
+            games_left: number;
         };
         /** GameHintIn */
         GameHintIn: {
@@ -982,6 +1105,28 @@ export interface components {
             reason: string | null;
             nudge: components["schemas"]["NudgeOut"] | null;
         };
+        /** ProgressOut */
+        ProgressOut: {
+            /** Belt */
+            belt: string;
+            /** Rank Estimate */
+            rank_estimate: number | null;
+            /** Rank Label */
+            rank_label: string | null;
+            /** Bot Rank */
+            bot_rank: number;
+            /** Bot Label */
+            bot_label: string;
+            /** Games Played */
+            games_played: number;
+            /** Rank History */
+            rank_history: components["schemas"]["RankPoint"][];
+            /** Concept Stats */
+            concept_stats: components["schemas"]["ConceptStat"][];
+            /** Belts */
+            belts: components["schemas"]["BeltStep"][];
+            exam: components["schemas"]["ExamStatus"];
+        };
         /** PuzzleOut */
         PuzzleOut: {
             /** Id */
@@ -1001,6 +1146,22 @@ export interface components {
             /** Learner Moves */
             learner_moves: number;
             position: components["schemas"]["GameStateOut"];
+        };
+        /** RankPoint */
+        RankPoint: {
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
+            /** Rank Estimate */
+            rank_estimate: number;
+            /** Likelihood Rank */
+            likelihood_rank: number | null;
+            /** Results Rank */
+            results_rank: number | null;
+            /** Games Count */
+            games_count: number;
         };
         /** RetryIn */
         RetryIn: {
@@ -1094,9 +1255,9 @@ export interface components {
         TodayGame: {
             /**
              * Mode
-             * @constant
+             * @enum {string}
              */
-            mode: "capture";
+            mode: "capture" | "full";
             /** Board Size */
             board_size: number;
             /** Bot Rank */
@@ -1118,6 +1279,8 @@ export interface components {
             exam_available: boolean;
             /** Exam In Progress */
             exam_in_progress: string | null;
+            /** Exam Belt */
+            exam_belt: string | null;
         };
         /** ValidationError */
         ValidationError: {
@@ -1764,6 +1927,80 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    exam_attempt_api_exams__exam_id__puzzles__puzzle_id__attempt_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                exam_id: string;
+                puzzle_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ExamAttemptIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ExamAttemptOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_progress_api_progress_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProgressOut"];
                 };
             };
         };

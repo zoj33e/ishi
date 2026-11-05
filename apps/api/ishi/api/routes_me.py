@@ -11,7 +11,9 @@ from ishi.db.models import User, utcnow
 from ishi.db.session import SessionDep, get_or_create_user
 from ishi.gym import service as gym
 from ishi.play import lessons, service
+from ishi.play.full_service import FULL_SIZE
 from ishi.play.progression import STAGES
+from ishi.progress import service as progress
 
 router = APIRouter(tags=["me"])
 
@@ -43,7 +45,7 @@ class CaptureStageOut(BaseModel):
 
 
 class TodayGame(BaseModel):
-    mode: Literal["capture"]
+    mode: Literal["capture", "full"]  # 9x9 vs the adaptive bot from the Yellow belt on (M8)
     board_size: int
     bot_rank: float | None
 
@@ -57,6 +59,7 @@ class TodayOut(BaseModel):
     capture: CaptureStageOut
     exam_available: bool
     exam_in_progress: str | None
+    exam_belt: str | None  # the belt the next exam is for
 
 
 def _me(user: User) -> MeOut:
@@ -100,7 +103,9 @@ def today(session: SessionDep, now: NowDep) -> TodayOut:
     pending = lessons.pending_lesson(session, user.id)
     return TodayOut(
         warmup_due=gym.due_count(session, user.id, now),
-        game=TodayGame(mode="capture", board_size=st.stage.board_size, bot_rank=None),
+        game=TodayGame(mode="full", board_size=FULL_SIZE, bot_rank=progress.default_bot_rank(user))
+        if user.belt != "white"
+        else TodayGame(mode="capture", board_size=st.stage.board_size, bot_rank=None),
         lesson_pending=pending.id if pending else None,
         lesson_game=pending.game_id if pending else None,
         school_next=next_lesson(session, user),
@@ -115,4 +120,5 @@ def today(session: SessionDep, now: NowDep) -> TodayOut:
         ),
         exam_available=service.can_take_exam(session, user),
         exam_in_progress=exam.id if exam else None,
+        exam_belt=service.next_belt(user),
     )

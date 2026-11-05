@@ -235,8 +235,11 @@ class AnalysisWorker:
             return False
         with Session(get_engine(self._db_path)) as session:
             game = session.get(Game, game_id)
-            if game is None or game.mode != "full" or game.reviewed_at is not None:
+            if game is None or game.mode != "full":
                 return True
+            if game.reviewed_at is not None:
+                pending_rank = game.status == "finished" and game.likelihood is None
+                return await self._rank(engine, game_id) if pending_rank else True
             state = load_state(session, game)
             have = stored_analyses(session, game)
             missing = [t for t in range(state.move_number + 1) if t not in have]
@@ -283,6 +286,27 @@ class AnalysisWorker:
             await lessons.build_lesson(
                 session, game, self._teacher(), self._model, budget, keep_late=True
             )
+        return await self._rank(engine, game_id)
+
+    async def _rank(self, engine: KataGoProcess, game_id: str) -> bool:
+        """After the lesson: how human-like the learner's moves were per rank, then the new
+        estimate and bot strength (M8)."""
+        from ishi.progress import service as progress  # progress builds on the play modules
+
+        with Session(get_engine(self._db_path)) as session:
+            game = session.get(Game, game_id)
+            assert game is not None
+            state = load_state(session, game)
+            color = learner_color(game)
+        likelihood = await progress.game_likelihood(engine, state, color, qid=f"{game_id}-rank")
+        with Session(get_engine(self._db_path)) as session:
+            game = session.get(Game, game_id)
+            user = session.get(User, game.user_id) if game else None
+            assert game is not None and user is not None
+            game.likelihood = likelihood
+            session.add(game)
+            session.commit()
+            progress.update_rank(session, user)
         return True
 
 

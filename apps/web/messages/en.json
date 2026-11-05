@@ -6,10 +6,6 @@
   "home": {
     "language": "Language",
     "sandboxLink": "Open the practice board (two players)",
-    "belt": {
-      "white": "White belt",
-      "yellow": "Yellow belt"
-    },
     "schoolTitle": "Rules school",
     "schoolProgress": "{done} of {total} lessons done",
     "schoolContinue": "Continue: {title}",
@@ -19,7 +15,7 @@
     "captureInfo": "Stage {stage} of {total} · {size}×{size} · first to capture {target}",
     "captureStreak": "Wins in a row: {streak} of 3 to move up",
     "capturePlay": "Play capture Go",
-    "examTitle": "Yellow belt exam",
+    "examTitle": "{belt} exam",
     "examReady": "You're ready! Win 3 capture games before losing 3.",
     "examStart": "Take the exam",
     "examContinue": "Continue the exam",
@@ -36,7 +32,16 @@
     "gymTitle": "Shape Gym",
     "gymDue": "{n, plural, =0 {Nothing due — practise a few new puzzles.} one {1 puzzle to review today.} other {# puzzles to review today.}}",
     "gymWarmup": "Warm up",
-    "gymOpen": "Practise"
+    "gymOpen": "Practise",
+    "progressLink": "Progress",
+    "todayTitle": "Today",
+    "todayWarmup": "{n, plural, =0 {Warm-up done} one {Warm up: 1 puzzle} other {Warm up: # puzzles}}",
+    "todayGame": "One 9×9 game against a {bot} bot",
+    "todayLesson": "Your lesson from that game",
+    "todayLessonReady": "Your lesson is ready",
+    "fullRecommended": "{rank} (for you)",
+    "examReadyBelt": "You're ready! 12 puzzles first (10 to pass), then win 2 of 3 games.",
+    "examLockedBelt": "Keep playing 9×9 games: the exam opens when your level is close to the next belt."
   },
   "health": {
     "title": "System status",
@@ -74,7 +79,9 @@
     "game_not_finished": "Finish the game first.",
     "retry_closed": "This try is already over.",
     "puzzle_not_found": "We couldn't find that puzzle.",
-    "no_nudge": "There's no teacher question to give a hint for."
+    "no_nudge": "There's no teacher question to give a hint for.",
+    "exam_not_ready": "Finish the exam puzzles before the games.",
+    "exam_puzzle_done": "That exam puzzle is already answered."
   },
   "board": {
     "label": "{size} by {size} Go board",
@@ -201,15 +208,26 @@
     }
   },
   "exam": {
-    "title": "Yellow belt exam",
-    "rules": "Play capture Go on 9×9: first to capture 3. Win 3 games before you lose 3.",
-    "score": "Wins {won} / 3 · Losses {lost} / 3",
+    "title": "{belt} exam",
+    "score": "Wins {won} / {wins} · Losses {lost} / {losses}",
     "play": "Play the next game",
     "resume": "Resume the game",
-    "passed": "Passed! You earned the yellow belt.",
-    "failed": "Not this time. Play 3 more capture games, then try again.",
-    "notAvailable": "The exam isn't open yet.",
-    "home": "Home"
+    "passed": "Passed! You earned the {belt}.",
+    "failed": "Not this time. Play 3 more 9×9 games, then try again.",
+    "home": "Home",
+    "rulesYellow": "Play capture Go on 9×9: first to capture 3. Win 3 games before you lose 3.",
+    "rulesTitle": "How the exam works",
+    "rulesPuzzles": "{total} puzzles. One try each, no hints. Solve {needed} to go on.",
+    "rulesGames": "Then 9×9 games against a {bot} bot: win 2 before you lose 2.",
+    "rulesNoHelp": "Your teacher stays quiet in exam games: no questions before moves.",
+    "begin": "Start the puzzles",
+    "puzzleProgress": "Puzzle {n} of {total} · solved {solved}",
+    "puzzleScore": "Puzzles: {solved} of {total} solved",
+    "puzzleSolved": "Solved!",
+    "puzzleMissed": "Not this one. Here is the answer.",
+    "failedYellow": "Not this time. Play 3 more capture games, then try again.",
+    "failedPuzzles": "Not enough puzzles solved this time. Play 3 more 9×9 games, then try again.",
+    "seeProgress": "See your progress"
   },
   "lesson": {
     "title": "Lesson",
@@ -299,5 +317,41 @@
     "summary": "You solved {solved} of {total}.",
     "empty": "No puzzles right now. Come back tomorrow.",
     "hintButton": "Hint"
+  },
+  "belts": {
+    "white": "White belt",
+    "yellow": "Yellow belt",
+    "orange": "Orange belt",
+    "green": "Green belt",
+    "blue": "Blue belt",
+    "purple": "Purple belt",
+    "brown": "Brown belt",
+    "black": "Black belt"
+  },
+  "progress": {
+    "title": "Progress",
+    "home": "Home",
+    "loading": "Loading…",
+    "noRank": "Not yet",
+    "noRankNote": "Play a few 9×9 games and Ishi will estimate your level.",
+    "rankNote": "Your estimated level, from how you play and your results ({games, plural, one {1 game} other {# games}}).",
+    "botNow": "Your next bot: {bot}",
+    "chartTitle": "Your level over time",
+    "chartLabel": "Estimated level",
+    "chartEmpty": "Your chart starts after your first 9×9 game.",
+    "beltsTitle": "Belts",
+    "beltStatus": {
+      "done": "earned",
+      "current": "now",
+      "next": "next",
+      "later": "later"
+    },
+    "examReady": "The {belt} exam is open: start it from the home screen.",
+    "examContinue": "Continue the exam",
+    "examNeeds": "{belt} exam: reach about {rank} and play {games, plural, =0 {— games done} one {1 more game} other {# more games}}.",
+    "conceptsTitle": "What cost you most (last 10 games)",
+    "conceptsEmpty": "Nothing yet: your mistakes show up here after 9×9 games.",
+    "times": "{n, plural, one {1 time} other {# times}}",
+    "examNeedsGames": "{belt} exam: your level is close enough — play {games, plural, =0 {— games done} one {1 more game} other {# more games}}."
   }
 }

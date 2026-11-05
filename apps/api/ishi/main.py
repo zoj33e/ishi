@@ -7,11 +7,13 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from ishi.api import (
+    routes_exams,
     routes_games,
     routes_gym,
     routes_health,
     routes_lessons,
     routes_me,
+    routes_progress,
     routes_sandbox,
     routes_school,
 )
@@ -90,6 +92,8 @@ def create_app() -> FastAPI:
     app.include_router(routes_me.router, prefix="/api")
     app.include_router(routes_school.router, prefix="/api")
     app.include_router(routes_games.router, prefix="/api")
+    app.include_router(routes_exams.router, prefix="/api")
+    app.include_router(routes_progress.router, prefix="/api")
     app.include_router(routes_lessons.router, prefix="/api")
     app.include_router(routes_gym.router, prefix="/api")
 

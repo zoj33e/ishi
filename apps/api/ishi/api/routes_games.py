@@ -1,4 +1,4 @@
-"""Games against the bot (capture games M2, full 9x9 vs HumanSL M3) and the Yellow exam."""
+"""Games against the bot: capture games (M2), full 9x9 vs HumanSL (M3), exam games."""
 
 import random
 from typing import Literal
@@ -7,16 +7,17 @@ from fastapi import APIRouter, Request
 from fastapi.concurrency import run_in_threadpool
 from fastapi.responses import PlainTextResponse
 from pydantic import BaseModel, Field
-from sqlmodel import Session, select
+from sqlmodel import Session
 
 from ishi.api.errors import ApiError
+from ishi.api.routes_exams import exam_bot_rank, exam_or_404, exam_phase
 from ishi.api.schemas import ErrorResponse, GameStateOut, game_state_out, score_out
 from ishi.bots.humansl_bot import PICKER_RANKS
-from ishi.db.models import Exam, Game, User
+from ishi.db.models import Game, User
 from ishi.db.session import SessionDep, get_or_create_user
 from ishi.engine.katago_process import EngineUnavailableError, KataGoProcess
 from ishi.play import full_service, nudges, service
-from ishi.play.progression import EXAM_LOSSES_TO_FAIL, EXAM_WINS_TO_PASS
+from ishi.progress import service as progress
 from ishi.rules.coords import gtp_to_point
 from ishi.rules.game import GameState, Legality, check_move
 from ishi.rules.scoring import area_score
@@ -30,7 +31,7 @@ _rng = random.Random()
 class NewGame(BaseModel):
     mode: Literal["capture", "full"] = "capture"
     exam_id: str | None = None
-    bot_rank: float | None = Field(default=None, ge=-8, le=30)  # full games; default weakest
+    bot_rank: float | None = Field(default=None, ge=-8, le=30)  # full; default adaptive
 
 
 class MoveIn(BaseModel):
@@ -79,18 +80,7 @@ class GameHintOut(BaseModel):
 class BotRanksOut(BaseModel):
     ranks: list[float]
     unlocked: bool  # full games open for this user (D-030)
-
-
-class ExamOut(BaseModel):
-    id: str
-    belt_target: str
-    status: Literal["in_progress", "passed", "failed"]
-    games_won: int
-    games_lost: int
-    wins_needed: int
-    losses_allowed: int
-    active_game: str | None  # unfinished exam game to resume
-    puzzles: list[str]  # Yellow exam has no puzzles (D-023)
+    recommended: float  # the adaptive strength (M8): the picker's default
 
 
 def _state_out(game: Game, state: GameState, user: User | None = None) -> GameStateOut:
@@ -127,38 +117,44 @@ def _game_or_404(session: Session, user: User, game_id: str) -> Game:
     return game
 
 
-def _exam_or_404(session: Session, user: User, exam_id: str) -> Exam:
-    exam = session.get(Exam, exam_id)
-    if exam is None or exam.user_id != user.id:
-        raise ApiError(404, "NOT_FOUND", "errors.not_found", {"exam_id": exam_id})
-    return exam
-
-
 @router.post("/games", response_model=GameStateOut, responses={409: {"model": ErrorResponse}})
 async def create_game(request: Request, session: SessionDep, body: NewGame) -> GameStateOut:
     user = get_or_create_user(session)
+    exam = None
+    if body.exam_id is not None:
+        exam = exam_or_404(session, user, body.exam_id)
+        if exam.status != "in_progress":
+            raise ApiError(409, "EXAM_FINISHED", "errors.exam_finished", {"exam_id": exam.id})
+        if exam_phase(exam) != "games" or (exam.belt_target == "yellow") != (
+            body.mode == "capture"
+        ):
+            raise ApiError(409, "EXAM_NOT_READY", "errors.exam_not_ready", {"exam_id": exam.id})
     if body.mode == "full":
         if not full_service.full_games_unlocked(user):
             raise ApiError(409, "MODE_LOCKED", "errors.mode_locked", {"mode": "full"})
-        rank = body.bot_rank if body.bot_rank is not None else max(PICKER_RANKS)
-        game = full_service.start_full_game(session, user, rank)
+        if exam is not None:
+            rank = exam_bot_rank(exam) or 25.0
+        elif body.bot_rank is not None:
+            rank = body.bot_rank
+        else:
+            rank = progress.default_bot_rank(user)
+        game = full_service.start_full_game(session, user, rank, exam_id=exam.id if exam else None)
         state = service.load_state(session, game)
         _warm(request, game, user, state)
         return _state_out(game, state, user)
-    exam = None
-    if body.exam_id is not None:
-        exam = _exam_or_404(session, user, body.exam_id)
-        if exam.status != "in_progress":
-            raise ApiError(409, "EXAM_FINISHED", "errors.exam_finished", {"exam_id": exam.id})
     game = service.start_game(session, user, exam)
     return _state_out(game, service.load_state(session, game))
 
 
 @router.get("/games/bot-ranks", response_model=BotRanksOut)
 def bot_ranks(session: SessionDep) -> BotRanksOut:
-    """Strengths offered in the 9x9 picker until adaptive strength (M8), D-031."""
+    """Strengths offered in the 9x9 picker (D-031); the adaptive one is the default (M8)."""
     user = get_or_create_user(session)
-    return BotRanksOut(ranks=list(PICKER_RANKS), unlocked=full_service.full_games_unlocked(user))
+    return BotRanksOut(
+        ranks=list(PICKER_RANKS),
+        unlocked=full_service.full_games_unlocked(user),
+        recommended=progress.default_bot_rank(user),
+    )
 
 
 @router.get(
@@ -313,40 +309,3 @@ def game_sgf(session: SessionDep, game_id: str) -> str:
     user = get_or_create_user(session)
     game = _game_or_404(session, user, game_id)
     return game.sgf or to_sgf(service.load_state(session, game))
-
-
-# -- exams -------------------------------------------------------------------------------
-
-
-def _exam_out(session: Session, exam: Exam) -> ExamOut:
-    active = session.exec(
-        select(Game).where(Game.exam_id == exam.id, Game.status == "active")
-    ).first()
-    return ExamOut(
-        id=exam.id,
-        belt_target=exam.belt_target,
-        status=exam.status,  # type: ignore[arg-type]
-        games_won=exam.games_won,
-        games_lost=exam.games_lost,
-        wins_needed=EXAM_WINS_TO_PASS,
-        losses_allowed=EXAM_LOSSES_TO_FAIL,
-        active_game=active.id if active and exam.status == "in_progress" else None,
-        puzzles=[],
-    )
-
-
-@router.post("/exams", response_model=ExamOut, responses={409: {"model": ErrorResponse}})
-def create_exam(session: SessionDep) -> ExamOut:
-    user = get_or_create_user(session)
-    current = service.active_exam(session, user)
-    if current is not None:
-        return _exam_out(session, current)
-    if not service.can_take_exam(session, user):
-        raise ApiError(409, "EXAM_NOT_AVAILABLE", "errors.exam_not_available", {})
-    return _exam_out(session, service.start_exam(session, user))
-
-
-@router.get("/exams/{exam_id}", response_model=ExamOut, responses={404: {"model": ErrorResponse}})
-def get_exam(session: SessionDep, exam_id: str) -> ExamOut:
-    user = get_or_create_user(session)
-    return _exam_out(session, _exam_or_404(session, user, exam_id))

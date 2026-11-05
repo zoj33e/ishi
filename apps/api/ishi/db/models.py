@@ -3,7 +3,7 @@
 Tables are added per milestone; M2 brings users, lesson progress, games, moves and exams.
 """
 
-from datetime import UTC, datetime
+from datetime import UTC, date, datetime
 from typing import Any
 from uuid import uuid4
 
@@ -58,6 +58,10 @@ class Exam(_Timestamps, table=True):
     puzzle_score: int | None = None
     games_won: int = 0
     games_lost: int = 0
+    # Orange+ exams (M8): 12 puzzles first, [{"id": puzzle id, "solved": bool | None}]
+    puzzles: list[dict[str, Any]] = Field(
+        default_factory=list, sa_column=Column(JSON, nullable=False, server_default="[]")
+    )
 
 
 class Game(_Timestamps, table=True):
@@ -82,6 +86,9 @@ class Game(_Timestamps, table=True):
     # Full games: {black_area, white_area, komi, dead: [GTP], katago_lead} after two passes.
     final_score: dict[str, Any] | None = Field(default=None, sa_column=Column(JSON, nullable=True))
     reviewed_at: datetime | None = None  # Why Engine review done (M4)
+    # Rank estimate (M8): summed log-likelihood of the learner's moves per HumanSL profile,
+    # {"rank_20k": -123.4, ..., "moves": n}
+    likelihood: dict[str, float] | None = Field(default=None, sa_column=Column(JSON, nullable=True))
 
 
 class Move(_Timestamps, table=True):
@@ -229,3 +236,18 @@ class NarrationCache(_Timestamps, table=True):
     key: str
     narration: dict[str, Any] = Field(sa_column=Column(JSON, nullable=False))
     model: str
+
+
+class RankHistory(_Timestamps, table=True):
+    """One rank-estimate snapshot per local day (M8)."""
+
+    __tablename__ = "rank_history"
+    __table_args__ = (Index("ix_rank_history_user_date", "user_id", "date", unique=True),)
+
+    id: str = Field(default_factory=_uuid, primary_key=True)
+    user_id: str = Field(foreign_key="users.id")
+    date: date
+    rank_estimate: float
+    likelihood_rank: float | None = None
+    results_rank: float | None = None
+    games_count: int = 0

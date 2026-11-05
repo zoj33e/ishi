@@ -405,7 +405,7 @@
           "games"
         ],
         "summary": "Bot Ranks",
-        "description": "Strengths offered in the 9x9 picker until adaptive strength (M8), D-031.",
+        "description": "Strengths offered in the 9x9 picker (D-031); the adaptive one is the default (M8).",
         "operationId": "bot_ranks_api_games_bot_ranks_get",
         "responses": {
           "200": {
@@ -758,7 +758,7 @@
     "/api/exams": {
       "post": {
         "tags": [
-          "games"
+          "exams"
         ],
         "summary": "Create Exam",
         "operationId": "create_exam_api_exams_post",
@@ -789,7 +789,7 @@
     "/api/exams/{exam_id}": {
       "get": {
         "tags": [
-          "games"
+          "exams"
         ],
         "summary": "Get Exam",
         "operationId": "get_exam_api_exams__exam_id__get",
@@ -831,6 +831,109 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/exams/{exam_id}/puzzles/{puzzle_id}/attempt": {
+      "post": {
+        "tags": [
+          "exams"
+        ],
+        "summary": "Exam Attempt",
+        "description": "One try per puzzle and no hints: a wrong move answers it as not solved.",
+        "operationId": "exam_attempt_api_exams__exam_id__puzzles__puzzle_id__attempt_post",
+        "parameters": [
+          {
+            "name": "exam_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Exam Id"
+            }
+          },
+          {
+            "name": "puzzle_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Puzzle Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExamAttemptIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExamAttemptOut"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/progress": {
+      "get": {
+        "tags": [
+          "progress"
+        ],
+        "summary": "Get Progress",
+        "operationId": "get_progress_api_progress_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProgressOut"
                 }
               }
             }
@@ -1565,6 +1668,42 @@
         ],
         "title": "AttemptOut"
       },
+      "BeltStep": {
+        "properties": {
+          "belt": {
+            "type": "string",
+            "title": "Belt"
+          },
+          "rank": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rank"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "done",
+              "current",
+              "next",
+              "later"
+            ],
+            "title": "Status"
+          }
+        },
+        "type": "object",
+        "required": [
+          "belt",
+          "rank",
+          "status"
+        ],
+        "title": "BeltStep"
+      },
       "BotRanksOut": {
         "properties": {
           "ranks": {
@@ -1577,12 +1716,17 @@
           "unlocked": {
             "type": "boolean",
             "title": "Unlocked"
+          },
+          "recommended": {
+            "type": "number",
+            "title": "Recommended"
           }
         },
         "type": "object",
         "required": [
           "ranks",
-          "unlocked"
+          "unlocked",
+          "recommended"
         ],
         "title": "BotRanksOut"
       },
@@ -1646,6 +1790,29 @@
           "white"
         ],
         "title": "Captures"
+      },
+      "ConceptStat": {
+        "properties": {
+          "concept_id": {
+            "type": "string",
+            "title": "Concept Id"
+          },
+          "count": {
+            "type": "integer",
+            "title": "Count"
+          },
+          "points_lost": {
+            "type": "number",
+            "title": "Points Lost"
+          }
+        },
+        "type": "object",
+        "required": [
+          "concept_id",
+          "count",
+          "points_lost"
+        ],
+        "title": "ConceptStat"
       },
       "DemoFrameOut": {
         "properties": {
@@ -1755,6 +1922,104 @@
         "title": "ErrorResponse",
         "description": "Every non-2xx response body (see `ishi.api.errors`)."
       },
+      "ExamAttemptIn": {
+        "properties": {
+          "moves": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 21,
+            "minItems": 1,
+            "title": "Moves"
+          },
+          "time_ms": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Time Ms"
+          }
+        },
+        "type": "object",
+        "required": [
+          "moves"
+        ],
+        "title": "ExamAttemptIn"
+      },
+      "ExamAttemptOut": {
+        "properties": {
+          "correct": {
+            "type": "boolean",
+            "title": "Correct"
+          },
+          "done": {
+            "type": "boolean",
+            "title": "Done"
+          },
+          "opponent_reply": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Opponent Reply"
+          },
+          "solution_line": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Solution Line"
+          },
+          "solution_frames": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/LineFrame"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Solution Frames"
+          },
+          "board": {
+            "$ref": "#/components/schemas/LineFrame"
+          },
+          "exam": {
+            "$ref": "#/components/schemas/ExamOut"
+          }
+        },
+        "type": "object",
+        "required": [
+          "correct",
+          "done",
+          "opponent_reply",
+          "solution_line",
+          "solution_frames",
+          "board",
+          "exam"
+        ],
+        "title": "ExamAttemptOut"
+      },
       "ExamOut": {
         "properties": {
           "id": {
@@ -1773,6 +2038,15 @@
               "failed"
             ],
             "title": "Status"
+          },
+          "phase": {
+            "type": "string",
+            "enum": [
+              "puzzles",
+              "games",
+              "done"
+            ],
+            "title": "Phase"
           },
           "games_won": {
             "type": "integer",
@@ -1803,10 +2077,45 @@
           },
           "puzzles": {
             "items": {
-              "type": "string"
+              "$ref": "#/components/schemas/ExamPuzzleOut"
             },
             "type": "array",
             "title": "Puzzles"
+          },
+          "puzzles_needed": {
+            "type": "integer",
+            "title": "Puzzles Needed"
+          },
+          "puzzle_score": {
+            "type": "integer",
+            "title": "Puzzle Score"
+          },
+          "bot_rank": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bot Rank"
+          },
+          "bot_label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bot Label"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
           }
         },
         "type": "object",
@@ -1814,14 +2123,108 @@
           "id",
           "belt_target",
           "status",
+          "phase",
           "games_won",
           "games_lost",
           "wins_needed",
           "losses_allowed",
           "active_game",
-          "puzzles"
+          "puzzles",
+          "puzzles_needed",
+          "puzzle_score",
+          "bot_rank",
+          "bot_label",
+          "created_at"
         ],
         "title": "ExamOut"
+      },
+      "ExamPuzzleOut": {
+        "properties": {
+          "puzzle": {
+            "$ref": "#/components/schemas/PuzzleOut"
+          },
+          "solved": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Solved"
+          }
+        },
+        "type": "object",
+        "required": [
+          "puzzle",
+          "solved"
+        ],
+        "title": "ExamPuzzleOut"
+      },
+      "ExamStatus": {
+        "properties": {
+          "belt_target": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Belt Target"
+          },
+          "available": {
+            "type": "boolean",
+            "title": "Available"
+          },
+          "in_progress": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "In Progress"
+          },
+          "rank_needed": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rank Needed"
+          },
+          "games_since_belt": {
+            "type": "integer",
+            "title": "Games Since Belt"
+          },
+          "games_needed": {
+            "type": "integer",
+            "title": "Games Needed"
+          },
+          "games_left": {
+            "type": "integer",
+            "title": "Games Left"
+          }
+        },
+        "type": "object",
+        "required": [
+          "belt_target",
+          "available",
+          "in_progress",
+          "rank_needed",
+          "games_since_belt",
+          "games_needed",
+          "games_left"
+        ],
+        "title": "ExamStatus"
       },
       "GameHintIn": {
         "properties": {
@@ -3070,6 +3473,86 @@
         ],
         "title": "PreviewOut"
       },
+      "ProgressOut": {
+        "properties": {
+          "belt": {
+            "type": "string",
+            "title": "Belt"
+          },
+          "rank_estimate": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rank Estimate"
+          },
+          "rank_label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rank Label"
+          },
+          "bot_rank": {
+            "type": "number",
+            "title": "Bot Rank"
+          },
+          "bot_label": {
+            "type": "string",
+            "title": "Bot Label"
+          },
+          "games_played": {
+            "type": "integer",
+            "title": "Games Played"
+          },
+          "rank_history": {
+            "items": {
+              "$ref": "#/components/schemas/RankPoint"
+            },
+            "type": "array",
+            "title": "Rank History"
+          },
+          "concept_stats": {
+            "items": {
+              "$ref": "#/components/schemas/ConceptStat"
+            },
+            "type": "array",
+            "title": "Concept Stats"
+          },
+          "belts": {
+            "items": {
+              "$ref": "#/components/schemas/BeltStep"
+            },
+            "type": "array",
+            "title": "Belts"
+          },
+          "exam": {
+            "$ref": "#/components/schemas/ExamStatus"
+          }
+        },
+        "type": "object",
+        "required": [
+          "belt",
+          "rank_estimate",
+          "rank_label",
+          "bot_rank",
+          "bot_label",
+          "games_played",
+          "rank_history",
+          "concept_stats",
+          "belts",
+          "exam"
+        ],
+        "title": "ProgressOut"
+      },
       "PuzzleOut": {
         "properties": {
           "id": {
@@ -3114,6 +3597,54 @@
           "position"
         ],
         "title": "PuzzleOut"
+      },
+      "RankPoint": {
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date",
+            "title": "Date"
+          },
+          "rank_estimate": {
+            "type": "number",
+            "title": "Rank Estimate"
+          },
+          "likelihood_rank": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Likelihood Rank"
+          },
+          "results_rank": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Results Rank"
+          },
+          "games_count": {
+            "type": "integer",
+            "title": "Games Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "date",
+          "rank_estimate",
+          "likelihood_rank",
+          "results_rank",
+          "games_count"
+        ],
+        "title": "RankPoint"
       },
       "RetryIn": {
         "properties": {
@@ -3374,7 +3905,10 @@
         "properties": {
           "mode": {
             "type": "string",
-            "const": "capture",
+            "enum": [
+              "capture",
+              "full"
+            ],
             "title": "Mode"
           },
           "board_size": {
@@ -3460,6 +3994,17 @@
               }
             ],
             "title": "Exam In Progress"
+          },
+          "exam_belt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Exam Belt"
           }
         },
         "type": "object",
@@ -3471,7 +4016,8 @@
           "school_next",
           "capture",
           "exam_available",
-          "exam_in_progress"
+          "exam_in_progress",
+          "exam_belt"
         ],
         "title": "TodayOut"
       },

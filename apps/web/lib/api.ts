@@ -134,3 +134,16 @@ export const gymAttempt = (id: string, body: Schemas["AttemptIn"]) =>
   request<GymAttempt>(`/api/gym/puzzles/${encodeURIComponent(id)}/attempt`, json(body));
 export const gymHint = (id: string, body: Schemas["HintIn"]) =>
   request<GymHint>(`/api/gym/puzzles/${encodeURIComponent(id)}/hint`, json(body));
+
+// -- M8: progression -------------------------------------------------------------------------
+
+export type Progress = Schemas["ProgressOut"];
+export type ExamAttempt = Schemas["ExamAttemptOut"];
+export type ExamPuzzle = Schemas["ExamPuzzleOut"];
+
+export const getProgress = () => request<Progress>("/api/progress");
+export const examAttempt = (examId: string, puzzleId: string, body: Schemas["ExamAttemptIn"]) =>
+  request<ExamAttempt>(
+    `/api/exams/${encodeURIComponent(examId)}/puzzles/${encodeURIComponent(puzzleId)}/attempt`,
+    json(body),
+  );

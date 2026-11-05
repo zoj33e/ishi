@@ -1,4 +1,4 @@
-"""Capture games, stages and the Yellow exam backed by the database (I/O lives here).
+"""Capture games, stages and belt exams backed by the database (I/O lives here).
 
 Full 9x9 games against the HumanSL bot live in `ishi.play.full_service`."""
 
@@ -6,17 +6,25 @@ from __future__ import annotations
 
 import logging
 import random
+from typing import Any
 
 from sqlmodel import Session, col, select
 
 from ishi.bots.capture_bot import CaptureBot, capture_over, capture_result, capture_winner
-from ishi.db.models import Exam, Game, LessonProgress, Move, User, utcnow
+from ishi.db.models import Exam, Game, LessonProgress, Move, Puzzle, User, utcnow
+from ishi.gym.puzzles import load_seed
+from ishi.gym.service import open_concepts
 from ishi.play.progression import (
+    BELT_EXAM_PUZZLES,
     EXAM_STAGE,
+    NEXT_BELT,
     ExamRecord,
     PlayedGame,
     Stage,
     StageStatus,
+    belt_exam_available,
+    belt_exam_games_left,
+    belt_exam_outcome,
     current_stage,
     exam_available,
     exam_outcome,
@@ -26,6 +34,7 @@ from ishi.rules.coords import Point, gtp_to_point, point_to_gtp
 from ishi.rules.game import GameState, new_game, play
 from ishi.rules.sgf import to_sgf
 from ishi.school.content import load_lessons
+from ishi.why.selector import BELT_RANK
 
 log = logging.getLogger("ishi.play")
 
@@ -65,30 +74,75 @@ def lessons_done(session: Session, user: User) -> bool:
     return all(lesson.id in done for lesson in load_lessons())
 
 
-def user_exams(session: Session, user: User) -> list[Exam]:
-    return list(
-        session.exec(
-            select(Exam)
-            .where(Exam.user_id == user.id, Exam.belt_target == "yellow")
-            .order_by(col(Exam.created_at))
-        )
-    )
+def user_exams(session: Session, user: User, belt_target: str | None = None) -> list[Exam]:
+    query = select(Exam).where(Exam.user_id == user.id)
+    if belt_target is not None:
+        query = query.where(Exam.belt_target == belt_target)
+    return list(session.exec(query.order_by(col(Exam.created_at))))
 
 
 def active_exam(session: Session, user: User) -> Exam | None:
     return next((e for e in user_exams(session, user) if e.status == "in_progress"), None)
 
 
-def can_take_exam(session: Session, user: User) -> bool:
-    games = capture_history(session, user)
-    records = [
+def next_belt(user: User) -> str | None:
+    return "yellow" if user.belt == "white" else NEXT_BELT.get(user.belt)
+
+
+def full_history(session: Session, user: User) -> list[Game]:
+    """Finished 9x9 games outside exams, oldest first."""
+    return list(
+        session.exec(
+            select(Game)
+            .where(Game.user_id == user.id, Game.mode == "full", Game.status == "finished")
+            .where(col(Game.exam_id).is_(None))
+            .order_by(col(Game.created_at))
+        )
+    )
+
+
+def _records(exams: list[Exam], games: list[Game]) -> list[ExamRecord]:
+    return [
         ExamRecord(
             e.status,
             sum(1 for g in games if e.status != "in_progress" and g.created_at > e.updated_at),
         )
-        for e in user_exams(session, user)
+        for e in exams
     ]
-    return exam_available(user.belt, lessons_done(session, user), len(games), records)
+
+
+def games_since_belt(session: Session, user: User) -> int:
+    """9x9 games finished since the learner's last belt (its exam), exams excluded."""
+    passed = [e for e in user_exams(session, user) if e.status == "passed"]
+    since = passed[-1].updated_at if passed else None
+    return sum(1 for g in full_history(session, user) if since is None or g.created_at > since)
+
+
+def exam_games_left(session: Session, user: User) -> int:
+    """Full games still to play before the next-belt exam opens (Orange+)."""
+    target = next_belt(user)
+    if target is None or target == "yellow":
+        return 0
+    records = _records(user_exams(session, user, target), full_history(session, user))
+    return belt_exam_games_left(games_since_belt(session, user), records)
+
+
+def can_take_exam(session: Session, user: User) -> bool:
+    target = next_belt(user)
+    if target == "yellow":
+        games = capture_history(session, user)
+        records = _records(user_exams(session, user, "yellow"), games)
+        return exam_available(user.belt, lessons_done(session, user), len(games), records)
+    if target is None or active_exam(session, user) is not None:
+        return False
+    records = _records(user_exams(session, user, target), full_history(session, user))
+    return belt_exam_available(
+        user.belt,
+        user.rank_estimate,
+        BELT_RANK.get(target),
+        games_since_belt(session, user),
+        records,
+    )
 
 
 # -- games -------------------------------------------------------------------------------
@@ -207,20 +261,73 @@ def _update_exam(session: Session, game: Game) -> None:
         exam.games_won += 1
     else:
         exam.games_lost += 1
-    exam.status = exam_outcome(exam.games_won, exam.games_lost)
+    settle_exam(session, exam)
+
+
+def puzzle_results(exam: Exam) -> list[bool | None]:
+    return [p.get("solved") for p in exam.puzzles]
+
+
+def settle_exam(session: Session, exam: Exam) -> None:
+    """Recompute the exam's status; a pass awards the belt."""
+    if exam.belt_target == "yellow":
+        exam.status = exam_outcome(exam.games_won, exam.games_lost)
+    else:
+        exam.status = belt_exam_outcome(puzzle_results(exam), exam.games_won, exam.games_lost)
     exam.updated_at = utcnow()
     session.add(exam)
     if exam.status == "passed":
         user = session.get(User, exam.user_id)
         assert user is not None
-        user.belt = "yellow"
+        user.belt = exam.belt_target
         user.updated_at = utcnow()
         session.add(user)
 
 
 def start_exam(session: Session, user: User) -> Exam:
-    exam = Exam(user_id=user.id, belt_target="yellow")
+    target = next_belt(user)
+    assert target is not None
+    exam = Exam(user_id=user.id, belt_target=target)
+    if target != "yellow":
+        exam.puzzles = [
+            {"id": pz.id, "solved": None} for pz in exam_puzzles(session, user, exam.id)
+        ]
     session.add(exam)
     session.commit()
     session.refresh(exam)
     return exam
+
+
+def exam_puzzles(session: Session, user: User, seed: str) -> list[Puzzle]:
+    """12 seed puzzles from the concepts open at the learner's belt, taken in turn."""
+    rng = random.Random(seed)
+    by_concept: dict[str, list[dict[str, Any]]] = {}
+    for item in load_seed():
+        by_concept.setdefault(item["concept_id"], []).append(item)
+    pools = [rng.sample(by_concept[c], len(by_concept[c])) for c in open_concepts(user.belt)]
+    pools = [pool for pool in pools if pool]
+    picked: list[dict[str, Any]] = []
+    while len(picked) < BELT_EXAM_PUZZLES and any(pools):
+        for pool in pools:
+            if pool and len(picked) < BELT_EXAM_PUZZLES:
+                picked.append(pool.pop())
+    out = []
+    for item in picked:
+        pz = session.exec(
+            select(Puzzle).where(Puzzle.user_id == user.id, Puzzle.seed_id == item["id"])
+        ).first()
+        if pz is None:  # no Shape Gym card: the gym will not serve it as new later
+            pz = Puzzle(
+                user_id=user.id,
+                source="seed",
+                seed_id=item["id"],
+                concept_id=item["concept_id"],
+                board_size=item["board_size"],
+                setup=item["setup"],
+                correct_moves=item["correct_moves"],
+                solution_line=item["solution_line"],
+                learner_moves=item["learner_moves"],
+            )
+            session.add(pz)
+        out.append(pz)
+    return out

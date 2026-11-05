@@ -28,7 +28,7 @@ def full_games_unlocked(user: User) -> bool:
     return user.belt != "white" or get_settings().dev_unlock_all
 
 
-def start_full_game(session: Session, user: User, rank: float) -> Game:
+def start_full_game(session: Session, user: User, rank: float, exam_id: str | None = None) -> Game:
     p = profile_for(rank)
     game = Game(
         user_id=user.id,
@@ -45,6 +45,7 @@ def start_full_game(session: Session, user: User, rank: float) -> Game:
             "blunder": p.blunder,
             "label": rank_label(p.rank),
         },
+        exam_id=exam_id,
     )
     session.add(game)
     session.commit()
