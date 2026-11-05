@@ -535,6 +535,142 @@
         }
       }
     },
+    "/api/games/{game_id}/preview": {
+      "post": {
+        "tags": [
+          "games"
+        ],
+        "summary": "Preview",
+        "description": "Called on the ghost stone: is the move legal, and does the teacher want to ask first?",
+        "operationId": "preview_api_games__game_id__preview_post",
+        "parameters": [
+          {
+            "name": "game_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Game Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PreviewIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PreviewOut"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          }
+        }
+      }
+    },
+    "/api/games/{game_id}/hint": {
+      "post": {
+        "tags": [
+          "games"
+        ],
+        "summary": "Game Hint",
+        "description": "Hints after a nudge: 1 = a guiding question and the stones in question, 2 = the area.",
+        "operationId": "game_hint_api_games__game_id__hint_post",
+        "parameters": [
+          {
+            "name": "game_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Game Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GameHintIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GameHintOut"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/games/{game_id}/resign": {
       "post": {
         "tags": [
@@ -1687,6 +1823,74 @@
         ],
         "title": "ExamOut"
       },
+      "GameHintIn": {
+        "properties": {
+          "level": {
+            "type": "integer",
+            "maximum": 2.0,
+            "minimum": 1.0,
+            "title": "Level"
+          },
+          "locale": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "th",
+                  "en"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Locale"
+          }
+        },
+        "type": "object",
+        "required": [
+          "level"
+        ],
+        "title": "GameHintIn"
+      },
+      "GameHintOut": {
+        "properties": {
+          "level": {
+            "type": "integer",
+            "title": "Level"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          },
+          "marks": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Marks"
+          },
+          "focus": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Focus"
+          }
+        },
+        "type": "object",
+        "required": [
+          "level",
+          "text",
+          "marks",
+          "focus"
+        ],
+        "title": "GameHintOut"
+      },
       "GameLessonOut": {
         "properties": {
           "lesson_id": {
@@ -2702,6 +2906,47 @@
         "type": "object",
         "title": "NewGame"
       },
+      "NudgeOut": {
+        "properties": {
+          "concept_id": {
+            "type": "string",
+            "title": "Concept Id"
+          },
+          "headline": {
+            "type": "string",
+            "title": "Headline"
+          },
+          "explanation": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Explanation"
+          },
+          "question": {
+            "type": "string",
+            "title": "Question"
+          },
+          "hint_level_available": {
+            "type": "integer",
+            "title": "Hint Level Available"
+          },
+          "nudges_left": {
+            "type": "integer",
+            "title": "Nudges Left"
+          }
+        },
+        "type": "object",
+        "required": [
+          "concept_id",
+          "headline",
+          "explanation",
+          "question",
+          "hint_level_available",
+          "nudges_left"
+        ],
+        "title": "NudgeOut"
+      },
       "Position": {
         "properties": {
           "board_size": {
@@ -2760,6 +3005,70 @@
           "captures"
         ],
         "title": "Position"
+      },
+      "PreviewIn": {
+        "properties": {
+          "point": {
+            "type": "string",
+            "title": "Point"
+          },
+          "locale": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "th",
+                  "en"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Locale"
+          }
+        },
+        "type": "object",
+        "required": [
+          "point"
+        ],
+        "title": "PreviewIn"
+      },
+      "PreviewOut": {
+        "properties": {
+          "legal": {
+            "type": "boolean",
+            "title": "Legal"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          },
+          "nudge": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/NudgeOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "legal",
+          "reason",
+          "nudge"
+        ],
+        "title": "PreviewOut"
       },
       "PuzzleOut": {
         "properties": {

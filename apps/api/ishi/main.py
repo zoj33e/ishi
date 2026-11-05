@@ -19,6 +19,7 @@ from ishi.api.errors import install_error_handlers
 from ishi.config import get_settings
 from ishi.db.session import migrate
 from ishi.engine.katago_process import EngineError, KataGoProcess
+from ishi.play.nudges import LiveAnalysis
 from ishi.play.review_service import AnalysisWorker
 from ishi.teacher.llm import TeacherLLM
 
@@ -36,6 +37,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         app.state.teacher = TeacherLLM(
             settings.anthropic_api_key.get_secret_value(), settings.llm_model
         )
+    app.state.live = LiveAnalysis(lambda: _ready(app.state.engine))  # nudges (M7)
     start_task: asyncio.Task[None] | None = None
     if settings.katago_configured:
         engine = KataGoProcess(settings.katago_command())
@@ -48,11 +50,13 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
             lambda: app.state.engine,
             lambda: app.state.teacher,
             settings.llm_model,
+            quiet=app.state.live.wait_quiet,
         )
         app.state.analysis.start()
     else:
         log.warning("KataGo not configured (run scripts/setup_engine.ps1); engine offline")
     yield
+    await app.state.live.close()
     if app.state.analysis is not None:
         await app.state.analysis.stop()
     if start_task is not None:
@@ -63,6 +67,10 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         await app.state.engine.stop()
     if app.state.teacher is not None:
         await app.state.teacher.close()
+
+
+def _ready(engine: KataGoProcess | None) -> KataGoProcess | None:
+    return engine if engine is not None and engine.ready else None
 
 
 async def _start_engine(engine: KataGoProcess) -> None:

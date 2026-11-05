@@ -73,7 +73,8 @@
     "mode_locked": "This mode isn't open yet.",
     "game_not_finished": "Finish the game first.",
     "retry_closed": "This try is already over.",
-    "puzzle_not_found": "We couldn't find that puzzle."
+    "puzzle_not_found": "We couldn't find that puzzle.",
+    "no_nudge": "There's no teacher question to give a hint for."
   },
   "board": {
     "label": "{size} by {size} Go board",
@@ -189,7 +190,15 @@
     "youResigned": "You gave up this game.",
     "scoreLine": "Area: Black {black} · White {white} + komi {komi}",
     "deadNote": "Stones with a cross were counted as dead.",
-    "seeLesson": "See your lesson"
+    "seeLesson": "See your lesson",
+    "nudge": {
+      "title": "Wait — before you play…",
+      "rethink": "Rethink",
+      "hint": "Hint",
+      "hintMore": "Bigger hint",
+      "playAnyway": "Play anyway",
+      "left": "Teacher questions left this game: {count}"
+    }
   },
   "exam": {
     "title": "Yellow belt exam",

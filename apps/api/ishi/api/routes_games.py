@@ -15,7 +15,7 @@ from ishi.bots.humansl_bot import PICKER_RANKS
 from ishi.db.models import Exam, Game, User
 from ishi.db.session import SessionDep, get_or_create_user
 from ishi.engine.katago_process import EngineUnavailableError, KataGoProcess
-from ishi.play import full_service, service
+from ishi.play import full_service, nudges, service
 from ishi.play.progression import EXAM_LOSSES_TO_FAIL, EXAM_WINS_TO_PASS
 from ishi.rules.coords import gtp_to_point
 from ishi.rules.game import GameState, Legality, check_move
@@ -44,6 +44,38 @@ class MoveOut(BaseModel):
     game_over: bool
 
 
+class PreviewIn(BaseModel):
+    point: str
+    locale: Literal["th", "en"] | None = None  # the screen's language (default: the learner's)
+
+
+class NudgeOut(BaseModel):
+    concept_id: str
+    headline: str
+    explanation: list[str]
+    question: str  # the teacher's question; the answer is never in it
+    hint_level_available: int  # hints 1 (question + marks) and 2 (highlighted area)
+    nudges_left: int
+
+
+class PreviewOut(BaseModel):
+    legal: bool
+    reason: str | None  # why it's illegal (errors.reason.*)
+    nudge: NudgeOut | None
+
+
+class GameHintIn(BaseModel):
+    level: int = Field(ge=1, le=nudges.HINT_LEVELS)
+    locale: Literal["th", "en"] | None = None
+
+
+class GameHintOut(BaseModel):
+    level: int
+    text: str
+    marks: list[str]  # the stones in question (triangles)
+    focus: str | None  # level 2: center of the highlighted 3x3 area
+
+
 class BotRanksOut(BaseModel):
     ranks: list[float]
     unlocked: bool  # full games open for this user (D-030)
@@ -61,8 +93,9 @@ class ExamOut(BaseModel):
     puzzles: list[str]  # Yellow exam has no puzzles (D-023)
 
 
-def _state_out(game: Game, state: GameState) -> GameStateOut:
+def _state_out(game: Game, state: GameState, user: User | None = None) -> GameStateOut:
     out = game_state_out(state, id=game.id, mode=game.mode, result=game.result)
+    out.nudges_left = nudges.nudges_left(game, user) if user is not None else 0
     if game.status == "finished":
         out.status = "finished"
     out.exam_id = game.exam_id
@@ -102,14 +135,16 @@ def _exam_or_404(session: Session, user: User, exam_id: str) -> Exam:
 
 
 @router.post("/games", response_model=GameStateOut, responses={409: {"model": ErrorResponse}})
-def create_game(session: SessionDep, body: NewGame) -> GameStateOut:
+async def create_game(request: Request, session: SessionDep, body: NewGame) -> GameStateOut:
     user = get_or_create_user(session)
     if body.mode == "full":
         if not full_service.full_games_unlocked(user):
             raise ApiError(409, "MODE_LOCKED", "errors.mode_locked", {"mode": "full"})
         rank = body.bot_rank if body.bot_rank is not None else max(PICKER_RANKS)
         game = full_service.start_full_game(session, user, rank)
-        return _state_out(game, service.load_state(session, game))
+        state = service.load_state(session, game)
+        _warm(request, game, user, state)
+        return _state_out(game, state, user)
     exam = None
     if body.exam_id is not None:
         exam = _exam_or_404(session, user, body.exam_id)
@@ -129,10 +164,12 @@ def bot_ranks(session: SessionDep) -> BotRanksOut:
 @router.get(
     "/games/{game_id}", response_model=GameStateOut, responses={404: {"model": ErrorResponse}}
 )
-def get_game(session: SessionDep, game_id: str) -> GameStateOut:
+async def get_game(request: Request, session: SessionDep, game_id: str) -> GameStateOut:
     user = get_or_create_user(session)
     game = _game_or_404(session, user, game_id)
-    return _state_out(game, service.load_state(session, game))
+    state = service.load_state(session, game)
+    _warm(request, game, user, state)
+    return _state_out(game, state, user)
 
 
 @router.post(
@@ -162,17 +199,101 @@ async def post_move(request: Request, session: SessionDep, game_id: str, body: M
         engine: KataGoProcess | None = request.app.state.engine
         if engine is None:
             raise EngineUnavailableError("KataGo not configured")
+        before = state
         state, bot_move = await full_service.play_full_move(
             session, game, state, point, engine, _rng
         )
+        nudges.after_move(session, game, before, body.point.upper())
         _queue_analysis(request, game)
+        _warm(request, game, user, state)
     else:  # the capture bot searches for up to ~1.5 s: keep it off the event loop
         state, bot_move = await run_in_threadpool(
             service.play_learner_move, session, game, state, point, _rng
         )
     session.refresh(game)
     return MoveOut(
-        state=_state_out(game, state), bot_move=bot_move, game_over=game.status == "finished"
+        state=_state_out(game, state, user),
+        bot_move=bot_move,
+        game_over=game.status == "finished",
+    )
+
+
+def _locale(user: User) -> Literal["th", "en"]:
+    return "en" if user.locale == "en" else "th"
+
+
+def _warm(request: Request, game: Game, user: User, state: GameState) -> None:
+    """Start analyzing the position the learner is thinking about (nudges, M7)."""
+    if nudges.nudges_left(game, user) > 0 and not state.is_over:
+        request.app.state.live.warm(game.id, state)
+
+
+@router.post(
+    "/games/{game_id}/preview",
+    response_model=PreviewOut,
+    responses={404: {"model": ErrorResponse}, 422: {"model": ErrorResponse}},
+)
+async def preview(
+    request: Request, session: SessionDep, game_id: str, body: PreviewIn
+) -> PreviewOut:
+    """Called on the ghost stone: is the move legal, and does the teacher want to ask first?"""
+    user = get_or_create_user(session)
+    game = _game_or_404(session, user, game_id)
+    state = service.load_state(session, game)
+    try:
+        point = gtp_to_point(body.point, game.board_size)
+    except ValueError:
+        raise ApiError(
+            422, "BAD_COORDINATE", "errors.bad_coordinate", {"point": body.point}
+        ) from None
+    legality = Legality.GAME_OVER if game.status == "finished" else check_move(state, point)
+    if legality is not Legality.OK:
+        return PreviewOut(legal=False, reason=legality.value, nudge=None)
+    if point is None or not nudges.nudges_on(game, user):
+        return PreviewOut(legal=True, reason=None, nudge=None)
+    nudge = await nudges.preview(
+        session,
+        game,
+        user,
+        state,
+        point,
+        engine=request.app.state.engine,
+        live=request.app.state.live,
+    )
+    if nudge is None:
+        return PreviewOut(legal=True, reason=None, nudge=None)
+    n = nudge.narration(body.locale or _locale(user))
+    return PreviewOut(
+        legal=True,
+        reason=None,
+        nudge=NudgeOut(
+            concept_id=nudge.concept_id,
+            headline=n.headline,
+            explanation=n.explanation,
+            question=n.question or "",
+            hint_level_available=nudges.HINT_LEVELS,
+            nudges_left=nudges.nudges_left(game, user),
+        ),
+    )
+
+
+@router.post(
+    "/games/{game_id}/hint",
+    response_model=GameHintOut,
+    responses={404: {"model": ErrorResponse}, 409: {"model": ErrorResponse}},
+)
+def game_hint(session: SessionDep, game_id: str, body: GameHintIn) -> GameHintOut:
+    """Hints after a nudge: 1 = a guiding question and the stones in question, 2 = the area."""
+    user = get_or_create_user(session)
+    game = _game_or_404(session, user, game_id)
+    nudge = nudges.pending(game, service.load_state(session, game))
+    if nudge is None:
+        raise ApiError(409, "NO_NUDGE", "errors.no_nudge", {"game_id": game_id})
+    return GameHintOut(
+        level=body.level,
+        text=nudge.narration(body.locale or _locale(user)).hints[body.level - 1],
+        marks=nudge.marks,
+        focus=nudge.focus if body.level >= 2 else None,
     )
 
 

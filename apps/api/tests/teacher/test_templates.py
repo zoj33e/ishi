@@ -24,7 +24,7 @@ def test_every_concept_has_a_template(name: str, locale: str) -> None:
 
 def test_no_stray_template_files() -> None:
     names = {p.name.split(".")[0] for p in TEMPLATES_DIR.glob("*.yaml")}
-    assert names == {*CONCEPTS, "praise", "clean"}
+    assert names == {*CONCEPTS, "praise", "clean", "nudge"}
 
 
 @pytest.mark.parametrize("case_id", POSITIVE_CASES)

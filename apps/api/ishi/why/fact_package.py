@@ -149,6 +149,29 @@ def mistake_package(
     ).finalize()
 
 
+def nudge_package(
+    review: MoveReview, hit: ConceptHit, *, locale: Literal["th", "en"], learner: LearnerInfo
+) -> FactPackage:
+    """A nudge (M7): the move is only a ghost stone, so there is no follow-up line and no move
+    number; the correct moves are kept for the validator (they must never be shown)."""
+    ctx = review.ctx
+    return FactPackage(
+        lesson_type="nudge",
+        locale=locale,
+        learner=learner,
+        board_size=ctx.size,
+        learner_color=_color(ctx.learner),
+        concept_id=hit.concept_id,
+        variant=hit.variant,
+        played_move=review.move,
+        correct_moves=hit.correct_moves,
+        points_lost=round(review.points_lost, 1),
+        groups=_group_facts(ctx, hit),
+        key_points=hit.key_points,
+        secondary_concepts=hit.secondary,
+    ).finalize()
+
+
 def praise_package(
     praise: Praise, *, locale: Literal["th", "en"], learner: LearnerInfo
 ) -> FactPackage:

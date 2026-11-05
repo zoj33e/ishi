@@ -10,7 +10,7 @@ import asyncio
 import contextlib
 import json
 import logging
-from collections.abc import Callable
+from collections.abc import Awaitable, Callable
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -176,8 +176,10 @@ class AnalysisWorker:
         engine: Callable[[], KataGoProcess | None],
         teacher: Callable[[], Completer | None] = lambda: None,
         model: str = "",
+        quiet: Callable[[], Awaitable[None]] | None = None,
     ) -> None:
         self._db_path = db_path
+        self._quiet = quiet  # waits while a learner is waiting on the engine (nudges, M7)
         self._engine = engine
         self._teacher = teacher
         self._model = model
@@ -243,8 +245,13 @@ class AnalysisWorker:
             user = session.get(User, game.user_id)
             assert user is not None
             belt, rank = user.belt, learner_rank(user.belt, user.rank_estimate)
-        if missing:
-            analyses = await analyze_positions(engine, state, missing, qid=f"{game_id}-bg")
+        # mid-game: one position at a time, each after the learner's nudge check (M7)
+        mid_game = not finished and self._quiet is not None
+        for chunk in [[t] for t in missing] if mid_game else [missing] if missing else []:
+            if mid_game:
+                assert self._quiet is not None
+                await self._quiet()
+            analyses = await analyze_positions(engine, state, chunk, qid=f"{game_id}-bg")
             version = engine.version or ""
             with Session(get_engine(self._db_path)) as session:
                 game = session.get(Game, game_id)

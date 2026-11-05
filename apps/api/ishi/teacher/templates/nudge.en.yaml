@@ -1,0 +1,42 @@
+# Nudges (M7): asked BEFORE the learner's move is played, so present tense and no answer.
+# `variants` are keyed by concept; `{played_move}` is the ghost stone.
+headline: "Wait, take another look."
+explanation:
+  - "Before you play {played_move}, look at the stones around it."
+  - "Something nearby matters more right now."
+question: "Is there a better move?"
+hints:
+  - "Look at the stones near {played_move}."
+  - "Look inside the highlighted area."
+takeaway: "Checking before you play is what strong players do."
+variants:
+  missed_capture:
+    question: "Are any of the opponent's stones short of liberties?"
+    hints:
+      - "Count the liberties of the opponent's stones near here."
+      - "Look inside the highlighted area."
+  ignored_atari:
+    question: "Are your own stones safe right now?"
+    hints:
+      - "Count the liberties of your stones nearby."
+      - "Look inside the highlighted area."
+  self_atari:
+    question: "How many liberties will your stones have after this move?"
+    hints:
+      - "Count the liberties your stones would have after {played_move}."
+      - "Look inside the highlighted area."
+  ladder:
+    question: "If this turns into a chase, who wins it?"
+    hints:
+      - "Read the chase one move at a time, all the way to the end."
+      - "Look inside the highlighted area."
+  cut_disconnect:
+    question: "After this move, can the opponent split your stones apart?"
+    hints:
+      - "Find the point where the opponent could cut."
+      - "Look inside the highlighted area."
+  group_death:
+    question: "Does your group still have room for two eyes?"
+    hints:
+      - "Which point decides whether your group lives?"
+      - "Look inside the highlighted area."

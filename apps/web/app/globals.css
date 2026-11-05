@@ -72,3 +72,23 @@ body {
     animation: none;
   }
 }
+
+/* Nudge (M7): the teacher panel slides up over the bottom of the screen. */
+@keyframes panel-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.nudge-panel {
+  animation: panel-up 200ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nudge-panel {
+    animation: none;
+  }
+}

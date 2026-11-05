@@ -79,6 +79,18 @@ export const getBotRanks = () => request<BotRanks>("/api/games/bot-ranks");
 export const getGame = (id: string) => request<GameState>(`/api/games/${encodeURIComponent(id)}`);
 export const playMove = (id: string, point: string) =>
   request<MoveOut>(`/api/games/${encodeURIComponent(id)}/moves`, json({ point }));
+// -- M7: nudges ------------------------------------------------------------------------------
+
+export type Nudge = Schemas["NudgeOut"];
+export type PreviewOut = Schemas["PreviewOut"];
+export type GameHint = Schemas["GameHintOut"];
+
+/** Asked when the learner confirms a move: legal? and does the teacher want to ask first? */
+export const previewMove = (id: string, point: string, locale: Locale) =>
+  request<PreviewOut>(`/api/games/${encodeURIComponent(id)}/preview`, json({ point, locale }));
+export const getGameHint = (id: string, level: number, locale: Locale) =>
+  request<GameHint>(`/api/games/${encodeURIComponent(id)}/hint`, json({ level, locale }));
+
 export const resignGame = (id: string) =>
   request<GameState>(`/api/games/${encodeURIComponent(id)}/resign`, { method: "POST" });
 

@@ -29,6 +29,8 @@ def load_template(name: str, locale: str) -> dict[str, Any]:
 def template_name(pkg: FactPackage) -> str:
     if pkg.lesson_type == "praise":
         return "praise"
+    if pkg.lesson_type == "nudge":
+        return "nudge"
     if pkg.lesson_type == "clean" or pkg.concept_id is None:
         return "clean"
     return pkg.concept_id
@@ -38,6 +40,8 @@ def template_variant(pkg: FactPackage) -> str | None:
     """The detector's variant, or one derived from the facts (e.g. capture from atari or not)."""
     if pkg.lesson_type == "praise":
         return pkg.praise_kind
+    if pkg.lesson_type == "nudge":
+        return pkg.concept_id  # nudge templates vary by concept
     if pkg.concept_id == "missed_capture" and pkg.groups:
         return None if len(pkg.groups[0].liberties_before) <= 1 else "short"
     return pkg.variant
@@ -93,6 +97,8 @@ def render(pkg: FactPackage) -> Narration:
 def default_marks(pkg: FactPackage) -> list[Mark]:
     """The played move (cross), the groups in question (triangles) and the key points that don't
     give the answer away (circles). Correct moves are never marked before the retry."""
+    if pkg.lesson_type == "nudge":
+        return []  # the question comes first; hints add marks (M7)
     hidden = set(pkg.correct_moves) if pkg.lesson_type == "mistake" else set()
     marks: list[Mark] = []
     seen: set[str] = set()

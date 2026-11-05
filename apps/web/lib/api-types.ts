@@ -195,6 +195,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/games/{game_id}/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Preview
+         * @description Called on the ghost stone: is the move legal, and does the teacher want to ask first?
+         */
+        post: operations["preview_api_games__game_id__preview_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/games/{game_id}/hint": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Game Hint
+         * @description Hints after a nudge: 1 = a guiding question and the stones in question, 2 = the area.
+         */
+        post: operations["game_hint_api_games__game_id__hint_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/games/{game_id}/resign": {
         parameters: {
             query?: never;
@@ -554,6 +594,24 @@ export interface components {
             /** Puzzles */
             puzzles: string[];
         };
+        /** GameHintIn */
+        GameHintIn: {
+            /** Level */
+            level: number;
+            /** Locale */
+            locale?: ("th" | "en") | null;
+        };
+        /** GameHintOut */
+        GameHintOut: {
+            /** Level */
+            level: number;
+            /** Text */
+            text: string;
+            /** Marks */
+            marks: string[];
+            /** Focus */
+            focus: string | null;
+        };
         /** GameLessonOut */
         GameLessonOut: {
             /** Lesson Id */
@@ -876,6 +934,21 @@ export interface components {
             /** Bot Rank */
             bot_rank?: number | null;
         };
+        /** NudgeOut */
+        NudgeOut: {
+            /** Concept Id */
+            concept_id: string;
+            /** Headline */
+            headline: string;
+            /** Explanation */
+            explanation: string[];
+            /** Question */
+            question: string;
+            /** Hint Level Available */
+            hint_level_available: number;
+            /** Nudges Left */
+            nudges_left: number;
+        };
         /** Position */
         Position: {
             /** Board Size */
@@ -893,6 +966,21 @@ export interface components {
             /** Ko Point */
             ko_point: string | null;
             captures: components["schemas"]["Captures"];
+        };
+        /** PreviewIn */
+        PreviewIn: {
+            /** Point */
+            point: string;
+            /** Locale */
+            locale?: ("th" | "en") | null;
+        };
+        /** PreviewOut */
+        PreviewOut: {
+            /** Legal */
+            legal: boolean;
+            /** Reason */
+            reason: string | null;
+            nudge: components["schemas"]["NudgeOut"] | null;
         };
         /** PuzzleOut */
         PuzzleOut: {
@@ -1448,6 +1536,103 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    preview_api_games__game_id__preview_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                game_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PreviewIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PreviewOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    game_hint_api_games__game_id__hint_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                game_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GameHintIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GameHintOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };

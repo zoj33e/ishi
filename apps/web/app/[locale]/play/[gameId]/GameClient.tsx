@@ -1,11 +1,22 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 import { Board, type Mark } from "@/components/board/Board";
 import { Button } from "@/components/ui";
 import { Link, useRouter } from "@/i18n/navigation";
-import { createGame, getGame, playMove, resignGame, type GameState } from "@/lib/api";
+import {
+  createGame,
+  getGame,
+  getGameHint,
+  playMove,
+  previewMove,
+  resignGame,
+  type GameHint,
+  type GameState,
+  type Locale,
+  type Nudge,
+} from "@/lib/api";
 import { useErrorText } from "@/lib/useErrorText";
 
 const THINKING_DELAY_MS = 300;
@@ -15,6 +26,7 @@ const THINKING_DELAY_MS = 300;
 export function GameClient({ gameId }: { gameId: string }) {
   const t = useTranslations("play");
   const router = useRouter();
+  const locale = useLocale() as Locale;
   const errorText = useErrorText();
   const [game, setGame] = useState<GameState | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -22,6 +34,9 @@ export function GameClient({ gameId }: { gameId: string }) {
   const [thinking, setThinking] = useState(false);
   const [botPassed, setBotPassed] = useState(false);
   const [botResigned, setBotResigned] = useState(false);
+  const [nudge, setNudge] = useState<{ point: string; data: Nudge } | null>(null);
+  const [hint, setHint] = useState<GameHint | null>(null);
+  const [asked, setAsked] = useState<string | null>(null); // asked about, then rethought
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -34,13 +49,28 @@ export function GameClient({ gameId }: { gameId: string }) {
     };
   }, [gameId, errorText]);
 
-  const move = async (point: string) => {
+  /** `anyway`: the learner saw the teacher's question and plays the move regardless. */
+  const move = async (point: string, anyway = false) => {
     if (!game) return;
     setBusy(true);
     setError(null);
     timer.current = setTimeout(() => setThinking(true), THINKING_DELAY_MS);
     try {
+      if (!anyway && point !== asked && game.mode === "full" && point !== "pass" && game.nudges_left > 0) {
+        // M7: the teacher may ask a question first (never on a move it rates fine)
+        const check = await previewMove(game.id, point, locale);
+        if (check.nudge) {
+          setNudge({ point, data: check.nudge });
+          setAsked(point);
+          setHint(null);
+          setGame({ ...game, nudges_left: check.nudge.nudges_left });
+          return;
+        }
+      }
       const res = await playMove(game.id, point);
+      setNudge(null);
+      setHint(null);
+      setAsked(null);
       setGame(res.state);
       setBotPassed(res.bot_move === "pass");
       setBotResigned(res.bot_move === "resign");
@@ -50,6 +80,20 @@ export function GameClient({ gameId }: { gameId: string }) {
       if (timer.current) clearTimeout(timer.current);
       setThinking(false);
       setBusy(false);
+    }
+  };
+
+  const rethink = () => {
+    setNudge(null);
+    setHint(null);
+  };
+
+  const askHint = async () => {
+    if (!game || !nudge) return;
+    try {
+      setHint(await getGameHint(game.id, (hint?.level ?? 0) + 1, locale));
+    } catch (e) {
+      setError(errorText(e));
     }
   };
 
@@ -89,6 +133,8 @@ export function GameClient({ gameId }: { gameId: string }) {
     return outcome === "won" ? t("won") : outcome === "lost" ? t("lost") : t("draw");
   })();
   const deadMarks: Mark[] = (game?.dead ?? []).map((p) => ({ point: p, kind: "cross" }));
+  const hintMarks: Mark[] = (hint?.marks ?? []).map((p) => ({ point: p, kind: "triangle" }));
+  const moreHints = nudge && (hint?.level ?? 0) < nudge.data.hint_level_available;
 
   return (
     <main className="mx-auto flex max-w-md flex-col gap-3 px-4 py-6">
@@ -107,7 +153,16 @@ export function GameClient({ gameId }: { gameId: string }) {
       {game && (
         <div className="grid grid-cols-2 gap-2 text-sm" data-testid="captures">
           <div className="rounded-xl border border-line bg-card px-3 py-2">
-            <p className="text-ink-soft">{t("you")}</p>
+            <p className="flex items-center justify-between gap-2 text-ink-soft">
+              {t("you")}
+              {full && game.nudges_left > 0 && (
+                <span className="flex gap-1" role="img" aria-label={t("nudge.left", { count: game.nudges_left })} title={t("nudge.left", { count: game.nudges_left })} data-testid="nudges-left" data-count={game.nudges_left}>
+                  {Array.from({ length: game.nudges_left }, (_, i) => (
+                    <span key={i} className="size-2 rounded-full bg-warn" />
+                  ))}
+                </span>
+              )}
+            </p>
             <p className="text-lg font-semibold">
               {t("captured")}: {game.captures.black}
               {full ? "" : ` / ${target}`}
@@ -136,9 +191,11 @@ export function GameClient({ gameId }: { gameId: string }) {
             stones={game.stones}
             toMove={game.to_move}
             lastMove={game.last_move}
-            marks={finished ? deadMarks : []}
+            marks={finished ? deadMarks : hintMarks}
+            faded={nudge && game ? [{ point: nudge.point, color: game.to_move }] : []}
+            highlight={hint?.focus ?? null}
             territory={finished ? game.score?.territory : undefined}
-            interactive={!finished && !busy}
+            interactive={!finished && !busy && !nudge}
             onPlay={(p) => void move(p)}
           />
         ) : (
@@ -152,11 +209,40 @@ export function GameClient({ gameId }: { gameId: string }) {
 
       {!finished && full && <p className="text-sm text-ink-soft">{t("fullHint")}</p>}
 
-      {!finished && game && (
+      {!finished && game && !nudge && (
         <div className="flex gap-2">
           <Button onClick={() => void move("pass")} disabled={busy}>{t("pass")}</Button>
           <Button onClick={() => void resign()} disabled={busy}>{t("resign")}</Button>
         </div>
+      )}
+
+      {nudge && !finished && (
+        <section
+          role="dialog"
+          aria-labelledby="nudge-title"
+          className="nudge-panel fixed inset-x-0 bottom-0 z-20 mx-auto flex max-h-[45vh] max-w-md flex-col gap-3 overflow-y-auto rounded-t-2xl border border-line bg-card p-4 pb-6 shadow-lg"
+          data-testid="nudge"
+          data-concept={nudge.data.concept_id}
+        >
+          <p id="nudge-title" className="text-sm font-semibold text-ink-soft">{t("nudge.title")}</p>
+          <p className="text-lg font-semibold" data-testid="nudge-question">{nudge.data.question}</p>
+          {hint && (
+            <p className="rounded-xl bg-paper px-3 py-2" aria-live="polite" data-testid="nudge-hint" data-level={hint.level}>
+              {hint.text}
+            </p>
+          )}
+          <div className="flex flex-wrap gap-2">
+            <Button onClick={rethink} disabled={busy} data-testid="nudge-rethink">{t("nudge.rethink")}</Button>
+            {moreHints && (
+              <Button variant="secondary" onClick={() => void askHint()} disabled={busy} data-testid="nudge-hint-button">
+                {hint ? t("nudge.hintMore") : t("nudge.hint")}
+              </Button>
+            )}
+            <Button variant="secondary" onClick={() => void move(nudge.point, true)} disabled={busy} data-testid="nudge-play-anyway">
+              {t("nudge.playAnyway")}
+            </Button>
+          </div>
+        </section>
       )}
 
       {finished && (
