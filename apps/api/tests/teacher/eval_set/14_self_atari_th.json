@@ -1,0 +1,101 @@
+{
+ "case": "self_atari/white_learner",
+ "package": {
+  "lesson_type": "mistake",
+  "locale": "th",
+  "learner": {
+   "belt": "yellow",
+   "rank_estimate": null
+  },
+  "board_size": 9,
+  "move_number": 18,
+  "learner_color": "white",
+  "concept_id": "self_atari",
+  "variant": null,
+  "concept_is_new": true,
+  "praise_kind": null,
+  "threat_move": null,
+  "played_move": "E5",
+  "correct_moves": [
+   "E3",
+   "G5",
+   "B5",
+   "H5",
+   "E8",
+   "D2",
+   "H4"
+  ],
+  "points_lost": 11.4,
+  "groups": [
+   {
+    "id": "g1",
+    "owner": "learner",
+    "stones": [
+     "D5",
+     "E5"
+    ],
+    "liberties_before": [],
+    "liberties_after": [
+     "D4"
+    ]
+   }
+  ],
+  "key_points": {
+   "last_liberty": "D4",
+   "played_move": "E5"
+  },
+  "follow_up_line": [
+   "B D4",
+   "W H5",
+   "B D8",
+   "W E2"
+  ],
+  "secondary_concepts": [],
+  "allowed_coordinates": [
+   "B5",
+   "D2",
+   "D4",
+   "D5",
+   "D8",
+   "E2",
+   "E3",
+   "E5",
+   "E8",
+   "G1",
+   "G5",
+   "H4",
+   "H5"
+  ]
+ },
+ "reference": {
+  "headline": "ลงแล้วหมากเราติดอาตาริเอง",
+  "explanation": [
+   "แบบนี้เรียกว่าทำตัวเองให้ติดอาตาริ คือลงแล้วหมากตัวเองเหลือลมหายใจช่องเดียว",
+   "พอลงที่ E5 หมาก 2 เม็ด ของเราที่มีสามเหลี่ยม เหลือลมหายใจช่องเดียวที่ D4",
+   "ฝ่ายตรงข้ามลงตรงนั้นก็กินได้เลย"
+  ],
+  "question": "ตรงไหนน่าจะเป็นตาเดินที่ดีกว่า",
+  "hints": [
+   "ก่อนลง ลองนับดูว่าลงแล้วหมากเราจะเหลือลมหายใจกี่ช่อง",
+   "คำตอบอยู่ในบริเวณที่ไฮไลต์ไว้"
+  ],
+  "takeaway": "ให้นับลมหายใจหลังจากลงแล้ว ไม่ใช่ก่อนลงนะ",
+  "marks": [
+   {
+    "point": "E5",
+    "kind": "cross",
+    "label": null
+   },
+   {
+    "point": "D5",
+    "kind": "triangle",
+    "label": null
+   },
+   {
+    "point": "D4",
+    "kind": "circle",
+    "label": null
+   }
+  ]
+ }
+}

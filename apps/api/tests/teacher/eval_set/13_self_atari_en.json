@@ -1,0 +1,92 @@
+{
+ "case": "self_atari/two_stones",
+ "package": {
+  "lesson_type": "mistake",
+  "locale": "en",
+  "learner": {
+   "belt": "yellow",
+   "rank_estimate": null
+  },
+  "board_size": 9,
+  "move_number": 16,
+  "learner_color": "black",
+  "concept_id": "self_atari",
+  "variant": null,
+  "concept_is_new": false,
+  "praise_kind": null,
+  "threat_move": null,
+  "played_move": "E5",
+  "correct_moves": [
+   "E3",
+   "G5",
+   "B5"
+  ],
+  "points_lost": 12.3,
+  "groups": [
+   {
+    "id": "g1",
+    "owner": "learner",
+    "stones": [
+     "D5",
+     "E5"
+    ],
+    "liberties_before": [],
+    "liberties_after": [
+     "D4"
+    ]
+   }
+  ],
+  "key_points": {
+   "last_liberty": "D4",
+   "played_move": "E5"
+  },
+  "follow_up_line": [
+   "W D4",
+   "B H5",
+   "W E8",
+   "B B5"
+  ],
+  "secondary_concepts": [],
+  "allowed_coordinates": [
+   "B5",
+   "D4",
+   "D5",
+   "E3",
+   "E5",
+   "E8",
+   "G1",
+   "G5",
+   "H5"
+  ]
+ },
+ "reference": {
+  "headline": "That move put your own stones in atari.",
+  "explanation": [
+   "After E5, your 2 stones marked with triangles had only one liberty left, at D4.",
+   "The opponent can capture them by playing there."
+  ],
+  "question": "Where would have been a better move?",
+  "hints": [
+   "Before you play, count how many liberties your stones will have.",
+   "The answer is inside the highlighted area."
+  ],
+  "takeaway": "Count your liberties after the move, not before it.",
+  "marks": [
+   {
+    "point": "E5",
+    "kind": "cross",
+    "label": null
+   },
+   {
+    "point": "D5",
+    "kind": "triangle",
+    "label": null
+   },
+   {
+    "point": "D4",
+    "kind": "circle",
+    "label": null
+   }
+  ]
+ }
+}

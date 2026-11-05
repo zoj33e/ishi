@@ -1,0 +1,108 @@
+{
+ "case": "missed_capture/mined_mine20_g14_m27",
+ "package": {
+  "lesson_type": "mistake",
+  "locale": "en",
+  "learner": {
+   "belt": "yellow",
+   "rank_estimate": null
+  },
+  "board_size": 9,
+  "move_number": 12,
+  "learner_color": "black",
+  "concept_id": "missed_capture",
+  "variant": null,
+  "concept_is_new": false,
+  "praise_kind": null,
+  "threat_move": null,
+  "played_move": "B2",
+  "correct_moves": [
+   "F2"
+  ],
+  "points_lost": 13.4,
+  "groups": [
+   {
+    "id": "g1",
+    "owner": "opponent",
+    "stones": [
+     "C1",
+     "D1",
+     "D2",
+     "E2"
+    ],
+    "liberties_before": [
+     "E1",
+     "F2"
+    ],
+    "liberties_after": [
+     "E1",
+     "F2"
+    ]
+   }
+  ],
+  "key_points": {
+   "capture_point": "F2"
+  },
+  "follow_up_line": [
+   "W F2",
+   "B H8",
+   "W J8",
+   "B D5"
+  ],
+  "secondary_concepts": [],
+  "allowed_coordinates": [
+   "B2",
+   "C1",
+   "D1",
+   "D2",
+   "D5",
+   "E1",
+   "E2",
+   "F2",
+   "G1",
+   "H8",
+   "J8"
+  ]
+ },
+ "reference": {
+  "headline": "You could have captured 4 stones here.",
+  "explanation": [
+   "The opponent's 4 stones marked with triangles had only two liberties.",
+   "You could have kept them in atari until they had nowhere to run.",
+   "Instead you played B2."
+  ],
+  "question": "Where could you have captured them?",
+  "hints": [
+   "Which atari stops them from getting more liberties?",
+   "The answer is inside the highlighted area."
+  ],
+  "takeaway": "Before every move, check whether any opponent stones are in atari.",
+  "marks": [
+   {
+    "point": "B2",
+    "kind": "cross",
+    "label": null
+   },
+   {
+    "point": "C1",
+    "kind": "triangle",
+    "label": null
+   },
+   {
+    "point": "D1",
+    "kind": "triangle",
+    "label": null
+   },
+   {
+    "point": "D2",
+    "kind": "triangle",
+    "label": null
+   },
+   {
+    "point": "E2",
+    "kind": "triangle",
+    "label": null
+   }
+  ]
+ }
+}

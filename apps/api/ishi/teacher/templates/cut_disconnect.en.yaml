@@ -1,0 +1,10 @@
+headline: "Your stones could be cut apart."
+explanation:
+  - "Your two groups marked with triangles were joined by only one point."
+  - "After {played_move}, the opponent can cut them apart, and both groups get weaker."
+new_term: "A cut separates stones that were almost connected."
+question: "Where should you have connected?"
+hints:
+  - "Find the one point that both groups touch."
+  - "The answer is inside the highlighted area."
+takeaway: "When two of your groups share only one connecting point, think about connecting first."

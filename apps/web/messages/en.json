@@ -29,7 +29,10 @@
     "fullInfo": "Real rules: surround the most area. Komi 7.",
     "fullStrength": "Bot strength",
     "fullPlay": "Play 9×9",
-    "fullLocked": "Opens after you earn the Yellow belt."
+    "fullLocked": "Opens after you earn the Yellow belt.",
+    "lessonTitle": "Your lesson",
+    "lessonReady": "Your teacher picked one moment from your last game.",
+    "lessonOpen": "Open the lesson"
   },
   "health": {
     "title": "System status",
@@ -63,7 +66,9 @@
     "lesson_locked": "This lesson is still locked.",
     "exam_finished": "This exam is already over.",
     "exam_not_available": "The exam isn't open yet.",
-    "mode_locked": "This mode isn't open yet."
+    "mode_locked": "This mode isn't open yet.",
+    "game_not_finished": "Finish the game first.",
+    "retry_closed": "This try is already over."
   },
   "board": {
     "label": "{size} by {size} Go board",
@@ -178,7 +183,8 @@
     "botResigned": "The bot resigned — you won!",
     "youResigned": "You gave up this game.",
     "scoreLine": "Area: Black {black} · White {white} + komi {komi}",
-    "deadNote": "Stones with a cross were counted as dead."
+    "deadNote": "Stones with a cross were counted as dead.",
+    "seeLesson": "See your lesson"
   },
   "exam": {
     "title": "Yellow belt exam",
@@ -190,5 +196,40 @@
     "failed": "Not this time. Play 3 more capture games, then try again.",
     "notAvailable": "The exam isn't open yet.",
     "home": "Home"
+  },
+  "lesson": {
+    "title": "Lesson",
+    "moveLabel": "Move {n}",
+    "home": "Home",
+    "next": "Next",
+    "tryIt": "Try it",
+    "preparing": "Your teacher is looking at the game…",
+    "unavailable": "The teacher is resting (engine offline). Start the engine and come back.",
+    "faded": "The faded stone with a cross is the move you played.",
+    "severity": {
+      "small": "Small mistake",
+      "medium": "Medium mistake",
+      "big": "Big mistake"
+    },
+    "praiseTag": "Good move",
+    "cleanTag": "Clean game",
+    "playPrompt": "Play your answer on the board.",
+    "hint": "Hint",
+    "showMove": "Show the move",
+    "hintArea": "Look inside the highlighted area.",
+    "retry": {
+      "correct": "That's it!",
+      "tryAgain": "Not quite. Try again.",
+      "solution": "Here is the move, and how it continues."
+    },
+    "solved": "You found it.",
+    "replayTitle": "How it continues",
+    "step": "Move {n} of {total}",
+    "back": "Back",
+    "forward": "Forward",
+    "takeaway": "Remember",
+    "addedToGym": "Added to Shape Gym",
+    "done": "Done",
+    "finishing": "Saving…"
   }
 }

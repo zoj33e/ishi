@@ -1,0 +1,100 @@
+{
+ "case": "ladder/broken_chase_white",
+ "package": {
+  "lesson_type": "mistake",
+  "locale": "th",
+  "learner": {
+   "belt": "yellow",
+   "rank_estimate": null
+  },
+  "board_size": 9,
+  "move_number": 12,
+  "learner_color": "white",
+  "concept_id": "ladder",
+  "variant": "broken_ladder_chase",
+  "concept_is_new": false,
+  "praise_kind": null,
+  "threat_move": null,
+  "played_move": "E3",
+  "correct_moves": [
+   "F7",
+   "G5",
+   "F5",
+   "G6",
+   "F6"
+  ],
+  "points_lost": 4.1,
+  "groups": [
+   {
+    "id": "g1",
+    "owner": "opponent",
+    "stones": [
+     "D3"
+    ],
+    "liberties_before": [
+     "D4",
+     "E3"
+    ],
+    "liberties_after": [
+     "D4"
+    ]
+   }
+  ],
+  "key_points": {
+   "atari_move": "E3",
+   "breaker": "G8"
+  },
+  "follow_up_line": [
+   "B F6",
+   "W C6",
+   "B C7",
+   "W D7"
+  ],
+  "secondary_concepts": [],
+  "allowed_coordinates": [
+   "C6",
+   "C7",
+   "D3",
+   "D4",
+   "D7",
+   "E3",
+   "F5",
+   "F6",
+   "F7",
+   "G1",
+   "G5",
+   "G6",
+   "G8"
+  ]
+ },
+ "reference": {
+  "headline": "ไล่บันไดตรงนี้จับไม่ได้",
+  "explanation": [
+   "เราลง E3 เพื่อไล่บันไดหมาก 1 เม็ด ที่มีสามเหลี่ยม",
+   "แต่ตรงนี้บันไดไม่ได้ผล หมากฝ่ายตรงข้ามเลยหนีรอดไปได้"
+  ],
+  "question": "ตรงนั้นควรลงตรงไหนดีกว่า",
+  "hints": [
+   "ลองไล่ตามทีละตาดู หมากหนีออกไปทางไหน",
+   "คำตอบอยู่ในบริเวณที่ไฮไลต์ไว้"
+  ],
+  "takeaway": "จะไล่บันได ให้อ่านให้จบก่อนว่าจับได้จริง",
+  "marks": [
+   {
+    "point": "E3",
+    "kind": "cross",
+    "label": null
+   },
+   {
+    "point": "D3",
+    "kind": "triangle",
+    "label": null
+   },
+   {
+    "point": "G8",
+    "kind": "circle",
+    "label": null
+   }
+  ]
+ }
+}

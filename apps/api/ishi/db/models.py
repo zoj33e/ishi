@@ -81,6 +81,7 @@ class Game(_Timestamps, table=True):
     exam_id: str | None = Field(default=None, foreign_key="exams.id")
     # Full games: {black_area, white_area, komi, dead: [GTP], katago_lead} after two passes.
     final_score: dict[str, Any] | None = Field(default=None, sa_column=Column(JSON, nullable=True))
+    reviewed_at: datetime | None = None  # Why Engine review done (M4)
 
 
 class Move(_Timestamps, table=True):
@@ -98,3 +99,100 @@ class Move(_Timestamps, table=True):
     nudge_shown: bool = False
     played_anyway: bool = False
     bot_winrate: float | None = None  # full games: the bot's winrate before its move (resign rule)
+
+
+class Analysis(_Timestamps, table=True):
+    """KataGo's view of the position after `move_number` moves (0 = empty board)."""
+
+    __tablename__ = "analyses"
+    __table_args__ = (Index("ix_analyses_game_move", "game_id", "move_number", unique=True),)
+
+    id: str = Field(default_factory=_uuid, primary_key=True)
+    user_id: str = Field(foreign_key="users.id")
+    game_id: str = Field(foreign_key="games.id")
+    move_number: int
+    visits: int
+    root: dict[str, Any] = Field(sa_column=Column(JSON, nullable=False))  # raw, Black perspective
+    move_infos: list[dict[str, Any]] = Field(sa_column=Column(JSON, nullable=False))  # top 12
+    ownership: list[float] | None = Field(default=None, sa_column=Column(JSON, nullable=True))
+    human_policy: dict[str, Any] | None = Field(default=None, sa_column=Column(JSON, nullable=True))
+    engine_version: str = ""
+
+
+class Mistake(_Timestamps, table=True):
+    """A learner move the Why Engine explained (or flagged `unexplained`)."""
+
+    __tablename__ = "mistakes"
+    __table_args__ = (
+        Index("ix_mistakes_game_move", "game_id", "move_number", unique=True),
+        Index("ix_mistakes_concept", "concept_id"),
+    )
+
+    id: str = Field(default_factory=_uuid, primary_key=True)
+    user_id: str = Field(foreign_key="users.id")
+    game_id: str = Field(foreign_key="games.id")
+    move_number: int
+    points_lost: float
+    concept_id: str
+    secondary_concepts: list[str] = Field(
+        default_factory=list, sa_column=Column(JSON, nullable=False)
+    )
+    evidence: dict[str, Any] = Field(sa_column=Column(JSON, nullable=False))  # the ConceptHit
+    p_find: float | None = None
+    eligible: bool = False
+
+
+class Lesson(_Timestamps, table=True):
+    """The one post-game lesson of a game (M5): a mistake, a praise moment or a clean-game note."""
+
+    __tablename__ = "lessons"
+    __table_args__ = (Index("ix_lessons_game", "game_id", unique=True),)
+
+    id: str = Field(default_factory=_uuid, primary_key=True)
+    user_id: str = Field(foreign_key="users.id", index=True)
+    game_id: str = Field(foreign_key="games.id")
+    mistake_id: str | None = Field(default=None, foreign_key="mistakes.id")
+    lesson_type: str  # mistake / praise / clean
+    concept_id: str | None = None
+    move_number: int | None = None  # the learner's move the lesson is about
+    fact_package: dict[str, Any] = Field(sa_column=Column(JSON, nullable=False))
+    narration: dict[str, Any] = Field(sa_column=Column(JSON, nullable=False))
+    narration_source: str  # llm / template
+    llm_reject_reason: str | None = None
+    solution_line: list[str] = Field(default_factory=list, sa_column=Column(JSON, nullable=False))
+    attempts: int = 0  # retry moves played
+    hint_level: int = 0  # highest hint shown: 1 question, 2 area, 3 solution
+    retry_result: str | None = None  # solved_first / solved_hint / failed
+    viewed_at: datetime | None = None
+    done_at: datetime | None = None
+
+
+class Puzzle(_Timestamps, table=True):
+    """A Shape Gym position (M5 creates them from lessons; M6 schedules them)."""
+
+    __tablename__ = "puzzles"
+
+    id: str = Field(default_factory=_uuid, primary_key=True)
+    user_id: str = Field(foreign_key="users.id", index=True)
+    source: str  # own_mistake / seed
+    concept_id: str
+    board_size: int
+    # {black: [GTP], white: [GTP], to_move: black|white, komi, rules}
+    setup: dict[str, Any] = Field(sa_column=Column(JSON, nullable=False))
+    correct_moves: list[str] = Field(sa_column=Column(JSON, nullable=False))
+    solution_line: list[str] = Field(default_factory=list, sa_column=Column(JSON, nullable=False))
+    difficulty: float | None = None
+    origin_lesson_id: str | None = Field(default=None, foreign_key="lessons.id")
+
+
+class NarrationCache(_Timestamps, table=True):
+    """Validated model narrations by FactPackage hash (06: the same facts reuse the same text)."""
+
+    __tablename__ = "narration_cache"
+    __table_args__ = (Index("ix_narration_cache_key", "user_id", "key", unique=True),)
+
+    id: str = Field(default_factory=_uuid, primary_key=True)
+    user_id: str = Field(foreign_key="users.id")
+    key: str
+    narration: dict[str, Any] = Field(sa_column=Column(JSON, nullable=False))
+    model: str

@@ -263,6 +263,77 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/games/{game_id}/lesson": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Lesson */
+        get: operations["get_lesson_api_games__game_id__lesson_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/lessons/{lesson_id}/retry": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Retry */
+        post: operations["retry_api_lessons__lesson_id__retry_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/lessons/{lesson_id}/hint": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Hint
+         * @description One step up the hint ladder: guiding question, highlighted area, then the solution.
+         */
+        post: operations["hint_api_lessons__lesson_id__hint_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/lessons/{lesson_id}/done": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Done */
+        post: operations["done_api_lessons__lesson_id__done_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -335,6 +406,11 @@ export interface components {
             marks: components["schemas"]["Mark"][];
             position: components["schemas"]["Position"];
         };
+        /** DoneOut */
+        DoneOut: {
+            /** Puzzle Added */
+            puzzle_added: boolean;
+        };
         /** ErrorDetail */
         ErrorDetail: {
             /** Code */
@@ -376,6 +452,63 @@ export interface components {
             active_game: string | null;
             /** Puzzles */
             puzzles: string[];
+        };
+        /** GameLessonOut */
+        GameLessonOut: {
+            /** Lesson Id */
+            lesson_id: string;
+            /** Game Id */
+            game_id: string;
+            /**
+             * Lesson Type
+             * @enum {string}
+             */
+            lesson_type: "mistake" | "praise" | "clean";
+            /** Concept Id */
+            concept_id: string | null;
+            /** Variant */
+            variant: string | null;
+            /** Move Number */
+            move_number: number | null;
+            /**
+             * Learner Color
+             * @enum {string}
+             */
+            learner_color: "black" | "white";
+            position: components["schemas"]["GameStateOut"];
+            /** Played Move */
+            played_move: string | null;
+            /** Severity */
+            severity: ("small" | "medium" | "big") | null;
+            /** Threat Move */
+            threat_move: string | null;
+            /** Follow Up Line */
+            follow_up_line: string[];
+            narration: components["schemas"]["Narration"];
+            /** Can Retry */
+            can_retry: boolean;
+            /** Attempts */
+            attempts: number;
+            /** Hint Level */
+            hint_level: number;
+            /** Retry Result */
+            retry_result: ("solved_first" | "solved_hint" | "failed") | null;
+            /** Focus */
+            focus: string | null;
+            /** Solution Line */
+            solution_line: string[];
+            /** Solution Frames */
+            solution_frames: components["schemas"]["LineFrame"][];
+            /** Done */
+            done: boolean;
+        };
+        /** GameLessonPreparing */
+        GameLessonPreparing: {
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "preparing" | "unavailable";
         };
         /** GameStateOut */
         GameStateOut: {
@@ -503,6 +636,12 @@ export interface components {
             /** Tasks Done */
             tasks_done: number;
         };
+        /** LineFrame */
+        LineFrame: {
+            stones: components["schemas"]["Stones"];
+            /** Last Move */
+            last_move: string | null;
+        };
         /** Mark */
         Mark: {
             /** Point */
@@ -566,6 +705,21 @@ export interface components {
             /** Game Over */
             game_over: boolean;
         };
+        /** Narration */
+        Narration: {
+            /** Headline */
+            headline: string;
+            /** Explanation */
+            explanation: string[];
+            /** Question */
+            question?: string | null;
+            /** Hints */
+            hints?: string[];
+            /** Takeaway */
+            takeaway: string;
+            /** Marks */
+            marks?: components["schemas"]["Mark"][];
+        };
         /** NewGame */
         NewGame: {
             /**
@@ -596,6 +750,19 @@ export interface components {
             /** Ko Point */
             ko_point: string | null;
             captures: components["schemas"]["Captures"];
+        };
+        /** RetryIn */
+        RetryIn: {
+            /** Point */
+            point: string;
+        };
+        /** RetryOut */
+        RetryOut: {
+            /** Correct */
+            correct: boolean;
+            /** Feedback Key */
+            feedback_key: string;
+            lesson: components["schemas"]["GameLessonOut"];
         };
         /** SandboxRequest */
         SandboxRequest: {
@@ -691,6 +858,8 @@ export interface components {
             game: components["schemas"]["TodayGame"];
             /** Lesson Pending */
             lesson_pending: string | null;
+            /** Lesson Game */
+            lesson_game: string | null;
             /** School Next */
             school_next: string | null;
             capture: components["schemas"]["CaptureStageOut"];
@@ -1229,6 +1398,208 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ExamOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_lesson_api_games__game_id__lesson_get: {
+        parameters: {
+            query?: {
+                locale?: ("th" | "en") | null;
+            };
+            header?: never;
+            path: {
+                game_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GameLessonOut"];
+                };
+            };
+            /** @description Accepted */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GameLessonPreparing"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    retry_api_lessons__lesson_id__retry_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                lesson_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RetryIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RetryOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    hint_api_lessons__lesson_id__hint_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                lesson_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GameLessonOut"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    done_api_lessons__lesson_id__done_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                lesson_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DoneOut"];
                 };
             };
             /** @description Not Found */

@@ -1,0 +1,96 @@
+{
+ "case": "missed_capture/mined_mine20_g33_m29",
+ "package": {
+  "lesson_type": "mistake",
+  "locale": "th",
+  "learner": {
+   "belt": "yellow",
+   "rank_estimate": null
+  },
+  "board_size": 9,
+  "move_number": 18,
+  "learner_color": "black",
+  "concept_id": "missed_capture",
+  "variant": null,
+  "concept_is_new": true,
+  "praise_kind": null,
+  "threat_move": null,
+  "played_move": "D7",
+  "correct_moves": [
+   "G8"
+  ],
+  "points_lost": 9.3,
+  "groups": [
+   {
+    "id": "g1",
+    "owner": "opponent",
+    "stones": [
+     "E8",
+     "F8"
+    ],
+    "liberties_before": [
+     "F9",
+     "G8"
+    ],
+    "liberties_after": [
+     "F9",
+     "G8"
+    ]
+   }
+  ],
+  "key_points": {
+   "capture_point": "G8"
+  },
+  "follow_up_line": [
+   "W H6",
+   "B H5",
+   "W G9",
+   "B C8"
+  ],
+  "secondary_concepts": [],
+  "allowed_coordinates": [
+   "C8",
+   "D7",
+   "E8",
+   "F8",
+   "F9",
+   "G1",
+   "G8",
+   "G9",
+   "H5",
+   "H6"
+  ]
+ },
+ "reference": {
+  "headline": "ตานี้กินหมาก 2 เม็ด ได้เลย",
+  "explanation": [
+   "การกินคือการปิดลมหายใจช่องสุดท้ายของกลุ่มหมาก",
+   "หมากฝ่ายตรงข้าม 2 เม็ด ที่มีสามเหลี่ยม เหลือลมหายใจแค่สองช่อง",
+   "เราไล่อาตาริต่อไปเรื่อย ๆ จนมันหนีไม่รอดได้",
+   "แต่เราไปลงที่ D7 แทน"
+  ],
+  "question": "ลองหาดูว่าควรลงตรงไหนถึงจะกินได้",
+  "hints": [
+   "อาตาริด้านไหนที่ทำให้มันได้ลมหายใจเพิ่มไม่ได้",
+   "คำตอบอยู่ในบริเวณที่ไฮไลต์ไว้"
+  ],
+  "takeaway": "ก่อนลงทุกครั้ง ดูก่อนว่ามีหมากฝ่ายตรงข้ามติดอาตาริอยู่ไหมนะ",
+  "marks": [
+   {
+    "point": "D7",
+    "kind": "cross",
+    "label": null
+   },
+   {
+    "point": "E8",
+    "kind": "triangle",
+    "label": null
+   },
+   {
+    "point": "F8",
+    "kind": "triangle",
+    "label": null
+   }
+  ]
+ }
+}

@@ -101,3 +101,27 @@ describe("Board select mode", () => {
     expect(document.querySelector('[data-testid="ghost"]')).toBeNull();
   });
 });
+
+describe("Board lesson extras", () => {
+  it("draws the learner's move faded, but not over a real stone", () => {
+    setup({ faded: [{ point: "F8", color: "black" }, { point: "C3", color: "black" }] });
+    const faded = screen.getAllByTestId("faded");
+    expect(faded.map((f) => f.getAttribute("data-point"))).toEqual(["F8"]);
+    expect(faded[0].getAttribute("opacity")).toBe("0.45");
+  });
+
+  it("highlights a 3x3 area around the hint point, clipped at the edge", () => {
+    setup({ highlight: "E5" });
+    const mid = screen.getByTestId("highlight");
+    cleanup();
+    setup({ highlight: "A1" });
+    const corner = screen.getByTestId("highlight");
+    expect(Number(corner.getAttribute("width"))).toBeCloseTo((Number(mid.getAttribute("width")) * 2) / 3);
+    expect(Number(corner.getAttribute("height"))).toBeCloseTo((Number(mid.getAttribute("height")) * 2) / 3);
+  });
+
+  it("draws no highlight without a hint point", () => {
+    setup();
+    expect(screen.queryByTestId("highlight")).toBeNull();
+  });
+});

@@ -50,6 +50,27 @@
         "ISHI_DB_PATH": "../../data/e2e.db",
         "ISHI_DEV_UNLOCK_ALL": "1"
       }
+    },
+    {
+      "name": "ishi-api-preview",
+      "runtimeExecutable": "uv",
+      "runtimeArgs": [
+        "run",
+        "--directory",
+        "apps/api",
+        "uvicorn",
+        "ishi.main:app",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "8000"
+      ],
+      "port": 8000,
+      "env": {
+        "ISHI_DB_PATH": "../../data/preview.db",
+        "ISHI_DEV_UNLOCK_ALL": "1",
+        "ISHI_LLM_ENABLED": "false"
+      }
     }
   ]
 }

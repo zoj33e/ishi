@@ -1,0 +1,115 @@
+{
+ "case": "group_death/mined_mine20_g31_m17",
+ "package": {
+  "lesson_type": "mistake",
+  "locale": "th",
+  "learner": {
+   "belt": "yellow",
+   "rank_estimate": null
+  },
+  "board_size": 9,
+  "move_number": 16,
+  "learner_color": "black",
+  "concept_id": "group_death",
+  "variant": null,
+  "concept_is_new": false,
+  "praise_kind": null,
+  "threat_move": null,
+  "played_move": "C4",
+  "correct_moves": [
+   "B8"
+  ],
+  "points_lost": 18.3,
+  "groups": [
+   {
+    "id": "g1",
+    "owner": "learner",
+    "stones": [
+     "C7",
+     "D7",
+     "D8",
+     "E8",
+     "E9"
+    ],
+    "liberties_before": [
+     "C8",
+     "D9"
+    ],
+    "liberties_after": [
+     "C8",
+     "D9"
+    ]
+   }
+  ],
+  "key_points": {
+   "vital_point": "B8"
+  },
+  "follow_up_line": [
+   "W C8",
+   "B G4",
+   "W E3",
+   "B D3"
+  ],
+  "secondary_concepts": [],
+  "allowed_coordinates": [
+   "B8",
+   "C4",
+   "C7",
+   "C8",
+   "D3",
+   "D7",
+   "D8",
+   "D9",
+   "E3",
+   "E8",
+   "E9",
+   "G1",
+   "G4"
+  ]
+ },
+ "reference": {
+  "headline": "ตานี้ทำให้หมากกลุ่มนี้ตาย",
+  "explanation": [
+   "ก่อนเราลง C4 หมาก 5 เม็ด ที่มีสามเหลี่ยมยังรอดอยู่",
+   "แต่หลังจากนั้น ฝ่ายตรงข้ามกันไม่ให้สร้างสองตาได้ หมากกลุ่มนี้เลยตาย"
+  ],
+  "question": "หมากกลุ่มนี้ต้องการจุดไหน",
+  "hints": [
+   "หมากกลุ่มนี้จะสร้างตาได้ตรงไหน",
+   "คำตอบอยู่ในบริเวณที่ไฮไลต์ไว้"
+  ],
+  "takeaway": "ถ้าหมากกลุ่มไหนมีพื้นที่น้อย ให้รีบทำให้มีสองตาก่อนนะ",
+  "marks": [
+   {
+    "point": "C4",
+    "kind": "cross",
+    "label": null
+   },
+   {
+    "point": "C7",
+    "kind": "triangle",
+    "label": null
+   },
+   {
+    "point": "D7",
+    "kind": "triangle",
+    "label": null
+   },
+   {
+    "point": "D8",
+    "kind": "triangle",
+    "label": null
+   },
+   {
+    "point": "E8",
+    "kind": "triangle",
+    "label": null
+   },
+   {
+    "point": "E9",
+    "kind": "triangle",
+    "label": null
+   }
+  ]
+ }
+}

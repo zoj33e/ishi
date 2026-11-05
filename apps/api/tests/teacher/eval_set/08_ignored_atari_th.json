@@ -1,0 +1,99 @@
+{
+ "case": "ignored_atari/three_center",
+ "package": {
+  "lesson_type": "mistake",
+  "locale": "th",
+  "learner": {
+   "belt": "yellow",
+   "rank_estimate": null
+  },
+  "board_size": 9,
+  "move_number": 16,
+  "learner_color": "black",
+  "concept_id": "ignored_atari",
+  "variant": null,
+  "concept_is_new": false,
+  "praise_kind": null,
+  "threat_move": null,
+  "played_move": "B8",
+  "correct_moves": [
+   "G5"
+  ],
+  "points_lost": 20.7,
+  "groups": [
+   {
+    "id": "g1",
+    "owner": "learner",
+    "stones": [
+     "D5",
+     "E5",
+     "F5"
+    ],
+    "liberties_before": [
+     "G5"
+    ],
+    "liberties_after": [
+     "G5"
+    ]
+   }
+  ],
+  "key_points": {
+   "save_move": "G5",
+   "liberty_point": "G5"
+  },
+  "follow_up_line": [
+   "W G5",
+   "B E2",
+   "W F2",
+   "B H5"
+  ],
+  "secondary_concepts": [],
+  "allowed_coordinates": [
+   "B8",
+   "D5",
+   "E2",
+   "E5",
+   "F2",
+   "F5",
+   "G1",
+   "G5",
+   "H5"
+  ]
+ },
+ "reference": {
+  "headline": "หมาก 3 เม็ด ของเรากำลังลำบาก",
+  "explanation": [
+   "หมาก 3 เม็ด ของเราที่มีสามเหลี่ยม เหลือลมหายใจช่องเดียว แบบนี้เรียกว่าอาตาริ",
+   "หมากที่ติดอาตาริ ฝ่ายตรงข้ามกินได้ในตาถัดไปเลย",
+   "แต่เราไปลงที่ B8 หมากกลุ่มนี้เลยยังอยู่ในอันตราย"
+  ],
+  "question": "ควรลงตรงไหนถึงจะช่วยหมากกลุ่มนี้ได้",
+  "hints": [
+   "ทำยังไงให้หมากของเรามีลมหายใจเพิ่มขึ้น",
+   "คำตอบอยู่ในบริเวณที่ไฮไลต์ไว้"
+  ],
+  "takeaway": "เมื่อหมากของเราติดอาตาริ ให้ถามตัวเองก่อนว่าช่วยได้ไหม และคุ้มที่จะช่วยหรือเปล่านะ",
+  "marks": [
+   {
+    "point": "B8",
+    "kind": "cross",
+    "label": null
+   },
+   {
+    "point": "D5",
+    "kind": "triangle",
+    "label": null
+   },
+   {
+    "point": "E5",
+    "kind": "triangle",
+    "label": null
+   },
+   {
+    "point": "F5",
+    "kind": "triangle",
+    "label": null
+   }
+  ]
+ }
+}

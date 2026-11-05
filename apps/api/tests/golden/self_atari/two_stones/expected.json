@@ -1,0 +1,11 @@
+{
+ "fires": true,
+ "concept_id": "self_atari",
+ "key_points": {
+  "last_liberty": "D4",
+  "played_move": "E5"
+ },
+ "correct_moves": [
+  "E3"
+ ]
+}

@@ -1,0 +1,110 @@
+{
+ "case": "cut_disconnect/mined_mine20_g07_m11",
+ "package": {
+  "lesson_type": "mistake",
+  "locale": "th",
+  "learner": {
+   "belt": "yellow",
+   "rank_estimate": null
+  },
+  "board_size": 9,
+  "move_number": 10,
+  "learner_color": "black",
+  "concept_id": "cut_disconnect",
+  "variant": null,
+  "concept_is_new": true,
+  "praise_kind": null,
+  "threat_move": null,
+  "played_move": "B2",
+  "correct_moves": [
+   "E3"
+  ],
+  "points_lost": 11.8,
+  "groups": [
+   {
+    "id": "g1",
+    "owner": "learner",
+    "stones": [
+     "E4"
+    ],
+    "liberties_before": [
+     "E3",
+     "E5"
+    ],
+    "liberties_after": [
+     "E3",
+     "E5"
+    ]
+   },
+   {
+    "id": "g2",
+    "owner": "learner",
+    "stones": [
+     "D3"
+    ],
+    "liberties_before": [
+     "D2",
+     "E3"
+    ],
+    "liberties_after": [
+     "D2",
+     "E3"
+    ]
+   }
+  ],
+  "key_points": {
+   "cut_point": "E3",
+   "connect_move": "E3"
+  },
+  "follow_up_line": [
+   "W E3",
+   "B D2",
+   "W C5",
+   "B F7"
+  ],
+  "secondary_concepts": [],
+  "allowed_coordinates": [
+   "B2",
+   "C5",
+   "D2",
+   "D3",
+   "E3",
+   "E4",
+   "E5",
+   "F7",
+   "G1",
+   "G2"
+  ]
+ },
+ "reference": {
+  "headline": "หมากของเราโดนตัดได้",
+  "explanation": [
+   "การตัด คือการแยกหมากที่เกือบจะต่อกันอยู่แล้วออกจากกัน",
+   "หมากสองกลุ่มของเราที่มีสามเหลี่ยม ต่อกันได้แค่จุดเดียว",
+   "พอเราไปลง B2 ฝ่ายตรงข้ามก็ตัดแยกสองกลุ่มนี้ได้ ทำให้อ่อนแอทั้งคู่"
+  ],
+  "question": "ควรต่อหมากตรงไหน",
+  "hints": [
+   "หาจุดที่หมากทั้งสองกลุ่มแตะกันอยู่",
+   "คำตอบอยู่ในบริเวณที่ไฮไลต์ไว้"
+  ],
+  "takeaway": "ถ้าหมากสองกลุ่มของเราต่อกันได้แค่จุดเดียว ให้คิดถึงการต่อก่อนนะ",
+  "marks": [
+   {
+    "point": "B2",
+    "kind": "cross",
+    "label": null
+   },
+   {
+    "point": "E4",
+    "kind": "triangle",
+    "label": null
+   },
+   {
+    "point": "D3",
+    "kind": "triangle",
+    "label": null
+   }
+  ]
+ }
+}

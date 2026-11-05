@@ -1,0 +1,10 @@
+{
+ "fires": true,
+ "concept_id": "group_death",
+ "key_points": {
+  "vital_point": "H4"
+ },
+ "correct_moves": [
+  "H4"
+ ]
+}

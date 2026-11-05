@@ -1,0 +1,11 @@
+{
+ "fires": true,
+ "concept_id": "ignored_atari",
+ "key_points": {
+  "save_move": "E3",
+  "liberty_point": "D3"
+ },
+ "correct_moves": [
+  "E3"
+ ]
+}

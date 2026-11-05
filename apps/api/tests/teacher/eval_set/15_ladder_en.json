@@ -1,0 +1,103 @@
+{
+ "case": "ladder/broken_chase",
+ "package": {
+  "lesson_type": "mistake",
+  "locale": "en",
+  "learner": {
+   "belt": "yellow",
+   "rank_estimate": null
+  },
+  "board_size": 9,
+  "move_number": 10,
+  "learner_color": "black",
+  "concept_id": "ladder",
+  "variant": "broken_ladder_chase",
+  "concept_is_new": true,
+  "praise_kind": null,
+  "threat_move": null,
+  "played_move": "E3",
+  "correct_moves": [
+   "G6",
+   "F7",
+   "F5",
+   "G5",
+   "F6",
+   "E6"
+  ],
+  "points_lost": 3.3,
+  "groups": [
+   {
+    "id": "g1",
+    "owner": "opponent",
+    "stones": [
+     "D3"
+    ],
+    "liberties_before": [
+     "D4",
+     "E3"
+    ],
+    "liberties_after": [
+     "D4"
+    ]
+   }
+  ],
+  "key_points": {
+   "atari_move": "E3",
+   "breaker": "G8"
+  },
+  "follow_up_line": [
+   "W F6",
+   "B C6",
+   "W G4",
+   "B D7"
+  ],
+  "secondary_concepts": [],
+  "allowed_coordinates": [
+   "C6",
+   "D3",
+   "D4",
+   "D7",
+   "E3",
+   "E6",
+   "F5",
+   "F6",
+   "F7",
+   "G1",
+   "G4",
+   "G5",
+   "G6",
+   "G8"
+  ]
+ },
+ "reference": {
+  "headline": "This chase can't catch those stone.",
+  "explanation": [
+   "A ladder is a zig-zag chase where every move is atari.",
+   "You played E3 to start a ladder against the stone marked with a triangle.",
+   "Here the ladder doesn't work, so it gets away."
+  ],
+  "question": "What would have been a better move?",
+  "hints": [
+   "Follow the chase move by move: where does it get out?",
+   "The answer is inside the highlighted area."
+  ],
+  "takeaway": "Only start a ladder after reading it to the end.",
+  "marks": [
+   {
+    "point": "E3",
+    "kind": "cross",
+    "label": null
+   },
+   {
+    "point": "D3",
+    "kind": "triangle",
+    "label": null
+   },
+   {
+    "point": "G8",
+    "kind": "circle",
+    "label": null
+   }
+  ]
+ }
+}

@@ -171,12 +171,17 @@ export function GameClient({ gameId }: { gameId: string }) {
             </p>
           )}
           <div className="flex flex-wrap gap-2">
+            {full && !game?.exam_id && game && (
+              <Link href={`/lesson/${game.id}`}>
+                <span className="inline-flex min-h-11 items-center rounded-full bg-ink px-5 font-semibold text-paper" data-testid="see-lesson">{t("seeLesson")}</span>
+              </Link>
+            )}
             {game?.exam_id ? (
               <Link href={`/exam/${game.exam_id}`}>
                 <span className="inline-flex min-h-11 items-center rounded-full bg-ink px-5 font-semibold text-paper">{t("toExam")}</span>
               </Link>
             ) : (
-              <Button variant="primary" onClick={() => void again()} disabled={busy}>{t("playAgain")}</Button>
+              <Button variant={full ? "secondary" : "primary"} onClick={() => void again()} disabled={busy}>{t("playAgain")}</Button>
             )}
             <Link href="/">
               <span className="inline-flex min-h-11 items-center rounded-full border border-line bg-card px-5 font-semibold">{t("home")}</span>

@@ -14,6 +14,10 @@ export type BoardProps = {
   toMove?: StoneColor;
   lastMove?: string | null;
   marks?: Mark[];
+  /** Stones drawn see-through (lessons: the learner's actual move). */
+  faded?: { point: string; color: StoneColor }[];
+  /** Center of a highlighted 3x3 area (hint level 2). */
+  highlight?: string | null;
   /** Empty points owned by each color, drawn as small squares (scoring view). */
   territory?: { black: string[]; white: string[] };
   showCoordinates?: boolean;
@@ -36,6 +40,8 @@ export function Board({
   toMove = "black",
   lastMove = null,
   marks = [],
+  faded = [],
+  highlight = null,
   territory,
   showCoordinates = false,
   interactive = true,
@@ -209,6 +215,29 @@ export function Board({
           }),
         )}
 
+      {/* highlighted area (hint level 2) */}
+      {highlight && (() => {
+        const c = gtpToXY(highlight, size);
+        if (!c) return null;
+        const x0 = Math.max(0, c.x - 1);
+        const x1 = Math.min(size - 1, c.x + 1);
+        const y0 = Math.max(0, c.y - 1);
+        const y1 = Math.min(size - 1, c.y + 1);
+        return (
+          <rect
+            data-testid="highlight"
+            x={at(x0) - CELL / 2}
+            y={at(y0) - CELL / 2}
+            width={(x1 - x0 + 1) * CELL}
+            height={(y1 - y0 + 1) * CELL}
+            rx={CELL * 0.3}
+            style={{ fill: "var(--hint)", stroke: "var(--hint-edge)" }}
+            strokeWidth={0.6}
+            pointerEvents="none"
+          />
+        );
+      })()}
+
       {/* stones */}
       {[...occupied].map(([p, c]) => {
         const { x, y } = gtpToXY(p, size)!;
@@ -219,6 +248,26 @@ export function Board({
           </g>
         );
       })}
+
+      {/* faded stones (the learner's actual move in a lesson) */}
+      {faded
+        .filter((f) => !occupied.has(f.point))
+        .map((f) => {
+          const { x, y } = gtpToXY(f.point, size)!;
+          return (
+            <circle
+              key={`f-${f.point}`}
+              data-testid="faded"
+              data-point={f.point}
+              cx={at(x)}
+              cy={at(y)}
+              r={CELL * 0.47}
+              fill={`url(#${gradId}-${f.color === "black" ? "b" : "w"})`}
+              opacity={0.45}
+              pointerEvents="none"
+            />
+          );
+        })}
 
       {/* last-move marker */}
       {lastMove && occupied.has(lastMove) && (() => {

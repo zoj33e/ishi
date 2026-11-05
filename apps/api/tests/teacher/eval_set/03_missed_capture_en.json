@@ -1,0 +1,84 @@
+{
+ "case": "missed_capture/mined_mine20_g32_m15",
+ "package": {
+  "lesson_type": "mistake",
+  "locale": "en",
+  "learner": {
+   "belt": "yellow",
+   "rank_estimate": null
+  },
+  "board_size": 9,
+  "move_number": 16,
+  "learner_color": "black",
+  "concept_id": "missed_capture",
+  "variant": null,
+  "concept_is_new": false,
+  "praise_kind": null,
+  "threat_move": null,
+  "played_move": "E2",
+  "correct_moves": [
+   "D2"
+  ],
+  "points_lost": 5.4,
+  "groups": [
+   {
+    "id": "g1",
+    "owner": "opponent",
+    "stones": [
+     "D3"
+    ],
+    "liberties_before": [
+     "D2"
+    ],
+    "liberties_after": [
+     "D2"
+    ]
+   }
+  ],
+  "key_points": {
+   "capture_point": "D2"
+  },
+  "follow_up_line": [
+   "W F2",
+   "B G6",
+   "W D2",
+   "B B6"
+  ],
+  "secondary_concepts": [],
+  "allowed_coordinates": [
+   "B6",
+   "D2",
+   "D3",
+   "E2",
+   "F2",
+   "G1",
+   "G6"
+  ]
+ },
+ "reference": {
+  "headline": "You could have captured a stone here.",
+  "explanation": [
+   "The opponent's stone marked with a triangle had only one liberty left.",
+   "One stone on that last liberty would have taken it off the board.",
+   "Instead you played E2."
+  ],
+  "question": "Where could you have captured it?",
+  "hints": [
+   "Count the liberties of the stones marked with a triangle.",
+   "The answer is inside the highlighted area."
+  ],
+  "takeaway": "Before every move, check whether any opponent stones are in atari.",
+  "marks": [
+   {
+    "point": "E2",
+    "kind": "cross",
+    "label": null
+   },
+   {
+    "point": "D3",
+    "kind": "triangle",
+    "label": null
+   }
+  ]
+ }
+}

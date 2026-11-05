@@ -1,0 +1,10 @@
+headline: "That move put your own stones in atari."
+explanation:
+  - "After {played_move}, your {stones} {marked} had only one liberty left, at {last_liberty}."
+  - "The opponent can capture {them} by playing there."
+new_term: "Self-atari means playing a move that leaves your own stones with one liberty."
+question: "Where would have been a better move?"
+hints:
+  - "Before you play, count how many liberties your stones will have."
+  - "The answer is inside the highlighted area."
+takeaway: "Count your liberties after the move, not before it."

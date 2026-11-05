@@ -8,7 +8,7 @@ from pydantic import BaseModel, Field
 from ishi.api.routes_school import next_lesson
 from ishi.db.models import User, utcnow
 from ishi.db.session import SessionDep, get_or_create_user
-from ishi.play import service
+from ishi.play import lessons, service
 from ishi.play.progression import STAGES
 
 router = APIRouter(tags=["me"])
@@ -49,7 +49,8 @@ class TodayGame(BaseModel):
 class TodayOut(BaseModel):
     warmup_due: int
     game: TodayGame
-    lesson_pending: str | None  # post-game lesson (M3+)
+    lesson_pending: str | None  # unfinished post-game lesson (M5)
+    lesson_game: str | None  # its game, for the lesson screen URL
     school_next: str | None  # next rules-school lesson, None when all done
     capture: CaptureStageOut
     exam_available: bool
@@ -94,10 +95,12 @@ def today(session: SessionDep) -> TodayOut:
     user = get_or_create_user(session)
     st = service.stage_status(session, user)
     exam = service.active_exam(session, user)
+    pending = lessons.pending_lesson(session, user.id)
     return TodayOut(
         warmup_due=0,
         game=TodayGame(mode="capture", board_size=st.stage.board_size, bot_rank=None),
-        lesson_pending=None,
+        lesson_pending=pending.id if pending else None,
+        lesson_game=pending.game_id if pending else None,
         school_next=next_lesson(session, user),
         capture=CaptureStageOut(
             stage=st.stage.number,

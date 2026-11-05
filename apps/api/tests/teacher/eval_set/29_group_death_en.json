@@ -1,0 +1,110 @@
+{
+ "case": "group_death/mined_run1_g01_m23",
+ "package": {
+  "lesson_type": "mistake",
+  "locale": "en",
+  "learner": {
+   "belt": "yellow",
+   "rank_estimate": null
+  },
+  "board_size": 9,
+  "move_number": 18,
+  "learner_color": "black",
+  "concept_id": "group_death",
+  "variant": null,
+  "concept_is_new": true,
+  "praise_kind": null,
+  "threat_move": null,
+  "played_move": "B7",
+  "correct_moves": [
+   "B4"
+  ],
+  "points_lost": 23.9,
+  "groups": [
+   {
+    "id": "g1",
+    "owner": "learner",
+    "stones": [
+     "B3",
+     "C2",
+     "C3"
+    ],
+    "liberties_before": [
+     "A3",
+     "B2",
+     "B4",
+     "C1",
+     "D2"
+    ],
+    "liberties_after": [
+     "A3",
+     "B2",
+     "B4",
+     "C1",
+     "D2"
+    ]
+   }
+  ],
+  "key_points": {
+   "vital_point": "B4"
+  },
+  "follow_up_line": [
+   "W B4",
+   "B B1",
+   "W A2",
+   "B G8"
+  ],
+  "secondary_concepts": [],
+  "allowed_coordinates": [
+   "A2",
+   "A3",
+   "B1",
+   "B2",
+   "B3",
+   "B4",
+   "B7",
+   "C1",
+   "C2",
+   "C3",
+   "D2",
+   "G1",
+   "G8"
+  ]
+ },
+ "reference": {
+  "headline": "This move let your 3 stones die.",
+  "explanation": [
+   "A group needs two eyes to stay alive for good.",
+   "Your 3 stones marked with triangles were alive before B7.",
+   "After it, the opponent can stop them from making two eyes, so they die."
+  ],
+  "question": "Which point did your group need?",
+  "hints": [
+   "Where can your group make its eyes?",
+   "The answer is inside the highlighted area."
+  ],
+  "takeaway": "When a group has little space, make sure it has two eyes first.",
+  "marks": [
+   {
+    "point": "B7",
+    "kind": "cross",
+    "label": null
+   },
+   {
+    "point": "B3",
+    "kind": "triangle",
+    "label": null
+   },
+   {
+    "point": "C2",
+    "kind": "triangle",
+    "label": null
+   },
+   {
+    "point": "C3",
+    "kind": "triangle",
+    "label": null
+   }
+  ]
+ }
+}

@@ -84,3 +84,27 @@ export const resignGame = (id: string) =>
 
 export const startExam = () => request<Exam>("/api/exams", { method: "POST" });
 export const getExam = (id: string) => request<Exam>(`/api/exams/${encodeURIComponent(id)}`);
+
+// -- M5: post-game lessons -------------------------------------------------------------------
+
+export type GameLesson = Schemas["GameLessonOut"];
+export type Narration = Schemas["Narration"];
+export type RetryOut = Schemas["RetryOut"];
+export type LessonStatus = Schemas["GameLessonPreparing"]["status"];
+
+/** The game's lesson, or its status while the teacher is still preparing it (HTTP 202). */
+export async function getGameLesson(
+  gameId: string,
+  locale: Locale,
+): Promise<{ lesson: GameLesson } | { status: LessonStatus }> {
+  const body = await request<GameLesson | Schemas["GameLessonPreparing"]>(
+    `/api/games/${encodeURIComponent(gameId)}/lesson?locale=${locale}`,
+  );
+  return "lesson_id" in body ? { lesson: body } : { status: body.status };
+}
+export const retryLesson = (id: string, point: string) =>
+  request<RetryOut>(`/api/lessons/${encodeURIComponent(id)}/retry`, json({ point }));
+export const lessonHint = (id: string) =>
+  request<GameLesson>(`/api/lessons/${encodeURIComponent(id)}/hint`, { method: "POST" });
+export const finishLesson = (id: string) =>
+  request<Schemas["DoneOut"]>(`/api/lessons/${encodeURIComponent(id)}/done`, { method: "POST" });

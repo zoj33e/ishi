@@ -1,0 +1,10 @@
+{
+ "fires": true,
+ "concept_id": "missed_capture",
+ "key_points": {
+  "capture_point": "J5"
+ },
+ "correct_moves": [
+  "J5"
+ ]
+}

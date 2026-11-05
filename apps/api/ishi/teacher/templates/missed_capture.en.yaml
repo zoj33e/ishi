@@ -1,0 +1,20 @@
+headline: "You could have captured {a_stones} here."
+explanation:
+  - "The opponent's {stones} {marked} had only one liberty left."
+  - "One stone on that last liberty would have taken {them} off the board."
+  - "Instead you played {played_move}."
+new_term: "Capturing means filling the last liberty of a group."
+question: "Where could you have captured {them}?"
+hints:
+  - "Count the liberties of the stones {marked}."
+  - "The answer is inside the highlighted area."
+takeaway: "Before every move, check whether any opponent stones are in atari."
+variants:
+  short:
+    explanation:
+      - "The opponent's {stones} {marked} had only two liberties."
+      - "You could have kept {them} in atari until {they} had nowhere to run."
+      - "Instead you played {played_move}."
+    hints:
+      - "Which atari stops {them} from getting more liberties?"
+      - "The answer is inside the highlighted area."

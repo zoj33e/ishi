@@ -1,0 +1,93 @@
+{
+ "case": "ladder/ran_into",
+ "package": {
+  "lesson_type": "mistake",
+  "locale": "en",
+  "learner": {
+   "belt": "yellow",
+   "rank_estimate": null
+  },
+  "board_size": 9,
+  "move_number": 14,
+  "learner_color": "black",
+  "concept_id": "ladder",
+  "variant": "ran_into_ladder",
+  "concept_is_new": true,
+  "praise_kind": null,
+  "threat_move": null,
+  "played_move": "D4",
+  "correct_moves": [
+   "G6"
+  ],
+  "points_lost": 5.8,
+  "groups": [
+   {
+    "id": "g1",
+    "owner": "learner",
+    "stones": [
+     "D3",
+     "D4"
+    ],
+    "liberties_before": [],
+    "liberties_after": [
+     "D5",
+     "E4"
+    ]
+   }
+  ],
+  "key_points": {
+   "escape_move": "D4",
+   "ladder_start": "D5"
+  },
+  "follow_up_line": [
+   "W G5",
+   "B F4",
+   "W F2",
+   "B G6"
+  ],
+  "secondary_concepts": [],
+  "allowed_coordinates": [
+   "D3",
+   "D4",
+   "D5",
+   "E4",
+   "F2",
+   "F4",
+   "G1",
+   "G5",
+   "G6"
+  ]
+ },
+ "reference": {
+  "headline": "Running this way doesn't work here.",
+  "explanation": [
+   "A ladder is a zig-zag chase where every move is atari.",
+   "Your 2 stones marked with triangles tried to run with D4.",
+   "The opponent can keep putting them in atari in a zig-zag, starting at D5. This is a ladder.",
+   "In the end they are captured."
+  ],
+  "question": "What could you have done instead?",
+  "hints": [
+   "If you run, will the ladder catch your 2 stones?",
+   "The answer is inside the highlighted area."
+  ],
+  "takeaway": "Before running from atari, read the ladder to its end.",
+  "marks": [
+   {
+    "point": "D4",
+    "kind": "cross",
+    "label": null
+   },
+   {
+    "point": "D3",
+    "kind": "triangle",
+    "label": null
+   },
+   {
+    "point": "D5",
+    "kind": "circle",
+    "label": null
+   }
+  ]
+ }
+}

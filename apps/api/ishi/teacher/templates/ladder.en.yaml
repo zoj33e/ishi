@@ -1,0 +1,22 @@
+headline: "Running this way doesn't work here."
+explanation:
+  - "Your {stones} {marked} tried to run with {played_move}."
+  - "The opponent can keep putting {them} in atari in a zig-zag, starting at {ladder_start}. This is a ladder."
+  - "In the end {they} {are} captured."
+new_term: "A ladder is a zig-zag chase where every move is atari."
+question: "What could you have done instead?"
+hints:
+  - "If you run, will the ladder catch your {stones}?"
+  - "The answer is inside the highlighted area."
+takeaway: "Before running from atari, read the ladder to its end."
+variants:
+  broken_ladder_chase:
+    headline: "This chase can't catch those {stones}."
+    explanation:
+      - "You played {played_move} to start a ladder against the {stones} {marked}."
+      - "Here the ladder doesn't work, so {they} {get} away."
+    question: "What would have been a better move?"
+    hints:
+      - "Follow the chase move by move: where {do} {they} get out?"
+      - "The answer is inside the highlighted area."
+    takeaway: "Only start a ladder after reading it to the end."

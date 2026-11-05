@@ -1,0 +1,40 @@
+# Words that name a concept (06-teacher-llm validator). A narration may only use the keywords of
+# its own concept and its secondary concepts; any other concept's keyword means the model drifted to
+# a second idea, so the narration is rejected. Basic rules vocabulary (stone, liberty, atari,
+# capture) is shared by every concept and is not listed. English matches whole words, ignoring case;
+# Thai matches substrings (Thai has no spaces between words), after removing the `th_ignore` words.
+missed_capture:
+  en: []
+  th: []
+ignored_atari:
+  en: []
+  th: []
+self_atari:
+  en: [self-atari, self atari]
+  th: [ติดอาตาริเอง, ทำตัวเองให้ติดอาตาริ]
+ladder:
+  en: [ladder, ladders, ladder breaker]
+  th: [บันได]
+cut_disconnect:
+  en: [cut, cuts, cutting, disconnect, disconnected, connect, connected, connecting]
+  th: [ตัด, เชื่อม, ต่อกัน, ต่อหมาก]
+group_death:
+  en: [vital point, two eyes, eye, eyes]
+  th: [จุดสำคัญ, สองตา, สร้างตา]
+# Concepts Ishi doesn't teach yet: never allowed.
+net:
+  en: [net]
+  th: [ตาข่าย]
+snapback:
+  en: [snapback]
+  th: [กินคืน]
+false_eye:
+  en: [false eye]
+  th: [ตาปลอม]
+capturing_race:
+  en: [capturing race, semeai]
+  th: [แข่งกิน, เซไม]
+ko:
+  en: [ko]
+  th: [โคะ]
+th_ignore: [จุดตัด]

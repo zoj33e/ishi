@@ -1,0 +1,107 @@
+{
+ "case": "missed_capture/mined_mine20_g01_m25",
+ "package": {
+  "lesson_type": "mistake",
+  "locale": "th",
+  "learner": {
+   "belt": "yellow",
+   "rank_estimate": null
+  },
+  "board_size": 9,
+  "move_number": 10,
+  "learner_color": "black",
+  "concept_id": "missed_capture",
+  "variant": null,
+  "concept_is_new": true,
+  "praise_kind": null,
+  "threat_move": null,
+  "played_move": "F8",
+  "correct_moves": [
+   "J5"
+  ],
+  "points_lost": 3.7,
+  "groups": [
+   {
+    "id": "g1",
+    "owner": "opponent",
+    "stones": [
+     "F5",
+     "G5",
+     "H5",
+     "H6"
+    ],
+    "liberties_before": [
+     "J5"
+    ],
+    "liberties_after": [
+     "J5"
+    ]
+   }
+  ],
+  "key_points": {
+   "capture_point": "J5"
+  },
+  "follow_up_line": [
+   "W B4",
+   "B B6",
+   "W G3",
+   "B H3"
+  ],
+  "secondary_concepts": [],
+  "allowed_coordinates": [
+   "B4",
+   "B6",
+   "F5",
+   "F8",
+   "G1",
+   "G3",
+   "G5",
+   "H3",
+   "H5",
+   "H6",
+   "J5"
+  ]
+ },
+ "reference": {
+  "headline": "ตานี้กินหมาก 4 เม็ด ได้เลย",
+  "explanation": [
+   "การกินคือการปิดลมหายใจช่องสุดท้ายของกลุ่มหมาก",
+   "หมากฝ่ายตรงข้าม 4 เม็ด ที่มีสามเหลี่ยม เหลือลมหายใจแค่ช่องเดียว",
+   "ถ้าเราลงปิดลมหายใจช่องสุดท้ายนั้น ก็กินได้ทันที",
+   "แต่เราไปลงที่ F8 แทน"
+  ],
+  "question": "ลองหาดูว่าควรลงตรงไหนถึงจะกินได้",
+  "hints": [
+   "ลองนับลมหายใจของหมากที่มีสามเหลี่ยมดู",
+   "คำตอบอยู่ในบริเวณที่ไฮไลต์ไว้"
+  ],
+  "takeaway": "ก่อนลงทุกครั้ง ดูก่อนว่ามีหมากฝ่ายตรงข้ามติดอาตาริอยู่ไหมนะ",
+  "marks": [
+   {
+    "point": "F8",
+    "kind": "cross",
+    "label": null
+   },
+   {
+    "point": "F5",
+    "kind": "triangle",
+    "label": null
+   },
+   {
+    "point": "G5",
+    "kind": "triangle",
+    "label": null
+   },
+   {
+    "point": "H5",
+    "kind": "triangle",
+    "label": null
+   },
+   {
+    "point": "H6",
+    "kind": "triangle",
+    "label": null
+   }
+  ]
+ }
+}

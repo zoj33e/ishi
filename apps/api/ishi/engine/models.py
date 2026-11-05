@@ -37,6 +37,7 @@ class AnalysisQuery(BaseModel):
     analyzeTurns: list[int] | None = None
     maxVisits: int | None = None
     includeOwnership: bool = False
+    includeMovesOwnership: bool = False
     includePolicy: bool = False
     overrideSettings: dict[str, object] | None = None
     avoidMoves: list[dict[str, object]] | None = None
@@ -60,6 +61,7 @@ class MoveInfo(_Lenient):
     order: int
     pv: list[str] = Field(default_factory=list)
     humanPrior: float | None = None
+    ownership: list[float] | None = None  # with includeMovesOwnership (M4)
 
 
 class RootInfo(_Lenient):

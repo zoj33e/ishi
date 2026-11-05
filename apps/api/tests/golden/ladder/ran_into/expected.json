@@ -1,0 +1,12 @@
+{
+ "fires": true,
+ "concept_id": "ladder",
+ "key_points": {
+  "escape_move": "D4",
+  "ladder_start": "D5"
+ },
+ "correct_moves": [
+  "G6"
+ ],
+ "variant": "ran_into_ladder"
+}

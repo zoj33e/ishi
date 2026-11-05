@@ -1,0 +1,11 @@
+headline: "Your {stones} needed help right away."
+explanation:
+  - "Your {stones} {marked} had only one liberty left. This is atari."
+  - "Stones in atari can be captured on the opponent's next move."
+  - "You played {played_move}, so {they} {were} left in danger."
+new_term: "Atari means your stones can only breathe once more."
+question: "How could you have saved {them}?"
+hints:
+  - "How can your {stones} get more liberties?"
+  - "The answer is inside the highlighted area."
+takeaway: "When your stones are in atari, first ask: can I save them, and are they worth saving?"

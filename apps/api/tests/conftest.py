@@ -28,6 +28,7 @@ def api(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Iterator[TestClient]
     monkeypatch.setenv("ISHI_DB_PATH", str(tmp_path / "ishi.db"))
     for key in ("ISHI_KATAGO_BIN", "ISHI_KATAGO_MODEL", "ISHI_KATAGO_CONFIG"):
         monkeypatch.setenv(key, str(tmp_path / "missing"))
+    monkeypatch.setenv("ISHI_LLM_ENABLED", "false")  # 11-testing: unit tests never call the LLM
     get_settings.cache_clear()
     migrate(get_settings().db_path)
     with TestClient(create_app()) as client:

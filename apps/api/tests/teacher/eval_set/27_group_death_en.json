@@ -1,0 +1,115 @@
+{
+ "case": "group_death/mined_mine20_g22_m25",
+ "package": {
+  "lesson_type": "mistake",
+  "locale": "en",
+  "learner": {
+   "belt": "yellow",
+   "rank_estimate": null
+  },
+  "board_size": 9,
+  "move_number": 14,
+  "learner_color": "black",
+  "concept_id": "group_death",
+  "variant": null,
+  "concept_is_new": true,
+  "praise_kind": null,
+  "threat_move": null,
+  "played_move": "G5",
+  "correct_moves": [
+   "E7"
+  ],
+  "points_lost": 35.5,
+  "groups": [
+   {
+    "id": "g1",
+    "owner": "learner",
+    "stones": [
+     "D5",
+     "E5",
+     "F4",
+     "F5",
+     "F6"
+    ],
+    "liberties_before": [
+     "G4",
+     "G5"
+    ],
+    "liberties_after": [
+     "G4",
+     "H5"
+    ]
+   }
+  ],
+  "key_points": {
+   "vital_point": "E7"
+  },
+  "follow_up_line": [
+   "W H5",
+   "B C3",
+   "W G4",
+   "B C2"
+  ],
+  "secondary_concepts": [],
+  "allowed_coordinates": [
+   "C2",
+   "C3",
+   "D5",
+   "E5",
+   "E7",
+   "F4",
+   "F5",
+   "F6",
+   "G1",
+   "G4",
+   "G5",
+   "H5"
+  ]
+ },
+ "reference": {
+  "headline": "This move let your 5 stones die.",
+  "explanation": [
+   "A group needs two eyes to stay alive for good.",
+   "Your 5 stones marked with triangles were alive before G5.",
+   "After it, the opponent can stop them from making two eyes, so they die."
+  ],
+  "question": "Which point did your group need?",
+  "hints": [
+   "Where can your group make its eyes?",
+   "The answer is inside the highlighted area."
+  ],
+  "takeaway": "When a group has little space, make sure it has two eyes first.",
+  "marks": [
+   {
+    "point": "G5",
+    "kind": "cross",
+    "label": null
+   },
+   {
+    "point": "D5",
+    "kind": "triangle",
+    "label": null
+   },
+   {
+    "point": "E5",
+    "kind": "triangle",
+    "label": null
+   },
+   {
+    "point": "F4",
+    "kind": "triangle",
+    "label": null
+   },
+   {
+    "point": "F5",
+    "kind": "triangle",
+    "label": null
+   },
+   {
+    "point": "F6",
+    "kind": "triangle",
+    "label": null
+   }
+  ]
+ }
+}

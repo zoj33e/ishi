@@ -23,8 +23,8 @@ async def health(request: Request) -> Health:
     settings = get_settings()
     engine: KataGoProcess | None = request.app.state.engine
     engine_ok = engine is not None and await engine.ping()
-    # LLM is only reported as configured/disabled here; a live check arrives with the narrator (M5).
-    llm = "ok" if settings.llm_enabled and settings.anthropic_api_key else "disabled"
+    teacher = request.app.state.teacher
+    llm = "disabled" if teacher is None else "down" if teacher.failing else "ok"
     return Health(
         api="ok",
         engine="ok" if engine_ok else "down",

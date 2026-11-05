@@ -1,0 +1,108 @@
+{
+ "case": "cut_disconnect/mined_mine20_g18_m17",
+ "package": {
+  "lesson_type": "mistake",
+  "locale": "en",
+  "learner": {
+   "belt": "yellow",
+   "rank_estimate": null
+  },
+  "board_size": 9,
+  "move_number": 12,
+  "learner_color": "black",
+  "concept_id": "cut_disconnect",
+  "variant": null,
+  "concept_is_new": false,
+  "praise_kind": null,
+  "threat_move": null,
+  "played_move": "H6",
+  "correct_moves": [
+   "G4"
+  ],
+  "points_lost": 10.1,
+  "groups": [
+   {
+    "id": "g1",
+    "owner": "learner",
+    "stones": [
+     "G5"
+    ],
+    "liberties_before": [
+     "G4",
+     "H5"
+    ],
+    "liberties_after": [
+     "G4",
+     "H5"
+    ]
+   },
+   {
+    "id": "g2",
+    "owner": "learner",
+    "stones": [
+     "F4"
+    ],
+    "liberties_before": [
+     "F3",
+     "G4"
+    ],
+    "liberties_after": [
+     "F3",
+     "G4"
+    ]
+   }
+  ],
+  "key_points": {
+   "cut_point": "G4",
+   "connect_move": "G4"
+  },
+  "follow_up_line": [
+   "W G4",
+   "B F3",
+   "W H5",
+   "B G8"
+  ],
+  "secondary_concepts": [],
+  "allowed_coordinates": [
+   "F3",
+   "F4",
+   "G1",
+   "G2",
+   "G4",
+   "G5",
+   "G8",
+   "H5",
+   "H6"
+  ]
+ },
+ "reference": {
+  "headline": "Your stones could be cut apart.",
+  "explanation": [
+   "Your two groups marked with triangles were joined by only one point.",
+   "After H6, the opponent can cut them apart, and both groups get weaker."
+  ],
+  "question": "Where should you have connected?",
+  "hints": [
+   "Find the one point that both groups touch.",
+   "The answer is inside the highlighted area."
+  ],
+  "takeaway": "When two of your groups share only one connecting point, think about connecting first.",
+  "marks": [
+   {
+    "point": "H6",
+    "kind": "cross",
+    "label": null
+   },
+   {
+    "point": "G5",
+    "kind": "triangle",
+    "label": null
+   },
+   {
+    "point": "F4",
+    "kind": "triangle",
+    "label": null
+   }
+  ]
+ }
+}

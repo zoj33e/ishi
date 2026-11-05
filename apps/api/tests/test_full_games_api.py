@@ -1,6 +1,7 @@
 """9x9 games against the HumanSL bot, with the fake KataGo (tests/fake_katago.py)."""
 
 from collections.abc import Iterator
+from pathlib import Path
 
 import pytest
 from fastapi.testclient import TestClient
@@ -75,3 +76,88 @@ def test_learner_pass_after_bot_pass_ends_without_bot_turn(with_engine: TestClie
     api.post(f"/api/games/{g['id']}/moves", json={"point": "pass"})  # bot answers pass
     state = api.get(f"/api/games/{g['id']}").json()
     assert state["status"] == "finished"  # pass + pass
+
+
+def test_moves_queue_background_analysis(with_engine: TestClient) -> None:
+    queued: list[str] = []
+
+    class Recorder:
+        def enqueue(self, game_id: str) -> None:
+            queued.append(game_id)
+
+        async def stop(self) -> None:
+            pass
+
+    with_engine.app.state.analysis = Recorder()  # type: ignore[attr-defined]
+    g = with_engine.post("/api/games", json={"mode": "full"}).json()
+    with_engine.post(f"/api/games/{g['id']}/moves", json={"point": "E5"})
+    with_engine.post(f"/api/games/{g['id']}/resign")
+    assert queued == [g["id"], g["id"]]
+
+
+def test_worker_analyzes_every_position_then_reviews(with_engine: TestClient) -> None:
+    from sqlmodel import Session, select
+
+    from ishi.config import get_settings
+    from ishi.db.models import Analysis, Game
+    from ishi.db.session import get_engine
+    from ishi.play.review_service import AnalysisWorker
+
+    api = with_engine
+    g = api.post("/api/games", json={"mode": "full"}).json()
+    api.post(f"/api/games/{g['id']}/moves", json={"point": "E5"})
+    engine = api.app.state.engine  # type: ignore[attr-defined]
+    worker = AnalysisWorker(get_settings().db_path, lambda: engine)
+    assert api.portal.call(worker.process, g["id"])  # type: ignore[union-attr]
+    db = get_engine(get_settings().db_path)
+    with Session(db) as s:
+        rows = s.exec(select(Analysis).where(Analysis.game_id == g["id"])).all()
+        assert sorted(r.move_number for r in rows) == [0, 1, 2]
+        assert s.get(Game, g["id"]).reviewed_at is None  # type: ignore[union-attr]  # still playing
+    api.post(f"/api/games/{g['id']}/resign")
+    assert api.portal.call(worker.process, g["id"])  # type: ignore[union-attr]
+    with Session(db) as s:
+        assert s.get(Game, g["id"]).reviewed_at is not None  # type: ignore[union-attr]
+    # Engine down: the worker asks to retry later instead of failing.
+    assert not api.portal.call(
+        AnalysisWorker(get_settings().db_path, lambda: None).process, g["id"]
+    )  # type: ignore[union-attr]
+
+
+def test_export_unexplained(with_engine: TestClient, tmp_path: Path) -> None:
+    from sqlmodel import Session
+
+    from ishi.config import get_settings
+    from ishi.db.models import Game, Mistake
+    from ishi.db.session import get_engine
+    from ishi.play.review_service import AnalysisWorker, export_unexplained
+    from ishi.rules.sgf import parse_sgf
+
+    api = with_engine
+    g = api.post("/api/games", json={"mode": "full"}).json()
+    api.post(f"/api/games/{g['id']}/moves", json={"point": "E5"})
+    api.post(f"/api/games/{g['id']}/resign")
+    engine = api.app.state.engine  # type: ignore[attr-defined]
+    api.portal.call(AnalysisWorker(get_settings().db_path, lambda: engine).process, g["id"])  # type: ignore[union-attr]
+    with Session(get_engine(get_settings().db_path)) as s:
+        user_id = s.get(Game, g["id"]).user_id  # type: ignore[union-attr]
+        s.add(
+            Mistake(
+                user_id=user_id,
+                game_id=g["id"],
+                move_number=1,
+                points_lost=6.0,
+                concept_id="unexplained",
+                evidence={"correct_moves": ["C3"], "evidence": {"played_move": "E5"}},
+            )
+        )
+        s.commit()
+        [folder] = export_unexplained(s, tmp_path)
+    assert sorted(p.name for p in folder.iterdir()) == [
+        "analysis_after.json",
+        "analysis_before.json",
+        "notes.md",
+        "position.sgf",
+    ]
+    assert len(parse_sgf((folder / "position.sgf").read_text(encoding="utf-8")).moves) == 1
+    assert "E5 lost 6.0" in (folder / "notes.md").read_text(encoding="utf-8")

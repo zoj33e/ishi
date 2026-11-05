@@ -80,6 +80,13 @@ def _state_out(game: Game, state: GameState) -> GameStateOut:
     return out
 
 
+def _queue_analysis(request: Request, game: Game) -> None:
+    """Background per-move analysis and, once the game is over, the Why Engine review (M4)."""
+    worker = request.app.state.analysis
+    if worker is not None and game.mode == "full":
+        worker.enqueue(game.id)
+
+
 def _game_or_404(session: Session, user: User, game_id: str) -> Game:
     game = session.get(Game, game_id)
     if game is None or game.user_id != user.id:
@@ -158,6 +165,7 @@ async def post_move(request: Request, session: SessionDep, game_id: str, body: M
         state, bot_move = await full_service.play_full_move(
             session, game, state, point, engine, _rng
         )
+        _queue_analysis(request, game)
     else:  # the capture bot searches for up to ~1.5 s: keep it off the event loop
         state, bot_move = await run_in_threadpool(
             service.play_learner_move, session, game, state, point, _rng
@@ -169,12 +177,13 @@ async def post_move(request: Request, session: SessionDep, game_id: str, body: M
 
 
 @router.post("/games/{game_id}/resign", response_model=GameStateOut)
-def resign(session: SessionDep, game_id: str) -> GameStateOut:
+def resign(request: Request, session: SessionDep, game_id: str) -> GameStateOut:
     user = get_or_create_user(session)
     game = _game_or_404(session, user, game_id)
     state = service.load_state(session, game)
     service.resign(session, game, state)
     session.refresh(game)
+    _queue_analysis(request, game)
     return _state_out(game, state)
 
 

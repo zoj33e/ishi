@@ -701,6 +701,285 @@
           }
         }
       }
+    },
+    "/api/games/{game_id}/lesson": {
+      "get": {
+        "tags": [
+          "lessons"
+        ],
+        "summary": "Get Lesson",
+        "operationId": "get_lesson_api_games__game_id__lesson_get",
+        "parameters": [
+          {
+            "name": "game_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Game Id"
+            }
+          },
+          {
+            "name": "locale",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "th",
+                    "en"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Locale"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GameLessonOut"
+                }
+              }
+            }
+          },
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GameLessonPreparing"
+                }
+              }
+            },
+            "description": "Accepted"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/lessons/{lesson_id}/retry": {
+      "post": {
+        "tags": [
+          "lessons"
+        ],
+        "summary": "Retry",
+        "operationId": "retry_api_lessons__lesson_id__retry_post",
+        "parameters": [
+          {
+            "name": "lesson_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Lesson Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RetryIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RetryOut"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/lessons/{lesson_id}/hint": {
+      "post": {
+        "tags": [
+          "lessons"
+        ],
+        "summary": "Hint",
+        "description": "One step up the hint ladder: guiding question, highlighted area, then the solution.",
+        "operationId": "hint_api_lessons__lesson_id__hint_post",
+        "parameters": [
+          {
+            "name": "lesson_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Lesson Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GameLessonOut"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/lessons/{lesson_id}/done": {
+      "post": {
+        "tags": [
+          "lessons"
+        ],
+        "summary": "Done",
+        "operationId": "done_api_lessons__lesson_id__done_post",
+        "parameters": [
+          {
+            "name": "lesson_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Lesson Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DoneOut"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -932,6 +1211,19 @@
         ],
         "title": "DemoFrameOut"
       },
+      "DoneOut": {
+        "properties": {
+          "puzzle_added": {
+            "type": "boolean",
+            "title": "Puzzle Added"
+          }
+        },
+        "type": "object",
+        "required": [
+          "puzzle_added"
+        ],
+        "title": "DoneOut"
+      },
       "ErrorDetail": {
         "properties": {
           "code": {
@@ -1036,6 +1328,218 @@
           "puzzles"
         ],
         "title": "ExamOut"
+      },
+      "GameLessonOut": {
+        "properties": {
+          "lesson_id": {
+            "type": "string",
+            "title": "Lesson Id"
+          },
+          "game_id": {
+            "type": "string",
+            "title": "Game Id"
+          },
+          "lesson_type": {
+            "type": "string",
+            "enum": [
+              "mistake",
+              "praise",
+              "clean"
+            ],
+            "title": "Lesson Type"
+          },
+          "concept_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Concept Id"
+          },
+          "variant": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Variant"
+          },
+          "move_number": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Move Number"
+          },
+          "learner_color": {
+            "type": "string",
+            "enum": [
+              "black",
+              "white"
+            ],
+            "title": "Learner Color"
+          },
+          "position": {
+            "$ref": "#/components/schemas/GameStateOut"
+          },
+          "played_move": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Played Move"
+          },
+          "severity": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "small",
+                  "medium",
+                  "big"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Severity"
+          },
+          "threat_move": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Threat Move"
+          },
+          "follow_up_line": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Follow Up Line"
+          },
+          "narration": {
+            "$ref": "#/components/schemas/Narration"
+          },
+          "can_retry": {
+            "type": "boolean",
+            "title": "Can Retry"
+          },
+          "attempts": {
+            "type": "integer",
+            "title": "Attempts"
+          },
+          "hint_level": {
+            "type": "integer",
+            "title": "Hint Level"
+          },
+          "retry_result": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "solved_first",
+                  "solved_hint",
+                  "failed"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Retry Result"
+          },
+          "focus": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Focus"
+          },
+          "solution_line": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Solution Line"
+          },
+          "solution_frames": {
+            "items": {
+              "$ref": "#/components/schemas/LineFrame"
+            },
+            "type": "array",
+            "title": "Solution Frames"
+          },
+          "done": {
+            "type": "boolean",
+            "title": "Done"
+          }
+        },
+        "type": "object",
+        "required": [
+          "lesson_id",
+          "game_id",
+          "lesson_type",
+          "concept_id",
+          "variant",
+          "move_number",
+          "learner_color",
+          "position",
+          "played_move",
+          "severity",
+          "threat_move",
+          "follow_up_line",
+          "narration",
+          "can_retry",
+          "attempts",
+          "hint_level",
+          "retry_result",
+          "focus",
+          "solution_line",
+          "solution_frames",
+          "done"
+        ],
+        "title": "GameLessonOut"
+      },
+      "GameLessonPreparing": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "preparing",
+              "unavailable"
+            ],
+            "title": "Status"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "title": "GameLessonPreparing"
       },
       "GameStateOut": {
         "properties": {
@@ -1392,6 +1896,30 @@
         ],
         "title": "LessonSummary"
       },
+      "LineFrame": {
+        "properties": {
+          "stones": {
+            "$ref": "#/components/schemas/Stones"
+          },
+          "last_move": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Move"
+          }
+        },
+        "type": "object",
+        "required": [
+          "stones",
+          "last_move"
+        ],
+        "title": "LineFrame"
+      },
       "Mark": {
         "properties": {
           "point": {
@@ -1576,6 +2104,58 @@
         ],
         "title": "MoveOut"
       },
+      "Narration": {
+        "properties": {
+          "headline": {
+            "type": "string",
+            "title": "Headline"
+          },
+          "explanation": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Explanation"
+          },
+          "question": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Question"
+          },
+          "hints": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Hints"
+          },
+          "takeaway": {
+            "type": "string",
+            "title": "Takeaway"
+          },
+          "marks": {
+            "items": {
+              "$ref": "#/components/schemas/Mark"
+            },
+            "type": "array",
+            "title": "Marks"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "headline",
+          "explanation",
+          "takeaway"
+        ],
+        "title": "Narration"
+      },
       "NewGame": {
         "properties": {
           "mode": {
@@ -1673,6 +2253,41 @@
           "captures"
         ],
         "title": "Position"
+      },
+      "RetryIn": {
+        "properties": {
+          "point": {
+            "type": "string",
+            "title": "Point"
+          }
+        },
+        "type": "object",
+        "required": [
+          "point"
+        ],
+        "title": "RetryIn"
+      },
+      "RetryOut": {
+        "properties": {
+          "correct": {
+            "type": "boolean",
+            "title": "Correct"
+          },
+          "feedback_key": {
+            "type": "string",
+            "title": "Feedback Key"
+          },
+          "lesson": {
+            "$ref": "#/components/schemas/GameLessonOut"
+          }
+        },
+        "type": "object",
+        "required": [
+          "correct",
+          "feedback_key",
+          "lesson"
+        ],
+        "title": "RetryOut"
       },
       "SandboxRequest": {
         "properties": {
@@ -1945,6 +2560,17 @@
             ],
             "title": "Lesson Pending"
           },
+          "lesson_game": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lesson Game"
+          },
           "school_next": {
             "anyOf": [
               {
@@ -1980,6 +2606,7 @@
           "warmup_due",
           "game",
           "lesson_pending",
+          "lesson_game",
           "school_next",
           "capture",
           "exam_available",

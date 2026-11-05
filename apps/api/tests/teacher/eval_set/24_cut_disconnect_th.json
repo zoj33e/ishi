@@ -1,0 +1,123 @@
+{
+ "case": "cut_disconnect/mined_mine20_g38_m13",
+ "package": {
+  "lesson_type": "mistake",
+  "locale": "th",
+  "learner": {
+   "belt": "yellow",
+   "rank_estimate": null
+  },
+  "board_size": 9,
+  "move_number": 18,
+  "learner_color": "black",
+  "concept_id": "cut_disconnect",
+  "variant": null,
+  "concept_is_new": true,
+  "praise_kind": null,
+  "threat_move": null,
+  "played_move": "A6",
+  "correct_moves": [
+   "D6"
+  ],
+  "points_lost": 9.7,
+  "groups": [
+   {
+    "id": "g1",
+    "owner": "learner",
+    "stones": [
+     "D7"
+    ],
+    "liberties_before": [
+     "D6",
+     "E7"
+    ],
+    "liberties_after": [
+     "D6",
+     "E7"
+    ]
+   },
+   {
+    "id": "g2",
+    "owner": "learner",
+    "stones": [
+     "B6",
+     "C6"
+    ],
+    "liberties_before": [
+     "A6",
+     "B5",
+     "C5",
+     "D6"
+    ],
+    "liberties_after": [
+     "A5",
+     "B5",
+     "C5",
+     "D6"
+    ]
+   }
+  ],
+  "key_points": {
+   "cut_point": "D6",
+   "connect_move": "D6"
+  },
+  "follow_up_line": [
+   "W D6",
+   "B D5",
+   "W E7",
+   "B E6"
+  ],
+  "secondary_concepts": [],
+  "allowed_coordinates": [
+   "A5",
+   "A6",
+   "B5",
+   "B6",
+   "C5",
+   "C6",
+   "D5",
+   "D6",
+   "D7",
+   "E6",
+   "E7",
+   "G1",
+   "G2"
+  ]
+ },
+ "reference": {
+  "headline": "หมากของเราโดนตัดได้",
+  "explanation": [
+   "การตัด คือการแยกหมากที่เกือบจะต่อกันอยู่แล้วออกจากกัน",
+   "หมากสองกลุ่มของเราที่มีสามเหลี่ยม ต่อกันได้แค่จุดเดียว",
+   "พอเราไปลง A6 ฝ่ายตรงข้ามก็ตัดแยกสองกลุ่มนี้ได้ ทำให้อ่อนแอทั้งคู่"
+  ],
+  "question": "ควรต่อหมากตรงไหน",
+  "hints": [
+   "หาจุดที่หมากทั้งสองกลุ่มแตะกันอยู่",
+   "คำตอบอยู่ในบริเวณที่ไฮไลต์ไว้"
+  ],
+  "takeaway": "ถ้าหมากสองกลุ่มของเราต่อกันได้แค่จุดเดียว ให้คิดถึงการต่อก่อนนะ",
+  "marks": [
+   {
+    "point": "A6",
+    "kind": "cross",
+    "label": null
+   },
+   {
+    "point": "D7",
+    "kind": "triangle",
+    "label": null
+   },
+   {
+    "point": "B6",
+    "kind": "triangle",
+    "label": null
+   },
+   {
+    "point": "C6",
+    "kind": "triangle",
+    "label": null
+   }
+  ]
+ }
+}

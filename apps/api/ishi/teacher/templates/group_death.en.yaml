@@ -1,0 +1,10 @@
+headline: "This move let your {stones} die."
+explanation:
+  - "Your {stones} {marked} were alive before {played_move}."
+  - "After it, the opponent can stop them from making two eyes, so they die."
+new_term: "A group needs two eyes to stay alive for good."
+question: "Which point did your group need?"
+hints:
+  - "Where can your group make its eyes?"
+  - "The answer is inside the highlighted area."
+takeaway: "When a group has little space, make sure it has two eyes first."

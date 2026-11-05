@@ -1,0 +1,11 @@
+{
+ "fires": true,
+ "concept_id": "cut_disconnect",
+ "key_points": {
+  "cut_point": "G4",
+  "connect_move": "G4"
+ },
+ "correct_moves": [
+  "G4"
+ ]
+}

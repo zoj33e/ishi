@@ -77,6 +77,15 @@ export function HomeClient() {
         {t(`belt.${me.belt === "yellow" ? "yellow" : "white"}`)}
       </p>
 
+      {today.lesson_game && (
+        <Card title={t("lessonTitle")}>
+          <p className="text-ink-soft">{t("lessonReady")}</p>
+          <Link href={`/lesson/${today.lesson_game}`} className="self-start" data-testid="home-lesson">
+            <span className="inline-flex min-h-11 items-center rounded-full bg-ink px-5 font-semibold text-paper">{t("lessonOpen")}</span>
+          </Link>
+        </Card>
+      )}
+
       <Card title={t("schoolTitle")}>
         <p className="text-ink-soft">{t("schoolProgress", { done, total: school.lessons.length })}</p>
         <div className="h-2 overflow-hidden rounded-full bg-line" aria-hidden>

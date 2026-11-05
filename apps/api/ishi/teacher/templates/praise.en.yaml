@@ -1,0 +1,14 @@
+headline: "Good answer to the atari at {threat_move}."
+explanation:
+  - "The opponent played {threat_move} and put your {stones} in atari."
+  - "You answered with {played_move}, and your {stones} got out of danger."
+question: null
+hints: []
+takeaway: "Answering threats in time is what strong players always do."
+variants:
+  answered_cut:
+    headline: "You connected just in time."
+    explanation:
+      - "The opponent's {threat_move} threatened to cut your stones apart."
+      - "You connected with {played_move}, and your stones stayed together."
+    takeaway: "Connecting before the cut keeps your stones strong."

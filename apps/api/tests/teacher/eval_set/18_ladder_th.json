@@ -1,0 +1,93 @@
+{
+ "case": "ladder/ran_into_mirror",
+ "package": {
+  "lesson_type": "mistake",
+  "locale": "th",
+  "learner": {
+   "belt": "yellow",
+   "rank_estimate": null
+  },
+  "board_size": 9,
+  "move_number": 16,
+  "learner_color": "black",
+  "concept_id": "ladder",
+  "variant": "ran_into_ladder",
+  "concept_is_new": false,
+  "praise_kind": null,
+  "threat_move": null,
+  "played_move": "F4",
+  "correct_moves": [
+   "C6"
+  ],
+  "points_lost": 5.9,
+  "groups": [
+   {
+    "id": "g1",
+    "owner": "learner",
+    "stones": [
+     "F3",
+     "F4"
+    ],
+    "liberties_before": [],
+    "liberties_after": [
+     "E4",
+     "F5"
+    ]
+   }
+  ],
+  "key_points": {
+   "escape_move": "F4",
+   "ladder_start": "F5"
+  },
+  "follow_up_line": [
+   "W C5",
+   "B D4",
+   "W D7",
+   "B G2"
+  ],
+  "secondary_concepts": [],
+  "allowed_coordinates": [
+   "C5",
+   "C6",
+   "D4",
+   "D7",
+   "E4",
+   "F3",
+   "F4",
+   "F5",
+   "G1",
+   "G2"
+  ]
+ },
+ "reference": {
+  "headline": "หนีทางนี้ไม่รอด เพราะติดบันได",
+  "explanation": [
+   "หมาก 2 เม็ด ของเราที่มีสามเหลี่ยม พยายามหนีด้วย F4",
+   "แต่ฝ่ายตรงข้ามไล่อาตาริแบบซิกแซกได้ตลอด เริ่มที่ F5 แบบนี้เรียกว่าบันได",
+   "สุดท้ายหมากของเราก็ถูกกิน"
+  ],
+  "question": "ตรงนั้นควรทำอะไรแทนดี",
+  "hints": [
+   "ถ้าหนีไป บันไดจะจับหมากเราได้ไหม",
+   "คำตอบอยู่ในบริเวณที่ไฮไลต์ไว้"
+  ],
+  "takeaway": "ก่อนหนีจากอาตาริ ลองอ่านบันไดให้จบก่อนนะ",
+  "marks": [
+   {
+    "point": "F4",
+    "kind": "cross",
+    "label": null
+   },
+   {
+    "point": "F3",
+    "kind": "triangle",
+    "label": null
+   },
+   {
+    "point": "F5",
+    "kind": "circle",
+    "label": null
+   }
+  ]
+ }
+}

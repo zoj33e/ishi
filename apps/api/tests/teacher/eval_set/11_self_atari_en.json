@@ -1,0 +1,94 @@
+{
+ "case": "self_atari/edge_white",
+ "package": {
+  "lesson_type": "mistake",
+  "locale": "en",
+  "learner": {
+   "belt": "yellow",
+   "rank_estimate": null
+  },
+  "board_size": 9,
+  "move_number": 12,
+  "learner_color": "white",
+  "concept_id": "self_atari",
+  "variant": null,
+  "concept_is_new": false,
+  "praise_kind": null,
+  "threat_move": null,
+  "played_move": "D3",
+  "correct_moves": [
+   "E6",
+   "G5"
+  ],
+  "points_lost": 10.5,
+  "groups": [
+   {
+    "id": "g1",
+    "owner": "learner",
+    "stones": [
+     "D3",
+     "E3"
+    ],
+    "liberties_before": [
+     "D3",
+     "E2"
+    ],
+    "liberties_after": [
+     "E2"
+    ]
+   }
+  ],
+  "key_points": {
+   "last_liberty": "E2",
+   "played_move": "D3"
+  },
+  "follow_up_line": [
+   "B F7",
+   "W F6",
+   "B E7",
+   "W E6"
+  ],
+  "secondary_concepts": [],
+  "allowed_coordinates": [
+   "D3",
+   "E2",
+   "E3",
+   "E6",
+   "E7",
+   "F6",
+   "F7",
+   "G1",
+   "G5"
+  ]
+ },
+ "reference": {
+  "headline": "That move put your own stones in atari.",
+  "explanation": [
+   "After D3, your 2 stones marked with triangles had only one liberty left, at E2.",
+   "The opponent can capture them by playing there."
+  ],
+  "question": "Where would have been a better move?",
+  "hints": [
+   "Before you play, count how many liberties your stones will have.",
+   "The answer is inside the highlighted area."
+  ],
+  "takeaway": "Count your liberties after the move, not before it.",
+  "marks": [
+   {
+    "point": "D3",
+    "kind": "cross",
+    "label": null
+   },
+   {
+    "point": "E3",
+    "kind": "triangle",
+    "label": null
+   },
+   {
+    "point": "E2",
+    "kind": "circle",
+    "label": null
+   }
+  ]
+ }
+}

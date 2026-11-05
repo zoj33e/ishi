@@ -1,0 +1,99 @@
+{
+ "case": "ignored_atari/capture_attacker",
+ "package": {
+  "lesson_type": "mistake",
+  "locale": "en",
+  "learner": {
+   "belt": "yellow",
+   "rank_estimate": null
+  },
+  "board_size": 9,
+  "move_number": 10,
+  "learner_color": "black",
+  "concept_id": "ignored_atari",
+  "variant": null,
+  "concept_is_new": true,
+  "praise_kind": null,
+  "threat_move": null,
+  "played_move": "B8",
+  "correct_moves": [
+   "E3"
+  ],
+  "points_lost": 29.7,
+  "groups": [
+   {
+    "id": "g1",
+    "owner": "learner",
+    "stones": [
+     "D4",
+     "D5"
+    ],
+    "liberties_before": [
+     "D3"
+    ],
+    "liberties_after": [
+     "D3"
+    ]
+   }
+  ],
+  "key_points": {
+   "save_move": "E3",
+   "liberty_point": "D3"
+  },
+  "follow_up_line": [
+   "W D3",
+   "B E7",
+   "W D7",
+   "B D8"
+  ],
+  "secondary_concepts": [],
+  "allowed_coordinates": [
+   "B8",
+   "D3",
+   "D4",
+   "D5",
+   "D7",
+   "D8",
+   "E3",
+   "E7",
+   "G1"
+  ]
+ },
+ "reference": {
+  "headline": "Your 2 stones needed help right away.",
+  "explanation": [
+   "Atari means your stones can only breathe once more.",
+   "Your 2 stones marked with triangles had only one liberty left. This is atari.",
+   "Stones in atari can be captured on the opponent's next move.",
+   "You played B8, so they were left in danger."
+  ],
+  "question": "How could you have saved them?",
+  "hints": [
+   "How can your 2 stones get more liberties?",
+   "The answer is inside the highlighted area."
+  ],
+  "takeaway": "When your stones are in atari, first ask: can I save them, and are they worth saving?",
+  "marks": [
+   {
+    "point": "B8",
+    "kind": "cross",
+    "label": null
+   },
+   {
+    "point": "D4",
+    "kind": "triangle",
+    "label": null
+   },
+   {
+    "point": "D5",
+    "kind": "triangle",
+    "label": null
+   },
+   {
+    "point": "D3",
+    "kind": "circle",
+    "label": null
+   }
+  ]
+ }
+}

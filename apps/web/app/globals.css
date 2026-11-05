@@ -11,6 +11,8 @@
   --warn: #b7791f;
   --bad: #b23a2b;
   --grid: #3b2a12;
+  --hint: rgba(255, 244, 196, 0.55);
+  --hint-edge: #b7791f;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -25,6 +27,8 @@
     --warn: #e0a44a;
     --bad: #e2715f;
     --grid: #2a1d0b;
+    --hint: rgba(255, 236, 160, 0.35);
+    --hint-edge: #e0a44a;
   }
 }
 

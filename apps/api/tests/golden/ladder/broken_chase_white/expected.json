@@ -1,0 +1,12 @@
+{
+ "fires": true,
+ "concept_id": "ladder",
+ "key_points": {
+  "atari_move": "E3",
+  "breaker": "G8"
+ },
+ "correct_moves": [
+  "F7"
+ ],
+ "variant": "broken_ladder_chase"
+}
