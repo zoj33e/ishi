@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import math
 import random
 
 import pytest
@@ -91,3 +92,26 @@ def test_likelihood_is_unsure_when_the_weakest_profile_fits_best() -> None:
     fit = rank.likelihood_fit({r: -4 * (r - 18.0) ** 2 for r in rank.LIKELIHOOD_PROFILES.values()})
     assert fit is not None
     assert fit[0] == pytest.approx(18.0, abs=0.01) and fit[1] == rank.EDGE_LIKELIHOOD_SD**2
+
+
+def test_policy_expected_logl() -> None:
+    assert rank.policy_expected_logl([1.0, -1.0, 0.0]) == pytest.approx(0.0, abs=1e-5)
+    two = rank.policy_expected_logl([0.5, 0.5, -1.0])
+    assert two == pytest.approx(math.log(0.5), abs=1e-5)  # a coin flip
+    assert rank.policy_expected_logl([-1.0, 0.0]) == 0.0
+
+
+def test_weak_learners_are_placed_by_their_surprise() -> None:
+    edge = {r: -((r - 22.0) ** 2) for r in rank.LIKELIHOOD_PROFILES.values()}  # 20k fits best
+    plain = rank.estimate(25.0, [], edge, likelihood_moves=80)
+    weak = rank.estimate(25.0, [], edge, likelihood_moves=80, surprise=1.0)
+    assert plain.rank == 25.0  # "20k or weaker": the belt guess
+    assert weak.rank == pytest.approx(rank.WEAK_RANK_AT_ZERO + rank.WEAK_STONES_PER_NAT, abs=0.05)
+    assert weak.likelihood_rank == weak.rank
+    typical = rank.estimate(25.0, [], edge, likelihood_moves=80, surprise=-0.2)
+    assert typical.rank == 25.0  # moves as typical as a 20k player's: no weak-end reading
+    stronger = {r: -((r - 12.0) ** 2) for r in rank.LIKELIHOOD_PROFILES.values()}
+    assert rank.estimate(25.0, [], stronger, likelihood_moves=80, surprise=1.0).rank == (
+        pytest.approx(12.0, abs=0.05)
+    )
+    assert rank.weak_rank(-5.0) == rank.LIKELIHOOD_FLOOR and rank.weak_rank(9.0) == rank.WEAK_MAX

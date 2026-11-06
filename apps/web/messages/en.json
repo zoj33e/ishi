@@ -170,7 +170,7 @@
   "play": {
     "title": "Capture Go",
     "fullTitle": "9×9 game",
-    "examTitle": "Yellow belt exam",
+    "examTitle": "{belt} exam",
     "goal": "First to capture {target} wins",
     "goalOne": "First capture wins",
     "you": "You (Black)",
@@ -205,7 +205,8 @@
       "hintMore": "Bigger hint",
       "playAnyway": "Play anyway",
       "left": "Teacher questions left this game: {count}"
-    }
+    },
+    "examTitleAny": "Belt exam"
   },
   "exam": {
     "title": "{belt} exam",

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui";
 import { Link, useRouter } from "@/i18n/navigation";
 import {
   createGame,
+  getExam,
   getGame,
   getGameHint,
   playMove,
@@ -25,6 +26,7 @@ const THINKING_DELAY_MS = 300;
  *  answers with the bot's reply in the same request; after two passes it scores a 9x9 game. */
 export function GameClient({ gameId }: { gameId: string }) {
   const t = useTranslations("play");
+  const tb = useTranslations("belts");
   const router = useRouter();
   const locale = useLocale() as Locale;
   const errorText = useErrorText();
@@ -38,6 +40,7 @@ export function GameClient({ gameId }: { gameId: string }) {
   const [hint, setHint] = useState<GameHint | null>(null);
   const [asked, setAsked] = useState<string | null>(null); // asked about, then rethought
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [examBelt, setExamBelt] = useState<string | null>(null);
 
   useEffect(() => {
     let alive = true;
@@ -48,6 +51,18 @@ export function GameClient({ gameId }: { gameId: string }) {
       alive = false;
     };
   }, [gameId, errorText]);
+
+  const examId = game?.exam_id ?? null;
+  useEffect(() => {
+    if (!examId) return;
+    let alive = true;
+    getExam(examId)
+      .then((e) => alive && setExamBelt(e.belt_target))
+      .catch(() => undefined); // the title falls back to "Belt exam"
+    return () => {
+      alive = false;
+    };
+  }, [examId]);
 
   /** `anyway`: the learner saw the teacher's question and plays the move regardless. */
   const move = async (point: string, anyway = false) => {
@@ -140,7 +155,7 @@ export function GameClient({ gameId }: { gameId: string }) {
     <main className="mx-auto flex max-w-md flex-col gap-3 px-4 py-6">
       <header className="flex items-center justify-between gap-3">
         <div>
-          <h1 className="text-xl font-semibold">{!game ? " " : game.exam_id ? t("examTitle") : full ? t("fullTitle") : t("title")}</h1>
+          <h1 className="text-xl font-semibold">{!game ? " " : game.exam_id ? (examBelt ? t("examTitle", { belt: tb(examBelt as "white") }) : t("examTitleAny")) : full ? t("fullTitle") : t("title")}</h1>
           <p className="text-ink-soft">
             {!game ? " " : full ? t("fullGoal", { komi: game.komi }) : target === 1 ? t("goalOne") : t("goal", { target })}
           </p>

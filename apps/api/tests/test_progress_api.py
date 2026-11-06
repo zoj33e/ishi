@@ -86,6 +86,7 @@ def test_rank_and_bot_follow_the_games(engine_api: TestClient) -> None:
         assert game is not None and game.likelihood is not None
         assert set(game.likelihood) == {
             "moves",
+            "rank_20k_expected",
             "rank_20k",
             "rank_15k",
             "rank_10k",

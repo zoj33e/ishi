@@ -73,6 +73,27 @@ def move_logl(policy: Sequence[float], index: int) -> float:
     return math.log(max(policy[index], 0.0) + EPS)
 
 
+# below 20k (D-066): the 20k profile is the weakest there is, so compare the learner's moves
+# with what a typical 20k player would play there: the policy's own expected log-likelihood
+EDGE_PROFILE = "rank_20k"
+EDGE_EXPECTED_KEY = "rank_20k_expected"
+# surprise = how much less likely, per move, the learner's moves are than a typical 20k player's
+# (nats). Calibrated on the weak bots (scripts/rank_simulation.py, seed 11, 8 games per rank,
+# 30k..20k): rank ~ 21.2 + 5.5 * surprise, residual sd ~1 stone
+WEAK_RANK_AT_ZERO = 21.2
+WEAK_STONES_PER_NAT = 5.5
+WEAK_SD = 2.5  # 10 games are noisy (per-game sd ~0.5 nats) and the bots are only a proxy
+WEAK_MAX = 35.0
+
+
+def policy_expected_logl(policy: Sequence[float]) -> float:
+    """E[log P(move)] when the move is drawn from the policy itself (illegal entries are < 0)."""
+    total = sum(p for p in policy if p > 0)
+    if total <= 0:
+        return 0.0
+    return sum((p / total) * math.log(p / total + EPS) for p in policy if p > 0)
+
+
 def likelihood_fit(logl: Mapping[float, float]) -> tuple[float, float] | None:
     """Max-likelihood rank and its variance (stones²) from a parabola through the best profile
     and its neighbors (the two next to it at an edge).
@@ -93,6 +114,11 @@ def likelihood_fit(logl: Mapping[float, float]) -> tuple[float, float] | None:
     peak = min(max(-b / (2 * a), ranks[0]), ranks[-1])
     floor_sd = EDGE_LIKELIHOOD_SD if best == len(ranks) - 1 else MIN_LIKELIHOOD_SD
     return peak, max(-1.0 / (2 * a), floor_sd**2)
+
+
+def weak_rank(surprise: float) -> float:
+    """Rank below 20k from the per-move surprise under the 20k profile."""
+    return min(max(WEAK_RANK_AT_ZERO + WEAK_STONES_PER_NAT * surprise, LIKELIHOOD_FLOOR), WEAK_MAX)
 
 
 def likelihood_rank(logl: Mapping[float, float]) -> float | None:
@@ -135,12 +161,19 @@ def estimate(
     results: Sequence[tuple[float, bool]],
     logl: Mapping[float, float],
     likelihood_moves: int,
+    surprise: float | None = None,
 ) -> RankEstimate:
-    """`prior` is the belt's rank; `results` are (bot rank, learner won) pairs."""
+    """`prior` is the belt's rank; `results` are (bot rank, learner won) pairs; `surprise` is
+    the per-move surprise under the 20k profile (None for games recorded before D-066)."""
     r = results_rank(prior, results)  # results alone, from the belt (shown on the chart)
     fit = likelihood_fit(logl) if likelihood_moves >= MIN_LIKELIHOOD_MOVES else None
     lk = None if fit is None else fit[0]
-    if fit is None or fit[0] >= LIKELIHOOD_FLOOR:
+    weakest = fit is not None and max(logl, key=lambda k: logl[k]) == max(logl)
+    if fit is not None and weakest and surprise is not None and surprise > 0:
+        # the 20k profile fits best and the moves are less typical than a 20k player's
+        lk = weak_rank(surprise)
+        rank = results_rank(lk, results, prior_sd=WEAK_SD)
+    elif fit is None or fit[0] >= LIKELIHOOD_FLOOR:
         rank = r
     else:
         rank = results_rank(fit[0], results, prior_sd=math.sqrt(fit[1]))

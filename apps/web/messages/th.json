@@ -170,7 +170,7 @@
   "play": {
     "title": "โกะแบบกิน",
     "fullTitle": "เกม 9×9",
-    "examTitle": "สอบสายเหลือง",
+    "examTitle": "สอบ{belt}",
     "goal": "ใครกินได้ {target} เม็ดก่อนชนะ",
     "goalOne": "ใครกินได้ก่อนชนะ",
     "you": "คุณ (ดำ)",
@@ -205,7 +205,8 @@
       "hintMore": "คำใบ้เพิ่ม",
       "playAnyway": "วางเลย",
       "left": "คำถามจากครูที่เหลือในเกมนี้: {count}"
-    }
+    },
+    "examTitleAny": "สอบเลื่อนสาย"
   },
   "exam": {
     "title": "สอบ{belt}",

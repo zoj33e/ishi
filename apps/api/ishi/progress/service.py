@@ -35,7 +35,8 @@ def learner_turns(state: GameState, learner: Color) -> list[int]:
 async def game_likelihood(
     engine: KataGoProcess, state: GameState, learner: Color, qid: str
 ) -> dict[str, float]:
-    """Summed log-likelihood of the learner's moves under each HumanSL profile."""
+    """Summed log-likelihood of the learner's moves under each HumanSL profile, plus what a
+    typical 20k player would score on the same positions (`EDGE_EXPECTED_KEY`)."""
     turns = learner_turns(state, learner)
     out: dict[str, float] = {"moves": float(len(turns))}
     if not turns:
@@ -44,11 +45,15 @@ async def game_likelihood(
     async def one(profile: str) -> tuple[str, float]:
         q = human_policy_query(f"{qid}-{profile}", state, turns, profile)
         q.priority = LIKELIHOOD_PRIORITY
-        total = 0.0
+        total = expected = 0.0
         for resp in await engine.analyze(q, timeout=120.0):
             move = state.moves[resp.turnNumber]
             assert move.point is not None and resp.humanPolicy is not None
             total += rk.move_logl(resp.humanPolicy, point_to_index(move.point, state.size))
+            if profile == rk.EDGE_PROFILE:
+                expected += rk.policy_expected_logl(resp.humanPolicy)
+        if profile == rk.EDGE_PROFILE:
+            out[rk.EDGE_EXPECTED_KEY] = round(expected, 3)
         return profile, round(total, 3)
 
     out.update(await asyncio.gather(*(one(p) for p in rk.LIKELIHOOD_PROFILES)))
@@ -76,13 +81,19 @@ def update_rank(session: Session, user: User, today: date | None = None) -> rk.R
     ]
     logl: dict[float, float] = {}
     moves = 0
+    excess = edge_moves = 0.0  # games that also have the typical-20k score (D-066)
     for g in [g for g in games if g.likelihood][: rk.RECENT_GAMES]:
         assert g.likelihood is not None
-        moves += int(g.likelihood.get("moves", 0))
+        n = int(g.likelihood.get("moves", 0))
+        moves += n
         for profile, r in rk.LIKELIHOOD_PROFILES.items():
             if profile in g.likelihood:
                 logl[r] = logl.get(r, 0.0) + g.likelihood[profile]
-    est = rk.estimate(rk.BELT_PRIOR.get(user.belt, 30.0), results, logl, moves)
+        if rk.EDGE_EXPECTED_KEY in g.likelihood and rk.EDGE_PROFILE in g.likelihood:
+            excess += g.likelihood[rk.EDGE_EXPECTED_KEY] - g.likelihood[rk.EDGE_PROFILE]
+            edge_moves += n
+    surprise = excess / edge_moves if edge_moves >= rk.MIN_LIKELIHOOD_MOVES else None
+    est = rk.estimate(rk.BELT_PRIOR.get(user.belt, 30.0), results, logl, moves, surprise)
     recent = [bool(g.learner_won) for g in reversed(games) if g.exam_id is None]
     user.rank_estimate = est.rank
     user.bot_rank = rk.adaptive_bot_rank(est.rank, recent)
