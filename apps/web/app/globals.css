@@ -1,54 +1,114 @@
 @import "tailwindcss";
 
 :root {
-  --paper: #f6f1e7;
-  --ink: #1f1b16;
-  --ink-soft: #5d554b;
-  --wood: #dcb35c;
-  --card: #fffdf8;
-  --line: #e4dccd;
-  --ok: #3f7d4e;
-  --warn: #b7791f;
-  --bad: #b23a2b;
+  /* Go-book paper (builder's choice, 2026-11-06): one light theme, whatever the device. */
+  color-scheme: light;
+  --paper: #f3ebdb;
+  --paper-deep: #e8dcc4;
+  --card: #fbf7ee;
+  --ink: #1c1915;
+  --ink-soft: #5a5044;
+  --ink-raised: #33302a;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --line: #d9ccb2;
+  --wood: #d6a453;
+  --wood-light: #e8c27e;
+  --seal: #a63d2a;
+  --seal-soft: #f3ddd5;
+  --ok: #2f6b3f;
+  --warn: #9a6416;
+  --bad: #a6352a;
   --grid: #3b2a12;
   --hint: rgba(255, 244, 196, 0.55);
   --hint-edge: #b7791f;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --paper: #17150f;
-    --ink: #f1ebdf;
-    --ink-soft: #b3aa9b;
-    --wood: #b98f3e;
-    --card: #211e17;
-    --line: #36312a;
-    --ok: #6fbf80;
-    --warn: #e0a44a;
-    --bad: #e2715f;
-    --grid: #2a1d0b;
-    --hint: rgba(255, 236, 160, 0.35);
-    --hint-edge: #e0a44a;
-  }
-}
-
 @theme inline {
   --color-paper: var(--paper);
+  --color-paper-deep: var(--paper-deep);
   --color-ink: var(--ink);
   --color-ink-soft: var(--ink-soft);
+  --color-ink-raised: var(--ink-raised);
+  --radius-control: 10px;
+  --shadow-soft: 0 1px 2px rgba(60, 40, 10, 0.06), 0 4px 12px -6px rgba(60, 40, 10, 0.12);
   --color-wood: var(--wood);
   --color-card: var(--card);
   --color-line: var(--line);
+  --color-seal: var(--seal);
+  --color-seal-soft: var(--seal-soft);
   --color-ok: var(--ok);
   --color-warn: var(--warn);
   --color-bad: var(--bad);
   --font-sans: var(--font-plex-thai), var(--font-plex), system-ui, sans-serif;
+  --font-serif: var(--font-serif-thai), var(--font-serif-latin), Georgia, serif;
+}
+
+html {
+  background: var(--paper);
 }
 
 body {
   background: var(--paper);
   color: var(--ink);
-  font-size: 16px;
+  font-size: 17px;
+  line-height: 1.6;
+  caret-color: var(--seal);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-serif);
+  line-height: 1.25;
+  text-wrap: balance;
+}
+
+::selection {
+  background: var(--seal-soft);
+  color: var(--ink);
+}
+
+:focus-visible {
+  outline: 3px solid var(--seal);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+a {
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
+}
+
+html {
+  scrollbar-color: var(--line) var(--paper);
+}
+
+/* Diagrams: stones drop from where they are drawn. */
+svg .stone-drop {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+/* Welcome: each screen eases in from slightly below. */
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-in {
+  animation: page-in 420ms var(--ease);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-in {
+    animation: none;
+  }
 }
 
 /* Stone placement: 120 ms drop (09-ui-ux), skipped for reduced motion. */
@@ -64,7 +124,7 @@ body {
 }
 
 .stone-drop {
-  animation: stone-drop 120ms ease-out;
+  animation: stone-drop 120ms var(--ease);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -84,7 +144,7 @@ body {
 }
 
 .nudge-panel {
-  animation: panel-up 200ms ease-out;
+  animation: panel-up 220ms var(--ease);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -105,7 +165,8 @@ body {
 
 .belt-ribbon {
   display: block;
-  width: 9rem;
+  width: 100%;
+  max-width: 9rem;
   height: 1.25rem;
   border-radius: 0.375rem;
   background: var(--belt);
@@ -123,17 +184,17 @@ body {
 
 @keyframes belt-award {
   from {
-    transform: scale(0.85);
+    transform: translateY(8px) scale(0.98);
     opacity: 0;
   }
   to {
-    transform: scale(1);
+    transform: none;
     opacity: 1;
   }
 }
 
 .belt-award {
-  animation: belt-award 450ms cubic-bezier(0.2, 0.8, 0.2, 1.1);
+  animation: belt-award 420ms var(--ease);
 }
 
 @media (prefers-reduced-motion: reduce) {

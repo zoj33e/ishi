@@ -95,6 +95,7 @@ export const resignGame = (id: string) =>
   request<GameState>(`/api/games/${encodeURIComponent(id)}/resign`, { method: "POST" });
 
 export const startExam = () => request<Exam>("/api/exams", { method: "POST" });
+export const startPlacement = () => request<Exam>("/api/exams/placement", { method: "POST" });
 export const getExam = (id: string) => request<Exam>(`/api/exams/${encodeURIComponent(id)}`);
 
 // -- M5: post-game lessons -------------------------------------------------------------------

@@ -206,3 +206,63 @@ def test_failed_puzzles_end_the_exam_and_retry_needs_three_games(engine_api: Tes
     assert api.get("/api/today").json()["exam_available"]
     with _db() as s:
         assert [e.status for e in s.exec(select(Exam)).all()] == ["failed"]
+
+
+@pytest.fixture
+def white_api(engine_api: TestClient) -> TestClient:
+    _set_user(belt="white")
+    return engine_api
+
+
+def test_placement_puzzles_then_one_game_places_at_orange(white_api: TestClient) -> None:
+    api = white_api
+    today = api.get("/api/today").json()
+    assert today["placement_available"] and today["exam_in_progress"] is None
+    exam = api.post("/api/exams/placement").json()
+    assert exam["belt_target"] == "placement" and len(exam["puzzles"]) == 8
+    assert exam["puzzles_needed"] == 6 and exam["bot_label"] == "25k"
+    assert exam["placed_belt"] is None
+    assert {p["puzzle"]["concept_id"] for p in exam["puzzles"]} == set(gym.open_concepts("white"))
+    assert api.post("/api/exams/placement").json()["id"] == exam["id"]  # resumes
+    today = api.get("/api/today").json()
+    assert today["exam_in_progress"] == exam["id"]
+    assert today["exam_in_progress_target"] == "placement"
+    assert not today["placement_available"]
+    for i, p in enumerate(exam["puzzles"]):
+        _answer(api, exam["id"], p["puzzle"]["id"], solve=i >= 2)
+    exam = api.get(f"/api/exams/{exam['id']}").json()
+    assert exam["phase"] == "games" and exam["status"] == "in_progress"
+    assert api.post("/api/games", json={"mode": "full"}).status_code == 409  # still White
+    g = api.post("/api/games", json={"mode": "full", "exam_id": exam["id"]}).json()
+    assert g["bot_label"] == "25k" and g["nudges_left"] == 0
+    _end_exam_game(g["id"], won=True)
+    exam = api.get(f"/api/exams/{exam['id']}").json()
+    assert exam["status"] == "passed" and exam["placed_belt"] == "orange"
+    assert api.get("/api/me").json()["belt"] == "orange"
+    school = api.get("/api/school", params={"locale": "en"}).json()
+    assert school["next_lesson"] is None  # the rules school counts as done
+    assert api.post("/api/exams/placement").status_code == 409  # only once
+
+
+def test_placement_lost_game_places_at_yellow(white_api: TestClient) -> None:
+    api = white_api
+    exam = api.post("/api/exams/placement").json()
+    for p in exam["puzzles"]:
+        _answer(api, exam["id"], p["puzzle"]["id"], solve=True)
+    g = api.post("/api/games", json={"mode": "full", "exam_id": exam["id"]}).json()
+    _end_exam_game(g["id"], won=False)
+    exam = api.get(f"/api/exams/{exam['id']}").json()
+    assert exam["status"] == "passed" and exam["placed_belt"] == "yellow"
+    assert api.get("/api/me").json()["belt"] == "yellow"
+
+
+def test_placement_missed_puzzles_keep_white(white_api: TestClient) -> None:
+    api = white_api
+    exam = api.post("/api/exams/placement").json()
+    for p in exam["puzzles"][:3]:
+        out = _answer(api, exam["id"], p["puzzle"]["id"], solve=False)
+    assert out["exam"]["status"] == "failed" and out["exam"]["placed_belt"] == "white"
+    assert api.get("/api/me").json()["belt"] == "white"
+    r = api.post("/api/games", json={"mode": "full", "exam_id": exam["id"]})
+    assert r.status_code == 409
+    assert not api.get("/api/today").json()["placement_available"]

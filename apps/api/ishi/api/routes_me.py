@@ -59,7 +59,9 @@ class TodayOut(BaseModel):
     capture: CaptureStageOut
     exam_available: bool
     exam_in_progress: str | None
+    exam_in_progress_target: str | None  # its belt, or "placement" (D-068)
     exam_belt: str | None  # the belt the next exam is for
+    placement_available: bool  # White belt who has not taken the placement test
 
 
 def _me(user: User) -> MeOut:
@@ -120,5 +122,7 @@ def today(session: SessionDep, now: NowDep) -> TodayOut:
         ),
         exam_available=service.can_take_exam(session, user),
         exam_in_progress=exam.id if exam else None,
+        exam_in_progress_target=exam.belt_target if exam else None,
         exam_belt=service.next_belt(user),
+        placement_available=service.can_take_placement(session, user),
     )

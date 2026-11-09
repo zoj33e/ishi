@@ -126,11 +126,11 @@ export function LessonPlayer({ lessonId }: { lessonId: string }) {
         <div className="flex flex-wrap gap-2">
           {nextLesson && (
             <Link href={`/school/${nextLesson}`}>
-              <span className="inline-flex min-h-11 items-center rounded-full bg-ink px-5 font-semibold text-paper">{t("nextLesson")}</span>
+              <span className="inline-flex min-h-11 items-center rounded-control bg-ink px-5 font-semibold text-paper transition-colors duration-150 hover:bg-ink-raised">{t("nextLesson")}</span>
             </Link>
           )}
           <Link href="/school">
-            <span className="inline-flex min-h-11 items-center rounded-full border border-line bg-card px-5 font-semibold">{t("backToSchool")}</span>
+            <span className="inline-flex min-h-11 items-center rounded-control border border-line bg-card px-5 font-semibold transition-colors duration-150 hover:border-ink-soft">{t("backToSchool")}</span>
           </Link>
         </div>
       </>

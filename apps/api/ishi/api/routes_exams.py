@@ -1,5 +1,6 @@
 """Belt exams: White -> Yellow (capture games, D-023) and Orange -> Brown (M8: 12 puzzles, then
-best of 3 9x9 games without nudges)."""
+best of 3 9x9 games without nudges). The placement test (D-068) is an exam too: 8 puzzles, then
+one 9x9 game against the Orange belt's bot; it places a White belt at White, Yellow or Orange."""
 
 from datetime import datetime
 from typing import Literal
@@ -23,7 +24,11 @@ from ishi.play.progression import (
     BELT_EXAM_WINS,
     EXAM_LOSSES_TO_FAIL,
     EXAM_WINS_TO_PASS,
+    PLACEMENT,
+    PLACEMENT_GAME_BELT,
+    PLACEMENT_PUZZLES_TO_PASS,
     belt_exam_phase,
+    placement_belt,
 )
 from ishi.why.selector import BELT_RANK
 
@@ -50,6 +55,7 @@ class ExamOut(BaseModel):
     puzzle_score: int  # solved so far
     bot_rank: float | None  # exam games' bot (Orange+: the belt's rank)
     bot_label: str | None
+    placed_belt: str | None  # placement test only: the starting belt it gave, once finished
     created_at: datetime
 
 
@@ -82,6 +88,8 @@ def exam_phase(exam: Exam) -> str:
 
 
 def exam_bot_rank(exam: Exam) -> float | None:
+    if exam.belt_target == PLACEMENT:
+        return BELT_RANK[PLACEMENT_GAME_BELT]
     return BELT_RANK.get(exam.belt_target)
 
 
@@ -90,6 +98,7 @@ def exam_out(session: Session, exam: Exam) -> ExamOut:
         select(Game).where(Game.exam_id == exam.id, Game.status == "active")
     ).first()
     yellow = exam.belt_target == "yellow"
+    placement = exam.belt_target == PLACEMENT
     puzzles = []
     for item in exam.puzzles:
         pz = session.get(Puzzle, item["id"])
@@ -103,14 +112,19 @@ def exam_out(session: Session, exam: Exam) -> ExamOut:
         phase=exam_phase(exam),  # type: ignore[arg-type]
         games_won=exam.games_won,
         games_lost=exam.games_lost,
-        wins_needed=EXAM_WINS_TO_PASS if yellow else BELT_EXAM_WINS,
-        losses_allowed=EXAM_LOSSES_TO_FAIL if yellow else BELT_EXAM_LOSSES,
+        wins_needed=EXAM_WINS_TO_PASS if yellow else 1 if placement else BELT_EXAM_WINS,
+        losses_allowed=EXAM_LOSSES_TO_FAIL if yellow else 1 if placement else BELT_EXAM_LOSSES,
         active_game=active.id if active and exam.status == "in_progress" else None,
         puzzles=puzzles,
-        puzzles_needed=0 if yellow else BELT_EXAM_PUZZLES_TO_PASS,
+        puzzles_needed=0
+        if yellow
+        else PLACEMENT_PUZZLES_TO_PASS
+        if placement
+        else BELT_EXAM_PUZZLES_TO_PASS,
         puzzle_score=sum(1 for s in service.puzzle_results(exam) if s),
         bot_rank=rank,
         bot_label=rank_label(rank) if rank is not None else None,
+        placed_belt=placement_belt(exam.status, exam.games_won) if placement else None,
         created_at=exam.created_at,
     )
 
@@ -124,6 +138,18 @@ def create_exam(session: SessionDep) -> ExamOut:
     if not service.can_take_exam(session, user):
         raise ApiError(409, "EXAM_NOT_AVAILABLE", "errors.exam_not_available", {})
     return exam_out(session, service.start_exam(session, user))
+
+
+@router.post("/exams/placement", response_model=ExamOut, responses={409: {"model": ErrorResponse}})
+def create_placement(session: SessionDep) -> ExamOut:
+    """The placement test for a White belt who already plays (once); resumes one under way."""
+    user = get_or_create_user(session)
+    current = service.active_exam(session, user)
+    if current is not None and current.belt_target == PLACEMENT:
+        return exam_out(session, current)
+    if not service.can_take_placement(session, user):
+        raise ApiError(409, "PLACEMENT_NOT_AVAILABLE", "errors.placement_not_available", {})
+    return exam_out(session, service.start_placement(session, user))
 
 
 @router.get("/exams/{exam_id}", response_model=ExamOut, responses={404: {"model": ErrorResponse}})

@@ -13,27 +13,29 @@ export default function HomePage({ params }: PageProps<"/[locale]">) {
   const t = useTranslations();
 
   return (
-    <main className="mx-auto flex max-w-md flex-col gap-6 px-4 py-8">
-      <header className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <TeacherMark className="h-11 w-11" />
-          <div>
-            <h1 className="text-2xl font-semibold">{t("app.name")}</h1>
-            <p className="text-ink-soft">{t("app.tagline")}</p>
+    <main className="mx-auto flex min-h-dvh max-w-md flex-col gap-6 px-4 pb-8 pt-5">
+      <header className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2.5">
+          <TeacherMark className="size-10" />
+          <div className="flex flex-col">
+            <h1 className="text-xl font-semibold leading-tight">{t("app.name")}</h1>
+            <p className="text-sm leading-snug text-ink-soft">{t("app.tagline")}</p>
           </div>
         </div>
         <LocaleSwitcher />
       </header>
       <HomeClient />
-      <details className="rounded-2xl border border-line p-4">
-        <summary className="cursor-pointer font-semibold">{t("health.title")}</summary>
-        <div className="mt-3 flex flex-col gap-3">
-          <HealthStatus />
-          <Link href="/sandbox" className="self-start py-2 underline underline-offset-4">
-            {t("home.sandboxLink")}
-          </Link>
-        </div>
-      </details>
+      <footer className="mt-auto flex flex-col gap-2 border-t border-line pt-4 text-sm text-ink-soft">
+        <Link href="/sandbox" className="self-start py-1 underline hover:text-seal">
+          {t("home.sandboxLink")}
+        </Link>
+        <details>
+          <summary className="cursor-pointer py-1">{t("health.title")}</summary>
+          <div className="mt-2">
+            <HealthStatus />
+          </div>
+        </details>
+      </footer>
     </main>
   );
 }

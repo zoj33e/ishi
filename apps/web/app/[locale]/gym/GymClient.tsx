@@ -56,11 +56,11 @@ export function GymClient({ context }: { context: GymContext }) {
     const solved = results.filter((r) => r.solved).length;
     return (
       <Shell title={title}>
-        <section className="flex flex-col gap-3 rounded-2xl border border-line bg-card p-4 shadow-md" data-testid="gym-summary">
+        <section className="flex flex-col gap-3 rounded-2xl border border-line bg-card p-5 shadow-soft" data-testid="gym-summary">
           <h2 className="text-lg font-semibold">{puzzles.length === 0 ? t("empty") : t("summaryTitle")}</h2>
           {results.length > 0 && <p>{t("summary", { solved, total: results.length })}</p>}
           <Link href="/" className="self-start">
-            <span className="inline-flex min-h-11 items-center rounded-full bg-ink px-5 font-semibold text-paper">{t("home")}</span>
+            <span className="inline-flex min-h-11 items-center rounded-control bg-ink px-5 font-semibold text-paper transition-colors duration-150 hover:bg-ink-raised">{t("home")}</span>
           </Link>
         </section>
       </Shell>
@@ -179,11 +179,11 @@ function PuzzleCard({
   return (
     <>
       <div className="flex flex-wrap items-center gap-2">
-        <span className="rounded-full bg-ink px-3 py-1 text-sm font-semibold text-paper" data-testid="concept-tag">
+        <span className="rounded-md bg-ink px-2 py-1 text-sm font-semibold text-paper" data-testid="concept-tag">
           {t(`concept.${puzzle.concept_id}` as "concept.missed_capture")}
         </span>
         {puzzle.source === "own_mistake" && (
-          <span className="rounded-full border border-line px-3 py-1 text-sm">{t("fromYourGame")}</span>
+          <span className="rounded-md border border-line px-2 py-1 text-sm">{t("fromYourGame")}</span>
         )}
       </div>
       <div className="rounded-xl shadow-sm">
@@ -198,7 +198,7 @@ function PuzzleCard({
           onPlay={(p) => void play(p)}
         />
       </div>
-      <section className="flex flex-col gap-3 rounded-2xl border border-line bg-card p-4 shadow-md" aria-live="polite" data-testid="gym-panel">
+      <section className="flex flex-col gap-3 rounded-2xl border border-line bg-card p-5 shadow-soft" aria-live="polite" data-testid="gym-panel">
         <h2 className="text-lg font-semibold" data-testid="to-play">
           {t("toPlay", { color })}
         </h2>

@@ -2,7 +2,7 @@ import { SerwistProvider } from "@serwist/turbopack/react";
 import type { Metadata, Viewport } from "next";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { IBM_Plex_Sans, IBM_Plex_Sans_Thai } from "next/font/google";
+import { IBM_Plex_Sans, IBM_Plex_Sans_Thai, Noto_Serif, Noto_Serif_Thai } from "next/font/google";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import "../globals.css";
@@ -16,6 +16,18 @@ const plexThai = IBM_Plex_Sans_Thai({
   variable: "--font-plex-thai",
   subsets: ["thai"],
   weight: ["400", "600"],
+});
+
+// display face: a book serif, Thai and Latin drawn to match
+const serifThai = Noto_Serif_Thai({
+  variable: "--font-serif-thai",
+  subsets: ["thai"],
+  weight: ["500", "600"],
+});
+const serifLatin = Noto_Serif({
+  variable: "--font-serif-latin",
+  subsets: ["latin"],
+  weight: ["500", "600"],
 });
 
 export function generateStaticParams() {
@@ -34,10 +46,7 @@ export async function generateMetadata(props: LayoutProps<"/[locale]">): Promise
 }
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f6f1e7" },
-    { media: "(prefers-color-scheme: dark)", color: "#17150f" },
-  ],
+  themeColor: "#f3ebdb",
 };
 
 export default async function LocaleLayout({ children, params }: LayoutProps<"/[locale]">) {
@@ -46,7 +55,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
   setRequestLocale(locale);
 
   return (
-    <html lang={locale} className={`${plex.variable} ${plexThai.variable} h-full antialiased`}>
+    <html lang={locale} className={`${plex.variable} ${plexThai.variable} ${serifThai.variable} ${serifLatin.variable} h-full antialiased`}>
       <body className="min-h-full font-sans">
         <SerwistProvider swUrl="/serwist/sw.js" disable={process.env.NODE_ENV === "development"}>
           <NextIntlClientProvider>{children}</NextIntlClientProvider>

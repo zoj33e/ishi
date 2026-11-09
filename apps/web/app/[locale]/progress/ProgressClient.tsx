@@ -82,7 +82,7 @@ export function ProgressClient() {
               <div className="flex flex-col gap-2 border-t border-line pt-3" data-testid="exam-status">
                 {data.exam.in_progress ? (
                   <Link href={`/exam/${data.exam.in_progress}`} className="self-start">
-                    <span className="inline-flex min-h-11 items-center rounded-full bg-ink px-5 font-semibold text-paper">{t("examContinue")}</span>
+                    <span className="inline-flex min-h-11 items-center rounded-control bg-ink px-5 font-semibold text-paper transition-colors duration-150 hover:bg-ink-raised">{t("examContinue")}</span>
                   </Link>
                 ) : data.exam.available ? (
                   <p className="font-semibold text-ok">{t("examReady", { belt: tb(data.exam.belt_target as "white") })}</p>
@@ -114,7 +114,7 @@ export function ProgressClient() {
                       <span className="text-ink-soft">{t("times", { n: c.count })}</span>
                     </span>
                     <span className="h-2 overflow-hidden rounded-full bg-line" aria-hidden>
-                      <span className="block h-full rounded-full bg-warn" style={{ width: `${(c.count / maxCount) * 100}%` }} />
+                      <span className="block h-full rounded-full bg-ink-soft" style={{ width: `${(c.count / maxCount) * 100}%` }} />
                     </span>
                   </li>
                 ))}
@@ -152,9 +152,9 @@ function RankChart({ points, label }: { points: { date: string; rank: number }[]
           </text>
         </g>
       ))}
-      <path d={path} fill="none" stroke="var(--ok)" strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />
+      <path d={path} fill="none" stroke="var(--seal)" strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" />
       {points.map((p, i) => (
-        <circle key={p.date} cx={x(i)} cy={y(p.rank)} r="3.5" fill="var(--card)" stroke="var(--ok)" strokeWidth="2" />
+        <circle key={p.date} cx={x(i)} cy={y(p.rank)} r="3.5" fill="var(--card)" stroke="var(--seal)" strokeWidth="2" />
       ))}
       <text x={PAD.l} y={H - 4} fontSize="10" fill="var(--ink-soft)">
         {points[0].date.slice(5)}

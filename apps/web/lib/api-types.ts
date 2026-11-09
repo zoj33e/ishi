@@ -286,6 +286,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/exams/placement": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Create Placement
+         * @description The placement test for a White belt who already plays (once); resumes one under way.
+         */
+        post: operations["create_placement_api_exams_placement_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/exams/{exam_id}": {
         parameters: {
             query?: never;
@@ -688,6 +708,8 @@ export interface components {
             bot_rank: number | null;
             /** Bot Label */
             bot_label: string | null;
+            /** Placed Belt */
+            placed_belt: string | null;
             /**
              * Created At
              * Format: date-time
@@ -1279,8 +1301,12 @@ export interface components {
             exam_available: boolean;
             /** Exam In Progress */
             exam_in_progress: string | null;
+            /** Exam In Progress Target */
+            exam_in_progress_target: string | null;
             /** Exam Belt */
             exam_belt: string | null;
+            /** Placement Available */
+            placement_available: boolean;
         };
         /** ValidationError */
         ValidationError: {
@@ -1863,6 +1889,35 @@ export interface operations {
         };
     };
     create_exam_api_exams_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ExamOut"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    create_placement_api_exams_placement_post: {
         parameters: {
             query?: never;
             header?: never;

@@ -164,10 +164,10 @@ export function LessonClient({ gameId }: { gameId: string }) {
       </div>
       {faded.length > 0 && stage === "explain" && mistake && <p className="text-sm text-ink-soft">{t("faded")}</p>}
 
-      <section className="flex flex-col gap-3 rounded-2xl border border-line bg-card p-4 shadow-md" aria-live="polite" data-testid="teacher-panel">
+      <section className="flex flex-col gap-3 rounded-2xl border border-line bg-card p-5 shadow-soft" aria-live="polite" data-testid="teacher-panel">
         <div className="flex items-center gap-3">
           <TeacherMark className="h-10 w-10 shrink-0" />
-          {tag && <span className={`rounded-full px-3 py-1 text-sm font-semibold text-paper ${tagColor}`} data-testid="lesson-tag">{tag}</span>}
+          {tag && <span className={`rounded-md px-2 py-1 text-sm font-semibold text-paper ${tagColor}`} data-testid="lesson-tag">{tag}</span>}
         </div>
         <h2 className="text-lg font-semibold" data-testid="headline">{n.headline}</h2>
 
@@ -231,9 +231,9 @@ export function LessonClient({ gameId }: { gameId: string }) {
 
         {stage === "takeaway" && (
           <>
-            <p className="text-sm font-semibold uppercase tracking-wide text-ink-soft">{t("takeaway")}</p>
+            <p className="text-sm font-semibold text-ink-soft">{t("takeaway")}</p>
             <p data-testid="takeaway">{n.takeaway}</p>
-            {puzzleAdded && <span className="self-start rounded-full bg-ok px-3 py-1 text-sm font-semibold text-paper" data-testid="gym-chip">{t("addedToGym")}</span>}
+            {puzzleAdded && <span className="text-sm text-ok" data-testid="gym-chip">{t("addedToGym")}</span>}
             <Button variant="primary" disabled={busy} onClick={() => router.push("/")}>{busy ? t("finishing") : t("done")}</Button>
           </>
         )}

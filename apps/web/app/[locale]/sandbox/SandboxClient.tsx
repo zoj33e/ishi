@@ -167,7 +167,7 @@ function Button({ children, ...props }: React.ButtonHTMLAttributes<HTMLButtonEle
   return (
     <button
       type="button"
-      className="min-h-11 rounded-full border border-line bg-card px-4 font-semibold disabled:opacity-40"
+      className="min-h-11 rounded-control border border-line bg-card px-4 font-semibold transition-colors duration-150 hover:border-ink-soft disabled:opacity-40"
       {...props}
     >
       {children}

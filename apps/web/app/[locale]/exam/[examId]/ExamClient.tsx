@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 import { Board } from "@/components/board/Board";
-import { Button, Card } from "@/components/ui";
+import { Button, ButtonLink, Card } from "@/components/ui";
 import { Link, useRouter } from "@/i18n/navigation";
 import { createGame, examAttempt, getExam, type Exam, type ExamAttempt, type ExamPuzzle } from "@/lib/api";
 import { useErrorText } from "@/lib/useErrorText";
@@ -34,7 +34,8 @@ export function ExamClient({ examId }: { examId: string }) {
   }, [examId, errorText]);
 
   const yellow = exam?.belt_target === "yellow";
-  const belt = exam ? tb(exam.belt_target as "yellow") : "";
+  const placement = exam?.belt_target === "placement";
+  const belt = exam && !placement ? tb(exam.belt_target as "yellow") : "";
 
   const play = async () => {
     if (!exam) return;
@@ -57,7 +58,7 @@ export function ExamClient({ examId }: { examId: string }) {
   return (
     <main className="mx-auto flex max-w-md flex-col gap-4 px-4 py-6">
       <header className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold">{exam ? t("title", { belt }) : " "}</h1>
+        <h1 className="text-xl font-semibold">{!exam ? " " : placement ? t("placementTitle") : t("title", { belt })}</h1>
         <Link href="/" className="py-1 text-ink-soft underline underline-offset-4">
           {t("home")}
         </Link>
@@ -78,11 +79,12 @@ export function ExamClient({ examId }: { examId: string }) {
       )}
 
       {exam && fresh && (
-        <Card title={t("rulesTitle")}>
+        <Card title={placement ? t("placementRulesTitle") : t("rulesTitle")}>
+          {placement && <p className="text-ink-soft">{t("placementIntro")}</p>}
           <ol className="flex list-decimal flex-col gap-2 pl-5" data-testid="exam-rules">
-            <li>{t("rulesPuzzles", { total: exam.puzzles.length, needed: exam.puzzles_needed })}</li>
-            <li>{t("rulesGames", { bot: exam.bot_label ?? "" })}</li>
-            <li>{t("rulesNoHelp")}</li>
+            <li>{t(placement ? "placementPuzzles" : "rulesPuzzles", { total: exam.puzzles.length, needed: exam.puzzles_needed })}</li>
+            <li>{t(placement ? "placementGame" : "rulesGames", { bot: exam.bot_label ?? "" })}</li>
+            <li>{placement ? t("placementNoHelp") : t("rulesNoHelp")}</li>
           </ol>
           <Button variant="primary" className="self-start" onClick={() => setStarted(true)} data-testid="exam-begin">
             {t("begin")}
@@ -104,28 +106,36 @@ export function ExamClient({ examId }: { examId: string }) {
           <p data-testid="exam-puzzle-score">{t("puzzleScore", { solved: exam.puzzle_score, total: exam.puzzles.length })}</p>
           {exam.phase === "games" && (
             <>
-              <p className="leading-relaxed">{t("rulesGames", { bot: exam.bot_label ?? "" })}</p>
-              <p className="text-lg font-semibold" data-testid="exam-score">
-                {t("score", { won: exam.games_won, lost: exam.games_lost, wins: exam.wins_needed, losses: exam.losses_allowed })}
-              </p>
+              {placement ? (
+                <p className="leading-relaxed">{t("placementGameNow", { bot: exam.bot_label ?? "" })}</p>
+              ) : (
+                <>
+                  <p className="leading-relaxed">{t("rulesGames", { bot: exam.bot_label ?? "" })}</p>
+                  <p className="text-lg font-semibold" data-testid="exam-score">
+                    {t("score", { won: exam.games_won, lost: exam.games_lost, wins: exam.wins_needed, losses: exam.losses_allowed })}
+                  </p>
+                </>
+              )}
               <Button variant="primary" className="self-start" disabled={busy} onClick={() => void play()} data-testid="exam-play">
-                {exam.active_game ? t("resume") : t("play")}
+                {exam.active_game ? t("resume") : placement ? t("placementPlay") : t("play")}
               </Button>
             </>
           )}
         </Card>
       )}
 
-      {exam?.status === "passed" && (
-        <section className="belt-award flex flex-col items-center gap-3 rounded-2xl border border-line bg-card p-6 text-center shadow-md" data-testid="exam-passed">
+      {placement && exam?.placed_belt && <PlacementResult belt={exam.placed_belt} />}
+
+      {!placement && exam?.status === "passed" && (
+        <section className="belt-award flex flex-col items-center gap-3 rounded-2xl border border-line bg-card p-6 text-center shadow-soft" data-testid="exam-passed">
           <span className={`belt-ribbon belt-${exam.belt_target}`} aria-hidden />
           <p className="text-2xl font-semibold text-ok">{t("passed", { belt })}</p>
           <Link href="/progress">
-            <span className="inline-flex min-h-11 items-center rounded-full bg-ink px-5 font-semibold text-paper">{t("seeProgress")}</span>
+            <span className="inline-flex min-h-11 items-center rounded-control bg-ink px-5 font-semibold text-paper transition-colors duration-150 hover:bg-ink-raised">{t("seeProgress")}</span>
           </Link>
         </section>
       )}
-      {exam?.status === "failed" && (
+      {!placement && exam?.status === "failed" && (
         <Card>
           <p className="text-warn" data-testid="exam-failed">
             {yellow ? t("failedYellow") : exam.puzzle_score < exam.puzzles_needed && exam.games_won + exam.games_lost === 0 ? t("failedPuzzles") : t("failed")}
@@ -137,6 +147,25 @@ export function ExamClient({ examId }: { examId: string }) {
         {error}
       </p>
     </main>
+  );
+}
+
+/** Where the placement test put the learner (D-068): White goes to lesson 1, Yellow or Orange
+ *  go to today's plan with the rules school marked done. */
+function PlacementResult({ belt }: { belt: string }) {
+  const t = useTranslations("exam");
+  const tb = useTranslations("belts");
+  const white = belt === "white";
+  return (
+    <section className="belt-award flex flex-col items-center gap-3 rounded-2xl border border-line bg-card p-6 text-center shadow-soft" data-testid="placement-result" data-belt={belt}>
+      <span className={`belt-ribbon belt-${belt}`} aria-hidden />
+      <p className="font-serif text-2xl font-semibold">{tb(belt as "white")}</p>
+      {!white && <p className="text-lg font-semibold text-ok">{belt === "orange" ? t("placedOrange") : t("placedYellow")}</p>}
+      <p className="text-ink-soft">{white ? t("placedWhite") : t("placedPast")}</p>
+      <ButtonLink href={white ? "/school" : "/"} variant="primary" size="lg" className="self-stretch" data-testid="placement-next">
+        {white ? t("toSchool") : t("toHome")}
+      </ButtonLink>
+    </section>
   );
 }
 
@@ -183,7 +212,7 @@ function ExamPuzzleCard({ examId, item, onDone }: { examId: string; item: ExamPu
 
   return (
     <>
-      <span className="self-start rounded-full bg-ink px-3 py-1 text-sm font-semibold text-paper" data-testid="concept-tag">
+      <span className="self-start rounded-md bg-ink px-2 py-1 text-sm font-semibold text-paper" data-testid="concept-tag">
         {tg(`concept.${puzzle.concept_id}` as "concept.missed_capture")}
       </span>
       <div className="rounded-xl shadow-sm">
@@ -196,7 +225,7 @@ function ExamPuzzleCard({ examId, item, onDone }: { examId: string; item: ExamPu
           onPlay={(p) => void play(p)}
         />
       </div>
-      <section className="flex flex-col gap-3 rounded-2xl border border-line bg-card p-4 shadow-md" aria-live="polite" data-testid="exam-panel">
+      <section className="flex flex-col gap-3 rounded-2xl border border-line bg-card p-5 shadow-soft" aria-live="polite" data-testid="exam-panel">
         <h2 className="text-lg font-semibold">{tg("toPlay", { color })}</h2>
         {!result && <p className="text-ink-soft">{puzzle.learner_moves > 1 ? `${task} ${tg("chase")}` : task}</p>}
         {!result && moves.length > 0 && <p className="font-semibold text-ok">{tg("keepGoing")}</p>}

@@ -14,7 +14,7 @@ export function LocaleSwitcher() {
   const pathname = usePathname();
 
   return (
-    <div role="group" aria-label={t("language")} className="flex rounded-full border border-line p-0.5 text-sm">
+    <div role="group" aria-label={t("language")} className="flex rounded-control border border-line p-0.5 text-sm">
       {routing.locales.map((l) => (
         <button
           key={l}
@@ -24,7 +24,7 @@ export function LocaleSwitcher() {
             patchMe({ locale: l }).catch(() => undefined); // remember the choice; the URL already switches
             router.replace(pathname, { locale: l });
           }}
-          className={`min-h-9 rounded-full px-3 ${l === locale ? "bg-ink text-paper" : "text-ink-soft"}`}
+          className={`min-h-9 rounded-lg px-3 transition-colors duration-150 ${l === locale ? "bg-ink text-paper" : "text-ink-soft"}`}
         >
           {LABELS[l]}
         </button>

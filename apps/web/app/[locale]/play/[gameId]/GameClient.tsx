@@ -155,7 +155,7 @@ export function GameClient({ gameId }: { gameId: string }) {
     <main className="mx-auto flex max-w-md flex-col gap-3 px-4 py-6">
       <header className="flex items-center justify-between gap-3">
         <div>
-          <h1 className="text-xl font-semibold">{!game ? " " : game.exam_id ? (examBelt ? t("examTitle", { belt: tb(examBelt as "white") }) : t("examTitleAny")) : full ? t("fullTitle") : t("title")}</h1>
+          <h1 className="text-xl font-semibold">{!game ? " " : game.exam_id ? (examBelt === "placement" ? t("placementTitle") : examBelt ? t("examTitle", { belt: tb(examBelt as "white") }) : t("examTitleAny")) : full ? t("fullTitle") : t("title")}</h1>
           <p className="text-ink-soft">
             {!game ? " " : full ? t("fullGoal", { komi: game.komi }) : target === 1 ? t("goalOne") : t("goal", { target })}
           </p>
@@ -261,7 +261,7 @@ export function GameClient({ gameId }: { gameId: string }) {
       )}
 
       {finished && (
-        <div role="dialog" aria-labelledby="game-over" className="flex flex-col gap-3 rounded-2xl border border-line bg-card p-4 shadow-md" data-testid="game-over" data-outcome={outcome ?? ""}>
+        <div role="dialog" aria-labelledby="game-over" className="flex flex-col gap-3 rounded-2xl border border-line bg-card p-5 shadow-soft" data-testid="game-over" data-outcome={outcome ?? ""}>
           <p id="game-over" className={`text-2xl font-semibold ${outcome === "won" ? "text-ok" : ""}`}>
             {resultText}
           </p>
@@ -274,18 +274,18 @@ export function GameClient({ gameId }: { gameId: string }) {
           <div className="flex flex-wrap gap-2">
             {full && !game?.exam_id && game && (
               <Link href={`/lesson/${game.id}`}>
-                <span className="inline-flex min-h-11 items-center rounded-full bg-ink px-5 font-semibold text-paper" data-testid="see-lesson">{t("seeLesson")}</span>
+                <span className="inline-flex min-h-11 items-center rounded-control bg-ink px-5 font-semibold text-paper transition-colors duration-150 hover:bg-ink-raised" data-testid="see-lesson">{t("seeLesson")}</span>
               </Link>
             )}
             {game?.exam_id ? (
               <Link href={`/exam/${game.exam_id}`}>
-                <span className="inline-flex min-h-11 items-center rounded-full bg-ink px-5 font-semibold text-paper">{t("toExam")}</span>
+                <span className="inline-flex min-h-11 items-center rounded-control bg-ink px-5 font-semibold text-paper transition-colors duration-150 hover:bg-ink-raised">{t("toExam")}</span>
               </Link>
             ) : (
               <Button variant={full ? "secondary" : "primary"} onClick={() => void again()} disabled={busy}>{t("playAgain")}</Button>
             )}
             <Link href="/">
-              <span className="inline-flex min-h-11 items-center rounded-full border border-line bg-card px-5 font-semibold">{t("home")}</span>
+              <span className="inline-flex min-h-11 items-center rounded-control border border-line bg-card px-5 font-semibold transition-colors duration-150 hover:border-ink-soft">{t("home")}</span>
             </Link>
           </div>
         </div>

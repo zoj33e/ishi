@@ -17,6 +17,7 @@ from ishi.db.models import Game, User
 from ishi.db.session import SessionDep, get_or_create_user
 from ishi.engine.katago_process import EngineUnavailableError, KataGoProcess
 from ishi.play import full_service, nudges, service
+from ishi.play.progression import PLACEMENT
 from ishi.progress import service as progress
 from ishi.rules.coords import gtp_to_point
 from ishi.rules.game import GameState, Legality, check_move
@@ -130,7 +131,8 @@ async def create_game(request: Request, session: SessionDep, body: NewGame) -> G
         ):
             raise ApiError(409, "EXAM_NOT_READY", "errors.exam_not_ready", {"exam_id": exam.id})
     if body.mode == "full":
-        if not full_service.full_games_unlocked(user):
+        placement = exam is not None and exam.belt_target == PLACEMENT
+        if not full_service.full_games_unlocked(user) and not placement:
             raise ApiError(409, "MODE_LOCKED", "errors.mode_locked", {"mode": "full"})
         if exam is not None:
             rank = exam_bot_rank(exam) or 25.0

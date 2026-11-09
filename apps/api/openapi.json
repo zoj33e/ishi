@@ -786,6 +786,38 @@
         }
       }
     },
+    "/api/exams/placement": {
+      "post": {
+        "tags": [
+          "exams"
+        ],
+        "summary": "Create Placement",
+        "description": "The placement test for a White belt who already plays (once); resumes one under way.",
+        "operationId": "create_placement_api_exams_placement_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExamOut"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/exams/{exam_id}": {
       "get": {
         "tags": [
@@ -2112,6 +2144,17 @@
             ],
             "title": "Bot Label"
           },
+          "placed_belt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Placed Belt"
+          },
           "created_at": {
             "type": "string",
             "format": "date-time",
@@ -2134,6 +2177,7 @@
           "puzzle_score",
           "bot_rank",
           "bot_label",
+          "placed_belt",
           "created_at"
         ],
         "title": "ExamOut"
@@ -3995,6 +4039,17 @@
             ],
             "title": "Exam In Progress"
           },
+          "exam_in_progress_target": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Exam In Progress Target"
+          },
           "exam_belt": {
             "anyOf": [
               {
@@ -4005,6 +4060,10 @@
               }
             ],
             "title": "Exam Belt"
+          },
+          "placement_available": {
+            "type": "boolean",
+            "title": "Placement Available"
           }
         },
         "type": "object",
@@ -4017,7 +4076,9 @@
           "capture",
           "exam_available",
           "exam_in_progress",
-          "exam_belt"
+          "exam_in_progress_target",
+          "exam_belt",
+          "placement_available"
         ],
         "title": "TodayOut"
       },

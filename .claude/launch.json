@@ -71,6 +71,43 @@
         "ISHI_DEV_UNLOCK_ALL": "1",
         "ISHI_LLM_ENABLED": "false"
       }
+    },
+    {
+      "name": "ishi-api-fresh",
+      "runtimeExecutable": "uv",
+      "runtimeArgs": [
+        "run",
+        "--directory",
+        "apps/api",
+        "uvicorn",
+        "ishi.main:app",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "8010"
+      ],
+      "port": 8010,
+      "env": {
+        "ISHI_DB_PATH": "../../data/fresh.db",
+        "ISHI_LLM_ENABLED": "false"
+      }
+    },
+    {
+      "name": "ishi-web-fresh",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": [
+        "--dir",
+        "apps/web",
+        "dev",
+        "-H",
+        "127.0.0.1",
+        "-p",
+        "3002"
+      ],
+      "port": 3002,
+      "env": {
+        "ISHI_API_URL": "http://127.0.0.1:8010"
+      }
     }
   ]
 }

@@ -158,3 +158,37 @@ def belt_exam_phase(puzzles: list[bool | None], status: str) -> str:
     if status != "in_progress":
         return "done"
     return "puzzles" if any(s is None for s in puzzles) else "games"
+
+
+# -- placement test (D-068): for players who already know Go ----------------------------------
+
+PLACEMENT = "placement"  # Exam.belt_target of a placement test
+PLACEMENT_PUZZLES = 8
+PLACEMENT_PUZZLES_TO_PASS = 6
+PLACEMENT_GAME_BELT = "orange"  # the one game is against the Orange belt's bot
+PLACEMENT_MAX_BELT = "orange"
+
+
+def placement_available(belt: str, placements: int, exam_in_progress: bool) -> bool:
+    """Once, from the White belt, while no other exam is under way."""
+    return belt == "white" and placements == 0 and not exam_in_progress
+
+
+def placement_outcome(puzzles: list[bool | None], won: int, lost: int) -> str:
+    """Failed (stay White) once 6 of 8 puzzles is out of reach; passed once the game is over
+    (a win or a loss both place the learner, draws count as losses)."""
+    wrong = sum(1 for s in puzzles if s is False)
+    if wrong > len(puzzles) - PLACEMENT_PUZZLES_TO_PASS:
+        return "failed"
+    if won or lost:
+        return "passed"
+    return "in_progress"
+
+
+def placement_belt(status: str, won: int) -> str | None:
+    """The starting belt a finished placement gives: White, Yellow, or Orange after a won game."""
+    if status == "in_progress":
+        return None
+    if status == "failed":
+        return "white"
+    return PLACEMENT_MAX_BELT if won else "yellow"

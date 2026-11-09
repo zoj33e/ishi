@@ -18,6 +18,8 @@ from ishi.play.progression import (
     BELT_EXAM_PUZZLES,
     EXAM_STAGE,
     NEXT_BELT,
+    PLACEMENT,
+    PLACEMENT_PUZZLES,
     ExamRecord,
     PlayedGame,
     Stage,
@@ -28,6 +30,9 @@ from ishi.play.progression import (
     current_stage,
     exam_available,
     exam_outcome,
+    placement_available,
+    placement_belt,
+    placement_outcome,
 )
 from ishi.rules.board import Color
 from ishi.rules.coords import Point, gtp_to_point, point_to_gtp
@@ -270,6 +275,9 @@ def puzzle_results(exam: Exam) -> list[bool | None]:
 
 def settle_exam(session: Session, exam: Exam) -> None:
     """Recompute the exam's status; a pass awards the belt."""
+    if exam.belt_target == PLACEMENT:
+        _settle_placement(session, exam)
+        return
     if exam.belt_target == "yellow":
         exam.status = exam_outcome(exam.games_won, exam.games_lost)
     else:
@@ -282,6 +290,50 @@ def settle_exam(session: Session, exam: Exam) -> None:
         user.belt = exam.belt_target
         user.updated_at = utcnow()
         session.add(user)
+
+
+def _settle_placement(session: Session, exam: Exam) -> None:
+    exam.status = placement_outcome(puzzle_results(exam), exam.games_won, exam.games_lost)
+    exam.updated_at = utcnow()
+    session.add(exam)
+    belt = placement_belt(exam.status, exam.games_won)
+    if belt is None or belt == "white":
+        return
+    user = session.get(User, exam.user_id)
+    assert user is not None
+    user.belt = belt
+    user.updated_at = utcnow()
+    session.add(user)
+    # placed past the rules school: its lessons count as done
+    rows = {
+        r.lesson_id: r
+        for r in session.exec(select(LessonProgress).where(LessonProgress.user_id == user.id))
+    }
+    for lesson in load_lessons():
+        row = rows.get(lesson.id) or LessonProgress(user_id=user.id, lesson_id=lesson.id)
+        row.status = "done"
+        row.updated_at = utcnow()
+        session.add(row)
+
+
+def can_take_placement(session: Session, user: User) -> bool:
+    return placement_available(
+        user.belt,
+        len(user_exams(session, user, PLACEMENT)),
+        active_exam(session, user) is not None,
+    )
+
+
+def start_placement(session: Session, user: User) -> Exam:
+    exam = Exam(user_id=user.id, belt_target=PLACEMENT)
+    exam.puzzles = [
+        {"id": pz.id, "solved": None}
+        for pz in exam_puzzles(session, user, exam.id, PLACEMENT_PUZZLES)
+    ]
+    session.add(exam)
+    session.commit()
+    session.refresh(exam)
+    return exam
 
 
 def start_exam(session: Session, user: User) -> Exam:
@@ -298,8 +350,10 @@ def start_exam(session: Session, user: User) -> Exam:
     return exam
 
 
-def exam_puzzles(session: Session, user: User, seed: str) -> list[Puzzle]:
-    """12 seed puzzles from the concepts open at the learner's belt, taken in turn."""
+def exam_puzzles(
+    session: Session, user: User, seed: str, count: int = BELT_EXAM_PUZZLES
+) -> list[Puzzle]:
+    """`count` seed puzzles from the concepts open at the learner's belt, taken in turn."""
     rng = random.Random(seed)
     by_concept: dict[str, list[dict[str, Any]]] = {}
     for item in load_seed():
@@ -307,9 +361,9 @@ def exam_puzzles(session: Session, user: User, seed: str) -> list[Puzzle]:
     pools = [rng.sample(by_concept[c], len(by_concept[c])) for c in open_concepts(user.belt)]
     pools = [pool for pool in pools if pool]
     picked: list[dict[str, Any]] = []
-    while len(picked) < BELT_EXAM_PUZZLES and any(pools):
+    while len(picked) < count and any(pools):
         for pool in pools:
-            if pool and len(picked) < BELT_EXAM_PUZZLES:
+            if pool and len(picked) < count:
                 picked.append(pool.pop())
     out = []
     for item in picked:
