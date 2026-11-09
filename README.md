@@ -1,6 +1,39 @@
-# Ishi — an AI Go teacher that explains *why*
+<div align="center">
 
-**An AI Go teacher that explains your mistakes like a human teacher would: KataGo analyses the board, Claude narrates the lesson in Thai or English.**
+<img src="docs/media/logo.png" width="120" alt="Ishi logo: a black Go stone on a wooden board">
+
+<h1>Ishi 石</h1>
+
+<p><b>An AI Go teacher that explains your mistakes like a human teacher would.</b></p>
+
+<p>KataGo analyses the board. Claude narrates the lesson in Thai or English.</p>
+
+<p>
+  <a href="https://github.com/zoj33e/ishi/actions/workflows/ci.yml"><img alt="CI status" src="https://github.com/zoj33e/ishi/actions/workflows/ci.yml/badge.svg"></a>
+  <img alt="Next.js 16" src="https://img.shields.io/badge/Next.js-16-000000?logo=nextdotjs&logoColor=white">
+  <img alt="FastAPI on Python 3.12" src="https://img.shields.io/badge/FastAPI-Python%203.12-009688?logo=fastapi&logoColor=white">
+  <img alt="KataGo HumanSL" src="https://img.shields.io/badge/KataGo-HumanSL-1c1915">
+  <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-d6a453"></a>
+</p>
+
+<p>
+  <a href="#features">Features</a> ·
+  <a href="#architecture">Architecture</a> ·
+  <a href="#run-it-locally">Run it</a> ·
+  <a href="README.th.md">ภาษาไทย</a>
+</p>
+
+</div>
+
+<!-- Demo GIF: uncomment once docs/media/demo.gif exists (see docs/media/README.md)
+<p align="center"><img src="docs/media/demo.gif" width="100%" alt="A 9×9 game ends and Ishi explains one mistake"></p>
+-->
+
+<!-- Screenshots: uncomment once the PNGs exist (see docs/media/README.md)
+| Play | Lesson | Progress |
+|---|---|---|
+| <img src="docs/media/play.png" width="100%" alt="9×9 game with an in-game nudge"> | <img src="docs/media/lesson.png" width="100%" alt="Post-game lesson"> | <img src="docs/media/progress.png" width="100%" alt="Rank chart and belt path"> |
+-->
 
 **Ishi** (石, "stone") teaches the board game Go (หมากล้อม / Baduk / Weiqi) to total beginners.
 
@@ -8,17 +41,19 @@ Strong Go AIs like KataGo can tell you *that* a move was bad, but not *why* in w
 
 > **KataGo finds the truth → the Why Engine turns it into facts → Claude only rewrites those facts in plain language.**
 
-<!-- DEMO GIF: replace with a 15–30 s capture of a game ending and the lesson appearing
-![Ishi demo](docs/media/demo.gif)
--->
-
-| Play | Lesson | Progress |
-|---|---|---|
-| <!-- ![9×9 game with a nudge](docs/media/play.png) --> *screenshot coming* | <!-- ![Post-game lesson](docs/media/lesson.png) --> *screenshot coming* | <!-- ![Rank chart and belts](docs/media/progress.png) --> *screenshot coming* |
-
 ## Why I built it
 
 I'm learning Go myself as a beginner. Engines told me my moves were bad but never why, and I couldn't find a teacher who worked at my level in Thai. Ishi is the teacher I wanted: one clear lesson per game, at my level, in my language.
+
+## By the numbers
+
+| | |
+|---|---|
+| Backend tests | 826 (pytest, incl. golden positions) + 4 that need the real engine |
+| Frontend tests | 20 (vitest) + TypeScript strict + ESLint |
+| Lesson ready after a game | ~3.5 s with real engine + Claude |
+| Nudge check latency | p95 1.04 s |
+| Seed puzzles | 103 across 6 concepts |
 
 ---
 
@@ -80,16 +115,6 @@ Each game is scored under five human-like profiles (20k → 1d) and combined wit
 **6. Decisions are written down.**
 [`docs/13-decisions.md`](docs/13-decisions.md) records 68 design decisions with dates, reasons and rejected alternatives.
 
-### Numbers
-
-| | |
-|---|---|
-| Backend tests | 826 (pytest, incl. golden positions) + 4 that need the real engine |
-| Frontend tests | 20 (vitest) + TypeScript strict + ESLint |
-| Lesson ready after a game | ~3.5 s with real engine + Claude |
-| Nudge check latency | p95 1.04 s |
-| Seed puzzles | 103 across 6 concepts |
-
 ---
 
 ## Tech stack
@@ -106,14 +131,17 @@ Each game is scored under five human-like profiles (20k → 1d) and combined wit
 
 ### Prerequisites
 
-- A GPU that runs KataGo (developed on Windows 11 with an NVIDIA card, OpenCL build)
+> [!NOTE]
+> KataGo needs a GPU. Ishi was developed on Windows 11 with an NVIDIA card (OpenCL build).
+
 - Python 3.12 and [`uv`](https://docs.astral.sh/uv/)
 - Node 20+ and [`pnpm`](https://pnpm.io/) 10
-- Optional: an [Anthropic API key](https://console.anthropic.com/). Without it, lessons use the built-in templates.
+- Optional: an [Anthropic API key](https://console.anthropic.com/)
 
 ### 1. Get KataGo and the networks
 
-**Windows (automatic):**
+> [!NOTE]
+> The setup script is Windows-only. On macOS or Linux, use the manual steps below; they haven't been tested.
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts\setup_engine.ps1
@@ -121,13 +149,26 @@ powershell -ExecutionPolicy Bypass -File scripts\setup_engine.ps1
 
 This downloads KataGo v1.18.1 (OpenCL), the main `kata1-b18c384nbt` network and the `b18c384nbt-humanv0` HumanSL network into `engine/` (git-ignored), runs the benchmark, writes `engine/analysis.cfg`, and writes the `ISHI_KATAGO_*` lines into `.env`.
 
-**macOS / Linux (manual, untested):** download a KataGo build for your platform from the [KataGo releases](https://github.com/lightvector/KataGo/releases), a `kata1-b18c384nbt` network from [katagotraining.org](https://katagotraining.org/networks/), and `b18c384nbt-humanv0.bin.gz` from the KataGo v1.15.0 release. Create an analysis config (start from KataGo's `analysis_example.cfg`), then fill in the paths in `.env`.
+<details>
+<summary><b>macOS / Linux: manual engine setup</b></summary>
+
+Download a KataGo build for your platform from the [KataGo releases](https://github.com/lightvector/KataGo/releases), a `kata1-b18c384nbt` network from [katagotraining.org](https://katagotraining.org/networks/), and `b18c384nbt-humanv0.bin.gz` from the KataGo v1.15.0 release. Create an analysis config (start from KataGo's `analysis_example.cfg`), then fill in the paths in `.env`.
+
+</details>
 
 ### 2. Configure
 
 ```powershell
 copy .env.example .env      # macOS/Linux: cp .env.example .env
 ```
+
+> [!TIP]
+> Ishi works without an Anthropic API key. Lessons then use the built-in templates instead of Claude.
+
+If you ran `setup_engine.ps1` first, it keeps your other `.env` lines and only rewrites the KataGo paths.
+
+<details>
+<summary><b>Environment variables</b></summary>
 
 | Variable | Required | Purpose |
 |---|---|---|
@@ -139,7 +180,7 @@ copy .env.example .env      # macOS/Linux: cp .env.example .env
 | `ISHI_DEFAULT_LOCALE` | no | `th` (default) or `en` |
 | `ISHI_DB_PATH` | no | SQLite file (default `data/ishi.db`) |
 
-If you ran `setup_engine.ps1` first, it keeps your other `.env` lines and only rewrites the KataGo paths.
+</details>
 
 ### 3. Run
 
@@ -166,7 +207,8 @@ pnpm dev                     # proxies /api to ISHI_API_URL (default http://127.
 
 Open http://localhost:3000. `http://localhost:3000/api/health` should report `"engine":"ok"`. The database is created on first start. To install it as an app, use the browser's "Install app" button.
 
-### Tests and lint
+<details>
+<summary><b>Tests and lint</b></summary>
 
 ```bash
 cd apps/api && uv run ruff check . && uv run pytest     # add -m engine for tests that need KataGo
@@ -175,9 +217,14 @@ cd apps/web && pnpm lint && pnpm typecheck && pnpm test && pnpm build
 
 The web app's API types are generated from the backend's OpenAPI schema (`apps/api/openapi.json` → `pnpm gen:api`), never hand-written.
 
+</details>
+
 ---
 
 ## Project structure
+
+<details>
+<summary><b>Folder layout</b></summary>
 
 ```
 apps/
@@ -198,6 +245,8 @@ docs/                  product spec, architecture, decisions log
 scripts/               engine setup, start script, calibration and eval tools
 engine/                KataGo + networks (downloaded, git-ignored)
 ```
+
+</details>
 
 ---
 
