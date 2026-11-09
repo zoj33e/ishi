@@ -25,3 +25,26 @@ node_modules/
 .next/
 *.tsbuildinfo
 next-env.d.ts
+
+# KataGo binaries and networks, wherever they end up
+*.bin.gz
+*.txt.gz
+katago*.exe
+katago*.zip
+
+# Databases, archives, large local files
+*.db
+*.db-journal
+*.sqlite*
+*.zip
+*.7z
+*.tar.gz
+
+# Local tooling / scratch
+unslop/
+.claude/settings.local.json
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.log
